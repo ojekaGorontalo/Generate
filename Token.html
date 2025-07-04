@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OtomaX Dual-Format Token Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        function generateToken() {
+            try {
+                // Ambil parameter URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const appId = decodeURIComponent(urlParams.get('appid') || '');
+                const appKey = decodeURIComponent(urlParams.get('appkey') || '');
+                const devKey = decodeURIComponent(urlParams.get('devkey') || '');
+                let payload = decodeURIComponent(urlParams.get('payload') || '');
+                const formatRaw = urlParams.has('format') && urlParams.get('format') === 'raw';
+
+                // Validasi
+                if (!appId || !appKey || !devKey || !payload) {
+                    throw new Error("Parameter wajib: appid, appkey, devkey, payload");
+                }
+
+                // Handle payload JSON
+                try {
+                    payload = JSON.parse(payload) ? JSON.stringify(JSON.parse(payload)) : payload;
+                } catch {
+                    try {
+                        payload = decodeURIComponent(payload);
+                        JSON.parse(payload); // Validasi ulang
+                    } catch (e) {
+                        throw new Error("Payload harus berupa JSON valid");
+                    }
+                }
+
+                // 1. Generate Metadata
+                const metadata = CryptoJS.enc.Base64.stringify(
+                    CryptoJS.enc.Utf8.parse(`{"id":"${appId}"}`)
+                ).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+                // 2. Generate Signature
+                const signatureKey = CryptoJS.HmacSHA256(appKey, devKey);
+                const signature = CryptoJS.HmacSHA256(payload, CryptoJS.enc.Base64.stringify(signatureKey));
+                const signatureB64 = CryptoJS.enc.Base64.stringify(signature)
+                    .replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+                const token = `${metadata}.${signatureB64}`;
+
+                // Respon dual-format
+                if (formatRaw) {
+                    document.write(token); // Versi raw: hanya token
+                } else {
+                    document.write(JSON.stringify({ // Versi JSON
+                        status: "success",
+                        token: token,
+                        timestamp: new Date().toISOString()
+                    }, null, 2));
+                }
+
+            } catch (e) {
+                const errorMsg = JSON.stringify({
+                    status: "error",
+                    message: e.message,
+                    usage: {
+                        json_format: "/?appid=XXX&appkey=XXX&devkey=XXX&payload=ENCODED_JSON",
+                        raw_format: "/?format=raw&appid=XXX...",
+                        example: "/?appid=OtomaX.Addon&payload=%7B%22test%22%3A1%7D"
+                    }
+                }, null, 2);
+                document.write(errorMsg);
+            }
+        }
+        window.onload = generateToken;
+    </script>
+</head>
+<body>
+    <!-- Kosong - konten diisi oleh JavaScript -->
+</body>
+</html>
