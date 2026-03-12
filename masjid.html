@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Ar-Rahman - Informasi Jamaah</title>
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html {
+            scroll-behavior: smooth;
+        }
+        body { 
+            background-color: #f3f4f6; 
+            color: #1f2937; 
+            padding-bottom: 80px; /* ruang untuk bottom navigation */
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Header dengan warna masjid */
+        header { 
+            background-color: #3FB6A8; 
+            color: white; 
+            padding: 0.8rem 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .logo h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+        }
+        .logo p { 
+            font-size: 0.8rem; 
+            opacity: 0.9; 
+        }
+        
+        /* Banner */
+        #bannerContainer { 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #e2e8f0; 
+        }
+        #bannerImage { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+        }
+
+        .section-title {
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: #1e3a5f; 
+            margin: 2rem 0 1.5rem;
+            border-bottom: 3px solid #fbbf24; 
+            display: inline-block; 
+            padding-bottom: 0.3rem;
+        }
+        
+        /* Card */
+        .card {
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem;
+        }
+
+        /* Grid ringkasan keuangan */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        .stat-item {
+            background: #f9fafb; 
+            padding: 1.2rem; 
+            border-radius: 10px; 
+            text-align: center;
+        }
+        .stat-item i { 
+            font-size: 1.8rem; 
+            color: #1e3a5f; 
+            margin-bottom: 0.3rem; 
+        }
+        .stat-item h3 { 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            color: #6b7280; 
+            margin-bottom: 0.3rem; 
+        }
+        .stat-item .value { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: #1e3a5f; 
+        }
+        
+        .total-row { 
+            display: flex; 
+            justify-content: space-around; 
+            text-align: center; 
+            margin-top: 1rem; 
+            gap: 1rem; 
+        }
+        .total-box { 
+            flex: 1; 
+            padding: 0.8rem; 
+            background: #f9fafb; 
+            border-radius: 10px; 
+        }
+        .total-box p:first-child { 
+            font-size: 1rem; 
+            color: #1e3a5f; 
+            margin-bottom: 0.3rem; 
+        }
+        .total-box .nilai { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: #1e3a5f; 
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 1rem; 
+            font-size: 0.9rem;
+        }
+        th, td { 
+            padding: 0.75rem; 
+            text-align: left; 
+            border-bottom: 1px solid #e5e7eb; 
+        }
+        th { 
+            background-color: #f9fafb; 
+            font-weight: 600; 
+        }
+
+        .panitia-list {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 1rem;
+        }
+        .panitia-card {
+            background: #f9fafb; 
+            padding: 0.8rem; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem;
+        }
+        .panitia-card .avatar {
+            width: 40px; 
+            height: 40px; 
+            background-color: #1e3a5f; 
+            color: white; 
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            font-size: 1rem;
+        }
+        .panitia-card .info h4 { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+        }
+        .panitia-card .info p { 
+            color: #6b7280; 
+            font-size: 0.8rem; 
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0.2rem;
+            z-index: 1000;
+            border-top: 1px solid #e5e7eb;
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+        }
+        .bottom-nav a i {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+        .bottom-nav a.active {
+            color: #3FB6A8;
+        }
+        .bottom-nav a.donate {
+            color: #e11d48;
+        }
+        .bottom-nav a.donate i {
+            color: #e11d48;
+        }
+
+        /* Konten tab: hanya satu yang tampil */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Gaya untuk jadwal sholat (mengikuti stat-item) */
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .prayer-item {
+            background: #f9fafb;
+            padding: 0.8rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .prayer-item i {
+            font-size: 1.2rem;
+            color: #1e3a5f;
+        }
+        .prayer-item h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin: 0.2rem 0;
+        }
+        .prayer-item .time {
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        .prayer-full {
+            grid-column: span 2;
+        }
+        .method-badge {
+            background: #f3f4f6;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        footer { 
+            background-color: #1e3a5f; 
+            color: white; 
+            text-align: center; 
+            padding: 1.2rem 0; 
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsif untuk mobile */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
+            .logo h1 { font-size: 1.5rem; }
+            .logo p { font-size: 0.8rem; }
+            .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
+            .card { padding: 1rem; margin-bottom: 1rem; }
+            
+            /* Grid 2 kolom di mobile */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .stat-item { padding: 0.8rem; }
+            .stat-item i { font-size: 1.5rem; }
+            .stat-item h3 { font-size: 0.8rem; }
+            .stat-item .value { font-size: 1.2rem; }
+            
+            .total-row { flex-direction: column; gap: 0.5rem; }
+            .total-box { padding: 0.6rem; }
+            .total-box p:first-child { font-size: 0.9rem; }
+            .total-box .nilai { font-size: 1.2rem; }
+            
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.4rem; }
+            
+            .panitia-list { grid-template-columns: 1fr; }
+            .panitia-card { padding: 0.6rem; }
+            .panitia-card .avatar { width: 35px; height: 35px; font-size: 0.9rem; }
+            
+            /* Scroll horizontal untuk tabel */
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Masjid Ar-Rahman</h1>
+                <p>Transparan, Amanah, Berkah</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Container -->
+    <div id="bannerContainer" style="display: none;">
+        <img id="bannerImage" src="" alt="Banner Masjid">
+    </div>
+
+    <main class="container">
+        <!-- Judul halaman (tetap) -->
+        <h2 class="section-title">🏠 Informasi Keuangan & Kepengurusan</h2>
+        
+        <!-- Konten Beranda (Ringkasan Keuangan + Jadwal Sholat) -->
+        <div id="beranda-content" class="tab-content active">
+            <!-- Ringkasan Keuangan -->
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan</h3>
+                <div class="stats-grid" id="statsContainer">
+                    <div class="stat-item">
+                        <i class="fas fa-arrow-down"></i>
+                        <h3>Total Pemasukan + Sumbangan</h3>
+                        <div class="value" id="totalPemasukanGabungan">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-arrow-up"></i>
+                        <h3>Total Pengeluaran</h3>
+                        <div class="value" id="totalPengeluaran">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-wallet"></i>
+                        <h3>Saldo Bersih</h3>
+                        <div class="value" id="saldoAkhir">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <h3>Jumlah Donatur</h3>
+                        <div class="value" id="donaturBulanIni">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Jadwal Sholat -->
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-mosque"></i> Jadwal Sholat Gorontalo</h3>
+                <div id="prayerContent" class="loading" style="min-height: 150px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #1e3a5f;"></i>
+                    <span style="margin-top: 10px; color: #6b7280;">Memuat jadwal sholat...</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.8rem; color: #6b7280; flex-wrap: wrap;">
+                    <span><i class="fas fa-calendar-alt"></i> <span id="hijriDate">-</span> | <span id="gregorianDate">-</span></span>
+                    <span class="method-badge"><i class="fas fa-check-circle" style="color: #10b981;"></i> Kemenag RI</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Konten Dana (Total Pemasukan & Sumbangan) -->
+        <div id="dana-content" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan</h3>
+                <div class="total-row">
+                    <div class="total-box"><p>Total Pemasukan</p><p class="nilai" id="totalPemasukanLangsung">-</p></div>
+                    <div class="total-box"><p>Total Sumbangan</p><p class="nilai" id="totalSumbanganLangsung">-</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Konten Terbaru (Sumbangan Terbaru) -->
+        <div id="terbaru-content" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
+                    <span><strong>Total Sumbangan:</strong> <span id="totalSumbangan">-</span></span>
+                    <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturSumbangan">-</span></span>
+                </div>
+                <div class="table-responsive">
+                    <table id="tabelSumbangan">
+                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th></tr></thead>
+                        <tbody id="sumbanganBody"></tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
+                    <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
+                </p>
+            </div>
+        </div>
+
+        <!-- Konten Pengurus (Kepengurusan Masjid) -->
+        <div id="pengurus-content" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
+                <div id="panitiaContainer" class="panitia-list"></div>
+            </div>
+        </div>
+
+        <!-- Konten Rincian (Rincian Pemasukan & Pengeluaran) -->
+        <div id="rincian-content" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Rincian Pemasukan & Pengeluaran</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pemasukan</h4>
+                        <div class="table-responsive">
+                            <table id="tabelPemasukan"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pengeluaran</h4>
+                        <div class="table-responsive">
+                            <table id="tabelPengeluaran"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Takmir Masjid Ar-Rahman. Informasi diperbarui secara berkala.</p>
+        </div>
+    </footer>
+
+    <!-- Bottom Navigation (sebagai tab) -->
+    <nav class="bottom-nav">
+        <a id="tab-beranda" class="active" onclick="showTab('beranda')"><i class="fas fa-home"></i><span>Beranda</span></a>
+        <a id="tab-dana" onclick="showTab('dana')"><i class="fas fa-chart-pie"></i><span>Dana</span></a>
+        <a id="tab-terbaru" onclick="showTab('terbaru')"><i class="fas fa-clock"></i><span>Terbaru</span></a>
+        <a id="tab-pengurus" onclick="showTab('pengurus')"><i class="fas fa-users"></i><span>Pengurus</span></a>
+        <a id="tab-rincian" onclick="showTab('rincian')"><i class="fas fa-list"></i><span>Rincian</span></a>
+        <a href="admin/donasi.html" class="donate"><i class="fas fa-heart"></i><span>Donasi</span></a>
+    </nav>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <!-- Script Utama -->
+    <script>
+        // Fungsi untuk menampilkan tab yang dipilih
+        window.showTab = function(tabName) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Tampilkan konten yang dipilih
+            document.getElementById(tabName + '-content').classList.add('active');
+            
+            // Hapus class active dari semua menu
+            document.querySelectorAll('.bottom-nav a').forEach(el => el.classList.remove('active'));
+            // Tambahkan class active ke menu yang sesuai
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
+            authDomain: "steady-fin-368617.firebaseapp.com",
+            databaseURL: "https://steady-fin-368617-default-rtdb.firebaseio.com",
+            projectId: "steady-fin-368617",
+            storageBucket: "steady-fin-368617.firebasestorage.app",
+            messagingSenderId: "626971902484",
+            appId: "1:626971902484:web:85323d8526217c26fe9d01",
+            measurementId: "G-VMK7V753MW"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Referensi Firebase
+        const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
+        const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
+        const panitiaRef = database.ref('panitia/daftar');
+        const penyumbangRef = database.ref('penyumbang/daftar');
+        const bannerRef = database.ref('banner/imageUrl');
+        const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
+
+        // Elemen DOM
+        const bannerContainer = document.getElementById('bannerContainer');
+        const bannerImage = document.getElementById('bannerImage');
+
+        // Format Rupiah
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toLocaleString('id-ID');
+        }
+
+        // Variabel untuk menyimpan total
+        let lastTotalPemasukan = 0;
+        let lastTotalPengeluaran = 0;
+        let lastTotalSumbangan = 0;
+        let lastJumlahDonatur = 0;
+
+        // Fungsi update ringkasan
+        function updateRingkasan() {
+            const totalGabungan = lastTotalPemasukan + lastTotalSumbangan;
+            document.getElementById('totalPemasukanGabungan').textContent = formatRupiah(totalGabungan);
+            document.getElementById('totalPengeluaran').textContent = formatRupiah(lastTotalPengeluaran);
+            document.getElementById('saldoAkhir').textContent = formatRupiah(totalGabungan - lastTotalPengeluaran);
+            document.getElementById('donaturBulanIni').textContent = lastJumlahDonatur.toLocaleString();
+        }
+
+        // Load banner
+        bannerRef.on('value', (snapshot) => {
+            const url = snapshot.val();
+            if (url) {
+                bannerImage.src = url;
+                bannerContainer.style.display = 'block';
+            } else {
+                bannerContainer.style.display = 'none';
+            }
+        });
+
+        // Pemasukan
+        pemasukanRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            lastTotalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(lastTotalPemasukan);
+            
+            // Tabel pemasukan
+            const tbody = document.querySelector('#tabelPemasukan tbody');
+            tbody.innerHTML = items.map(item => `
+                <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
+            `).join('');
+            
+            updateRingkasan();
+        });
+
+        // Pengeluaran
+        pengeluaranRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            lastTotalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            
+            const tbody = document.querySelector('#tabelPengeluaran tbody');
+            tbody.innerHTML = items.map(item => `
+                <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
+            `).join('');
+            
+            updateRingkasan();
+        });
+
+        // Penyumbang
+        penyumbangRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            lastTotalSumbangan = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
+            
+            // Hitung donatur unik
+            const namaSet = new Set();
+            items.forEach(item => { if (item.nama) namaSet.add(item.nama.trim().toLowerCase()); });
+            lastJumlahDonatur = namaSet.size;
+
+            document.getElementById('totalSumbangan').textContent = formatRupiah(lastTotalSumbangan);
+            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(lastTotalSumbangan);
+            document.getElementById('jumlahDonaturSumbangan').textContent = lastJumlahDonatur.toLocaleString();
+
+            // 5 sumbangan terbaru
+            const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+            const limaTerbaru = sorted.slice(0, 5);
+            const tbody = document.getElementById('sumbanganBody');
+            tbody.innerHTML = limaTerbaru.map(item => `
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.jumlah || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.keterangan || '-'}</td>
+                </tr>
+            `).join('');
+
+            updateRingkasan();
+        });
+
+        // Panitia
+        panitiaRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            const daftar = (data && data.daftar) || [];
+            const container = document.getElementById('panitiaContainer');
+            container.innerHTML = daftar.map(item => {
+                const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
+                return `
+                    <div class="panitia-card">
+                        <div class="avatar">${inisial}</div>
+                        <div class="info">
+                            <h4>${item.nama}</h4>
+                            <p>${item.jabatan}</p>
+                            <small>${item.kontak || ''}</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
+    </script>
+
+    <!-- Script Jadwal Sholat -->
+    <script>
+        async function getJadwalSholat() {
+            const today = new Date();
+            const tanggal = today.getDate();
+            const bulan = today.getMonth() + 1;
+            const tahun = today.getFullYear();
+
+            const url = `https://api.aladhan.com/v1/timingsByCity/${tanggal}-${bulan}-${tahun}?city=Gorontalo&country=Indonesia&method=20`;
+
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('Gagal memuat data');
+                const data = await res.json();
+                const t = data.data.timings;
+                const dateInfo = data.data.date;
+
+                // Format tanggal Hijriah
+                const hijri = dateInfo.hijri;
+                const hijriString = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
+                const gregorian = dateInfo.gregorian;
+                const gregorianString = `${gregorian.day} ${gregorian.month.en} ${gregorian.year}`;
+
+                document.getElementById('hijriDate').innerText = hijriString;
+                document.getElementById('gregorianDate').innerText = gregorianString;
+
+                // Susun jadwal sholat dalam grid
+                const prayerHTML = `
+                    <div class="prayer-grid">
+                        <div class="prayer-item">
+                            <i class="fas fa-moon"></i>
+                            <h4>Imsak</h4>
+                            <span class="time">${t.Imsak}</span>
+                        </div>
+                        <div class="prayer-item">
+                            <i class="fas fa-star"></i>
+                            <h4>Subuh</h4>
+                            <span class="time">${t.Fajr}</span>
+                        </div>
+                        <div class="prayer-item">
+                            <i class="fas fa-sun"></i>
+                            <h4>Terbit</h4>
+                            <span class="time">${t.Sunrise}</span>
+                        </div>
+                        <div class="prayer-item">
+                            <i class="fas fa-cloud-sun"></i>
+                            <h4>Dzuhur</h4>
+                            <span class="time">${t.Dhuhr}</span>
+                        </div>
+                        <div class="prayer-item">
+                            <i class="fas fa-sun-plant-wilt"></i>
+                            <h4>Ashar</h4>
+                            <span class="time">${t.Asr}</span>
+                        </div>
+                        <div class="prayer-item">
+                            <i class="fas fa-sunset"></i>
+                            <h4>Maghrib</h4>
+                            <span class="time">${t.Maghrib}</span>
+                        </div>
+                        <div class="prayer-item prayer-full">
+                            <i class="fas fa-moon-stars"></i>
+                            <h4>Isya</h4>
+                            <span class="time">${t.Isha}</span>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('prayerContent').innerHTML = prayerHTML;
+            } catch (error) {
+                document.getElementById('prayerContent').innerHTML = `
+                    <div style="text-align:center; color:#991b1b; padding:1rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i>
+                        <p style="margin-top:0.5rem;">Gagal memuat jadwal sholat.</p>
+                        <button onclick="getJadwalSholat()" style="background:#1e3a5f; color:white; border:none; padding:0.5rem 1rem; border-radius:8px; margin-top:0.5rem; cursor:pointer;"><i class="fas fa-sync-alt"></i> Coba lagi</button>
+                    </div>
+                `;
+            }
+        }
+
+        getJadwalSholat();
+    </script>
+</body>
+</html>
