@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Ar-Rahman - Beranda</title>
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        nav a:hover {
+            opacity: 0.8;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin: 2rem 0 1.5rem;
+            border-bottom: 3px solid #fbbf24;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .stat-item {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-item i {
+            font-size: 2rem;
+            color: #1e3a5f;
+            margin-bottom: 0.5rem;
+        }
+        .stat-item h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        .stat-item .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        .panitia-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .panitia-card {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .panitia-card .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: #1e3a5f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .panitia-card .info h4 {
+            font-weight: 600;
+        }
+        .panitia-card .info p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: #1e3a5f;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            nav a {
+                margin: 0 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Masjid Ar-Rahman</h1>
+                <p>Transparan, Amanah, Berkah</p>
+            </div>
+            <nav>
+                <a href="index.html">Beranda</a>
+                <a href="admin/panitia.html">Admin Panitia</a>
+                <a href="admin/pemasukan.html">Admin Pemasukan</a>
+                <a href="admin/pengeluaran.html">Admin Pengeluaran</a>
+                <a href="admin/bukti.html">Admin Bukti</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title">🏠 Beranda Masjid</h2>
+        
+        <!-- Ringkasan Keuangan -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan</h3>
+            <div class="stats-grid" id="statsContainer">
+                <div class="stat-item">
+                    <i class="fas fa-arrow-down"></i>
+                    <h3>Total Pemasukan</h3>
+                    <div class="value" id="totalPemasukan">-</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-arrow-up"></i>
+                    <h3>Total Pengeluaran</h3>
+                    <div class="value" id="totalPengeluaran">-</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Saldo Bersih</h3>
+                    <div class="value" id="saldoAkhir">-</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <h3>Jumlah Donatur</h3>
+                    <div class="value" id="donaturBulanIni">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daftar Panitia -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
+            <div id="panitiaContainer" class="panitia-list">
+                <!-- Akan diisi oleh JavaScript -->
+            </div>
+        </div>
+
+        <!-- Rincian Pemasukan & Pengeluaran (opsional, bisa ditambahkan) -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Rincian Pemasukan & Pengeluaran</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h4>Pemasukan</h4>
+                    <table id="tabelPemasukan">
+                        <thead>
+                            <tr><th>Kategori</th><th>Nominal</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div>
+                    <h4>Pengeluaran</h4>
+                    <table id="tabelPengeluaran">
+                        <thead>
+                            <tr><th>Kategori</th><th>Nominal</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Takmir Masjid Ar-Rahman. Informasi keuangan diperbarui secara berkala.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <!-- Konfigurasi Firebase (sama dengan file admin/js/firebase-config.js) -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
+            authDomain: "steady-fin-368617.firebaseapp.com",
+            databaseURL: "https://steady-fin-368617-default-rtdb.firebaseio.com",
+            projectId: "steady-fin-368617",
+            storageBucket: "steady-fin-368617.firebasestorage.app",
+            messagingSenderId: "626971902484",
+            appId: "1:626971902484:web:85323d8526217c26fe9d01",
+            measurementId: "G-VMK7V753MW"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Referensi
+        const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
+        const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
+        const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
+        const panitiaRef = database.ref('panitia/daftar');
+
+        // Format Rupiah
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toLocaleString('id-ID');
+        }
+
+        // Update statistik
+        statsRef.on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            document.getElementById('totalPemasukan').textContent = formatRupiah(data.totalPemasukan || 0);
+            document.getElementById('totalPengeluaran').textContent = formatRupiah(data.totalPengeluaran || 0);
+            document.getElementById('saldoAkhir').textContent = formatRupiah(data.saldoAkhir || 0);
+            document.getElementById('donaturBulanIni').textContent = (data.donaturBulanIni || 0).toLocaleString();
+        });
+
+        // Update pemasukan
+        pemasukanRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            const tbody = document.querySelector('#tabelPemasukan tbody');
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td>${item.kategori}</td>
+                    <td>${formatRupiah(item.nominal)}</td>
+                </tr>
+            `).join('');
+        });
+
+        // Update pengeluaran
+        pengeluaranRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            const tbody = document.querySelector('#tabelPengeluaran tbody');
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td>${item.kategori}</td>
+                    <td>${formatRupiah(item.nominal)}</td>
+                </tr>
+            `).join('');
+        });
+
+        // Update panitia
+        panitiaRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            const daftar = (data && data.daftar) || [];
+            const container = document.getElementById('panitiaContainer');
+            container.innerHTML = daftar.map(item => {
+                // Ambil inisial dari nama
+                const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
+                return `
+                    <div class="panitia-card">
+                        <div class="avatar">${inisial}</div>
+                        <div class="info">
+                            <h4>${item.nama}</h4>
+                            <p>${item.jabatan}</p>
+                            <small>${item.kontak || ''}</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
+    </script>
+</body>
+</html>
