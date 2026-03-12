@@ -12,35 +12,106 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #f3f4f6; color: #1f2937; }
+        body { 
+            background-color: #f3f4f6; 
+            color: #1f2937; 
+            padding-bottom: 80px; /* Memberi ruang untuk bottom navigation */
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { background-color: #3FB6A8; color: white; padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .logo h1 { font-size: 1.8rem; font-weight: 700; }
-        .logo p { font-size: 0.9rem; opacity: 0.9; }
-        nav a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: 500; transition: opacity 0.3s; }
-        nav a:hover { opacity: 0.8; }
         
-        /* Banner */
-        /* Ganti CSS yang lama */
-#bannerContainer { 
-    width: 100%; 
-    /* Hapus max-height */ 
-    overflow: hidden; 
-    background-color: #e2e8f0; 
-}
+        /* Header hanya dengan logo dan logout */
+        header { 
+            background-color: #3FB6A8; 
+            color: white; 
+            padding: 0.8rem 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .logo h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+        }
+        .logo p { 
+            font-size: 0.8rem; 
+            opacity: 0.9; 
+        }
+        
+        /* Tombol logout di header */
+        .logout-btn-header {
+            background: transparent; 
+            border: 2px solid white; 
+            color: white; 
+            padding: 0.3rem 1rem;
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .logout-btn-header:hover { 
+            background: white; 
+            color: #1e3a5f; 
+        }
+        
+        /* Banner di bawah header */
+        #bannerContainer { 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #e2e8f0; 
+        }
+        #bannerImage { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+        }
 
-#bannerImage { 
-    width: 100%; 
-    height: auto; /* Ini penting! */
-    display: block; 
-}
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0.2rem;
+            z-index: 1000;
+            border-top: 1px solid #e5e7eb;
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .bottom-nav a i {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+        .bottom-nav a.active {
+            color: #3FB6A8;
+        }
+        .bottom-nav a:hover {
+            color: #3FB6A8;
+        }
 
         /* Login Overlay */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(4px);
+            z-index: 2000; backdrop-filter: blur(4px);
         }
         .login-card {
             background: white; padding: 2.5rem; border-radius: 20px; width: 90%; max-width: 400px;
@@ -67,96 +138,116 @@
             font-size: 1.8rem; font-weight: 700; color: #1e3a5f; margin: 2rem 0 1.5rem;
             border-bottom: 3px solid #fbbf24; display: inline-block; padding-bottom: 0.3rem;
         }
+        /* Card lebih kecil untuk mobile */
         .card {
             background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 1.8rem; margin-bottom: 2rem;
+            padding: 1.5rem; margin-bottom: 1.5rem;
         }
+        /* Grid 4 kolom untuk ringkasan keuangan */
         .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
         }
         .stat-item {
-            background: #f9fafb; padding: 1.5rem; border-radius: 10px; text-align: center;
+            background: #f9fafb; padding: 1.2rem; border-radius: 10px; text-align: center;
         }
-        .stat-item i { font-size: 2rem; color: #1e3a5f; margin-bottom: 0.5rem; }
-        .stat-item h3 { font-size: 1rem; font-weight: 500; color: #6b7280; margin-bottom: 0.5rem; }
-        .stat-item .value { font-size: 2rem; font-weight: 700; color: #1e3a5f; }
-        .total-row { display: flex; justify-content: space-around; text-align: center; margin-top: 1rem; }
-        .total-box { flex: 1; padding: 1rem; background: #f9fafb; border-radius: 10px; margin: 0 0.5rem; }
-        .total-box p:first-child { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 0.5rem; }
-        .total-box .nilai { font-size: 2rem; font-weight: 700; color: #1e3a5f; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        .stat-item i { font-size: 1.8rem; color: #1e3a5f; margin-bottom: 0.3rem; }
+        .stat-item h3 { font-size: 0.9rem; font-weight: 500; color: #6b7280; margin-bottom: 0.3rem; }
+        .stat-item .value { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
+        
+        .total-row { display: flex; justify-content: space-around; text-align: center; margin-top: 1rem; gap: 1rem; }
+        .total-box { flex: 1; padding: 0.8rem; background: #f9fafb; border-radius: 10px; }
+        .total-box p:first-child { font-size: 1rem; color: #1e3a5f; margin-bottom: 0.3rem; }
+        .total-box .nilai { font-size: 1.5rem; font-weight: 700; color: #1e3a5f; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
         th { background-color: #f9fafb; font-weight: 600; }
+
         .panitia-list {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
         }
         .panitia-card {
-            background: #f9fafb; padding: 1rem; border-radius: 8px; display: flex; align-items: center; gap: 1rem;
+            background: #f9fafb; padding: 0.8rem; border-radius: 8px; display: flex; align-items: center; gap: 0.8rem;
         }
         .panitia-card .avatar {
-            width: 50px; height: 50px; background-color: #1e3a5f; color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;
+            width: 40px; height: 40px; background-color: #1e3a5f; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem;
         }
-        .panitia-card .info h4 { font-weight: 600; }
-        .panitia-card .info p { color: #6b7280; font-size: 0.9rem; }
+        .panitia-card .info h4 { font-weight: 600; font-size: 0.95rem; }
+        .panitia-card .info p { color: #6b7280; font-size: 0.8rem; }
 
-        /* Panel Upload Banner (hanya untuk admin) */
+        /* Panel Upload Banner */
         .banner-panel {
-            background: #f9fafb; border-radius: 10px; padding: 1.5rem; margin-top: 1rem;
+            background: #f9fafb; border-radius: 10px; padding: 1.2rem; margin-top: 1rem;
             border: 1px dashed #cbd5e1;
         }
-        .banner-panel h4 { margin-bottom: 1rem; color: #1e3a5f; }
-        .banner-panel input[type="file"] { margin-bottom: 1rem; }
+        .banner-panel h4 { margin-bottom: 0.8rem; color: #1e3a5f; font-size: 1.1rem; }
+        .banner-panel input[type="file"] { margin-bottom: 0.8rem; font-size: 0.9rem; }
         .banner-panel button {
-            background: #1e3a5f; color: white; border: none; padding: 0.6rem 1.5rem;
-            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;
+            background: #1e3a5f; color: white; border: none; padding: 0.5rem 1.2rem;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
         }
         .banner-panel button:hover { background: #2b4c7a; }
         .banner-panel button:disabled { background: #9ca3af; cursor: not-allowed; }
-        #uploadStatus { margin-top: 0.8rem; font-size: 0.9rem; color: #059669; }
-
-        .logout-btn {
-            background: transparent; border: 2px solid white; color: white; padding: 0.4rem 1rem;
-            border-radius: 30px; cursor: pointer; font-weight: 600; margin-left: 1.5rem;
-            transition: 0.2s;
-        }
-        .logout-btn:hover { background: white; color: #1e3a5f; }
+        #uploadStatus { margin-top: 0.5rem; font-size: 0.85rem; color: #059669; }
 
         footer {
-            background-color: #1e3a5f; color: white; text-align: center; padding: 1.5rem 0; margin-top: 2rem;
+            background-color: #1e3a5f; color: white; text-align: center; padding: 1.2rem 0;
+            font-size: 0.9rem;
+            /* Karena ada bottom nav, footer tidak perlu margin-bottom */
         }
+
+        /* Responsif untuk mobile */
         @media (max-width: 768px) {
-            header .container { flex-direction: column; text-align: center; gap: 0.5rem; }
-            nav a { margin: 0 0.8rem; }
+            .container { padding: 15px; }
+            header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
+            .logo h1 { font-size: 1.5rem; }
+            .logo p { font-size: 0.8rem; }
+            .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
+            .card { padding: 1rem; margin-bottom: 1rem; }
+            /* Grid 2 kolom di mobile */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .stat-item { padding: 0.8rem; }
+            .stat-item i { font-size: 1.5rem; }
+            .stat-item h3 { font-size: 0.8rem; }
+            .stat-item .value { font-size: 1.2rem; }
+            .total-row { flex-direction: column; gap: 0.5rem; }
+            .total-box { padding: 0.6rem; }
+            .total-box p:first-child { font-size: 0.9rem; }
+            .total-box .nilai { font-size: 1.2rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.4rem; }
+            .panitia-list { grid-template-columns: 1fr; }
+            .panitia-card { padding: 0.6rem; }
+            .panitia-card .avatar { width: 35px; height: 35px; font-size: 0.9rem; }
+            .banner-panel { padding: 1rem; }
+            .banner-panel h4 { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    
-
     <header>
         <div class="container">
             <div class="logo">
                 <h1>Masjid Ar-Rahman</h1>
                 <p>Transparan, Amanah, Berkah</p>
             </div>
-            <!-- Banner Container (di dalam header) -->
-    <div id="bannerContainer" style="display: none;">
-        <img id="bannerImage" src="" alt="Banner Masjid">
-    </div>
-            <nav>
-                <a href="index.html">Beranda</a>
-                <a href="admin/panitia.html">Admin Panitia</a>
-                <a href="admin/pemasukan.html">Admin Pemasukan</a>
-                <a href="admin/pengeluaran.html">Admin Pengeluaran</a>
-                <a href="admin/bukti.html">Admin Bukti</a>
-                <a href="admin/penyumbang.html">Admin Penyumbang</a>
-                <!-- Tombol Logout akan ditambahkan lewat JS -->
-            </nav>
+            <!-- Tombol Logout akan ditambahkan lewat JS di header -->
+            <div id="headerLogout"></div>
         </div>
     </header>
 
-    <!-- Login Overlay (muncul otomatis jika belum login) -->
+    <!-- Banner Container di bawah header -->
+    <div id="bannerContainer" style="display: none;">
+        <img id="bannerImage" src="" alt="Banner Masjid">
+    </div>
+
+    <!-- Login Overlay -->
     <div id="loginOverlay">
         <div class="login-card">
             <h2>🔐 Akses Admin</h2>
@@ -168,12 +259,22 @@
         </div>
     </div>
 
-    <!-- Seluruh konten admin dibungkus, disembunyikan sampai login sukses -->
+    <!-- Bottom Navigation (tersembunyi sampai login) -->
+    <nav class="bottom-nav" id="bottomNav" style="display: none;">
+        <a href="index.html" class="active"><i class="fas fa-home"></i><span>Beranda</span></a>
+        <a href="admin/panitia.html"><i class="fas fa-users-cog"></i><span>Panitia</span></a>
+        <a href="admin/pemasukan.html"><i class="fas fa-arrow-down"></i><span>Pemasukan</span></a>
+        <a href="admin/pengeluaran.html"><i class="fas fa-arrow-up"></i><span>Pengeluaran</span></a>
+        <a href="admin/bukti.html"><i class="fas fa-file-invoice"></i><span>Bukti</span></a>
+        <a href="admin/penyumbang.html"><i class="fas fa-hand-holding-heart"></i><span>Penyumbang</span></a>
+    </nav>
+
+    <!-- Konten admin (tersembunyi sampai login) -->
     <div id="adminContent">
         <main class="container">
             <h2 class="section-title">🏠 Beranda Masjid (Admin)</h2>
             
-            <!-- Panel khusus admin untuk mengubah banner -->
+            <!-- Panel kelola banner -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-image"></i> Kelola Banner Header</h3>
                 <div class="banner-panel">
@@ -182,7 +283,7 @@
                     <button id="uploadBannerBtn">Upload Banner</button>
                     <div id="uploadStatus"></div>
                     <p style="margin-top: 1rem; color: #4b5563; font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i> Banner akan tampil di atas header. Format: JPG, PNG, GIF.
+                        <i class="fas fa-info-circle"></i> Banner akan tampil di bawah header. Format: JPG, PNG, GIF.
                     </p>
                 </div>
             </div>
@@ -226,7 +327,7 @@
             <!-- Sumbangan Terbaru -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
                     <span><strong>Total Sumbangan:</strong> <span id="totalSumbangan">-</span></span>
                     <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturSumbangan">-</span></span>
                 </div>
@@ -234,7 +335,7 @@
                     <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th></tr></thead>
                     <tbody id="sumbanganBody"></tbody>
                 </table>
-                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
                     <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
                 </p>
             </div>
@@ -248,13 +349,13 @@
             <!-- Rincian Pemasukan & Pengeluaran -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Rincian Pemasukan & Pengeluaran</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div>
-                        <h4>Pemasukan</h4>
+                        <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pemasukan</h4>
                         <table id="tabelPemasukan"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
                     </div>
                     <div>
-                        <h4>Pengeluaran</h4>
+                        <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pengeluaran</h4>
                         <table id="tabelPengeluaran"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
                     </div>
                 </div>
@@ -292,7 +393,7 @@
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const panitiaRef = database.ref('panitia/daftar');
         const penyumbangRef = database.ref('penyumbang/daftar');
-        const bannerRef = database.ref('banner/imageUrl');   // tempat simpan URL banner
+        const bannerRef = database.ref('banner/imageUrl');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
         const userNameRef = database.ref('panitia/UserName');
         const passwordRef = database.ref('panitia/Password');
@@ -306,6 +407,7 @@
         // Elemen DOM
         const loginOverlay = document.getElementById('loginOverlay');
         const adminContent = document.getElementById('adminContent');
+        const bottomNav = document.getElementById('bottomNav');
         const bannerContainer = document.getElementById('bannerContainer');
         const bannerImage = document.getElementById('bannerImage');
         const usernameInput = document.getElementById('usernameInput');
@@ -315,6 +417,7 @@
         const uploadBtn = document.getElementById('uploadBannerBtn');
         const fileInput = document.getElementById('bannerFileInput');
         const uploadStatus = document.getElementById('uploadStatus');
+        const headerLogoutDiv = document.getElementById('headerLogout');
 
         // Ambil kredensial dari Firebase
         Promise.all([
@@ -324,15 +427,17 @@
         ]).then(([snapKey, snapUser, snapPass]) => {
             apiKey = snapKey.val();
             validUsername = snapUser.val();
-            validPassword = String(snapPass.val());  // Pastikan string
-            // Cek apakah sudah login sebelumnya (localStorage)
+            validPassword = String(snapPass.val());
             if (localStorage.getItem('adminLoggedIn') === 'true') {
                 loginOverlay.style.display = 'none';
                 adminContent.style.display = 'block';
-                loadBanner(); // Load banner saat login tersimpan
+                bottomNav.style.display = 'flex';
+                addLogoutButton();
+                loadBanner();
             } else {
                 loginOverlay.style.display = 'flex';
                 adminContent.style.display = 'none';
+                bottomNav.style.display = 'none';
             }
         }).catch(err => {
             console.error('Gagal mengambil kredensial:', err);
@@ -347,7 +452,9 @@
                 localStorage.setItem('adminLoggedIn', 'true');
                 loginOverlay.style.display = 'none';
                 adminContent.style.display = 'block';
-                loadBanner(); // Muat banner setelah login
+                bottomNav.style.display = 'flex';
+                addLogoutButton();
+                loadBanner();
             } else {
                 loginError.textContent = 'Username atau password salah.';
             }
@@ -356,25 +463,17 @@
         loginBtn.addEventListener('click', handleLogin);
         passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
 
-        // Logout: tambahkan tombol di navigasi
+        // Logout
         function addLogoutButton() {
-            const nav = document.querySelector('nav');
-            const logoutBtn = document.createElement('button');
-            logoutBtn.className = 'logout-btn';
-            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-            logoutBtn.onclick = () => {
+            // Buat tombol logout di header
+            headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtnHeader"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+            document.getElementById('logoutBtnHeader').addEventListener('click', () => {
                 localStorage.removeItem('adminLoggedIn');
-                window.location.reload(); // Refresh kembali ke login
-            };
-            nav.appendChild(logoutBtn);
+                window.location.reload();
+            });
         }
 
-        // Panggil setelah login
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            addLogoutButton();
-        }
-
-        // Load banner dari Firebase
+        // Load banner
         function loadBanner() {
             bannerRef.once('value', (snapshot) => {
                 const url = snapshot.val();
@@ -387,7 +486,7 @@
             });
         }
 
-        // Upload banner ke ImgBB via API
+        // Upload banner
         async function uploadBanner(file) {
             if (!apiKey) {
                 uploadStatus.style.color = '#dc2626';
@@ -408,7 +507,6 @@
                 const result = await response.json();
                 if (result.success) {
                     const imageUrl = result.data.url;
-                    // Simpan ke Firebase
                     await bannerRef.set(imageUrl);
                     bannerImage.src = imageUrl;
                     bannerContainer.style.display = 'block';
@@ -425,7 +523,6 @@
             }
         }
 
-        // Event upload
         uploadBtn.addEventListener('click', () => {
             const file = fileInput.files[0];
             if (!file) {
@@ -435,7 +532,7 @@
             uploadBanner(file);
         });
 
-        // ----- Kode yang sudah ada (Ringkasan keuangan, dll) tetap dijalankan -----
+        // Fungsi format Rupiah
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
@@ -501,11 +598,22 @@
             }).join('');
         });
 
-        // Jika sudah login saat halaman dimuat, tambahkan tombol logout dan muat banner
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            addLogoutButton();
-            loadBanner();
+        // Set active menu berdasarkan halaman saat ini
+        function setActiveMenu() {
+            const currentPath = window.location.pathname;
+            const links = bottomNav.querySelectorAll('a');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath.endsWith(href) || (href === 'index.html' && (currentPath.endsWith('/') || currentPath.endsWith('index.html')))) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         }
+
+        // Panggil saat halaman dimuat
+        window.addEventListener('load', setActiveMenu);
     </script>
 </body>
 </html>
