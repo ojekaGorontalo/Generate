@@ -209,14 +209,14 @@
     <main class="container">
         <h2 class="section-title">🏠 Beranda Masjid</h2>
         
-        <!-- Ringkasan Keuangan (berdasarkan stats) -->
+        <!-- Ringkasan Keuangan (gabungan pemasukan + sumbangan) -->
         <div class="card">
-            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan (dari Statistik)</h3>
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan</h3>
             <div class="stats-grid" id="statsContainer">
                 <div class="stat-item">
                     <i class="fas fa-arrow-down"></i>
-                    <h3>Total Pemasukan</h3>
-                    <div class="value" id="totalPemasukan">-</div>
+                    <h3>Total Pemasukan + Sumbangan</h3>
+                    <div class="value" id="totalPemasukanGabungan">-</div>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-arrow-up"></i>
@@ -236,7 +236,7 @@
             </div>
         </div>
 
-        <!-- CARD BARU: Total Pemasukan & Sumbangan (langsung dari data) -->
+        <!-- CARD: Total Pemasukan & Sumbangan (langsung dari data) -->
         <div class="card">
             <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan (Langsung dari Data)</h3>
             <div class="total-row">
@@ -335,7 +335,6 @@
         const database = firebase.database();
 
         // Referensi
-        const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
         const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const panitiaRef = database.ref('panitia/daftar');
@@ -346,36 +345,27 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // 1. Update statistik (ringkasan keuangan dari node stats)
-        // Update total pemasukan dan pengeluaran langsung dari data
-pemasukanRef.on('value', (snapshot) => {
-    const items = snapshot.val() || [];
-    const totalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
-    document.getElementById('totalPemasukan').textContent = formatRupiah(totalPemasukan);
-    
-    // Ambil data pengeluaran untuk menghitung saldo
-    pengeluaranRef.once('value', (snapPeng) => {
-        const pengItems = snapPeng.val() || [];
-        const totalPengeluaran = pengItems.reduce((sum, item) => sum + (item.nominal || 0), 0);
-        document.getElementById('totalPengeluaran').textContent = formatRupiah(totalPengeluaran);
-        document.getElementById('saldoAkhir').textContent = formatRupiah(totalPemasukan - totalPengeluaran);
-    });
-});
+        // Variabel penyimpan nilai terkini
+        let lastTotalPemasukan = 0;
+        let lastTotalPengeluaran = 0;
+        let lastTotalSumbangan = 0;
+        let lastJumlahDonatur = 0;
 
-// Update jumlah donatur dari penyumbang
-penyumbangRef.on('value', (snapshot) => {
-    const items = snapshot.val() || [];
-    const namaSet = new Set();
-    items.forEach(item => {
-        if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
-    });
-    document.getElementById('donaturBulanIni').textContent = namaSet.size.toLocaleString();
-});
+        // Fungsi untuk memperbarui ringkasan keuangan (gabungan)
+        function updateRingkasanKeuangan() {
+            const totalGabungan = lastTotalPemasukan + lastTotalSumbangan;
+            document.getElementById('totalPemasukanGabungan').textContent = formatRupiah(totalGabungan);
+            document.getElementById('totalPengeluaran').textContent = formatRupiah(lastTotalPengeluaran);
+            document.getElementById('saldoAkhir').textContent = formatRupiah(totalGabungan - lastTotalPengeluaran);
+            document.getElementById('donaturBulanIni').textContent = lastJumlahDonatur.toLocaleString();
+        }
 
-        // 2. Update pemasukan (tabel dan total langsung)
+        // 1. Listener pemasukan
         pemasukanRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
-            // Tabel pemasukan
+            lastTotalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            
+            // Update tabel pemasukan
             const tbody = document.querySelector('#tabelPemasukan tbody');
             tbody.innerHTML = items.map(item => `
                 <tr>
@@ -384,14 +374,19 @@ penyumbangRef.on('value', (snapshot) => {
                 </tr>
             `).join('');
 
-            // Hitung total pemasukan langsung dari data
-            const totalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
-            document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(totalPemasukan);
+            // Update total pemasukan langsung
+            document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(lastTotalPemasukan);
+
+            // Panggil update ringkasan
+            updateRingkasanKeuangan();
         });
 
-        // 3. Update pengeluaran (tabel)
+        // 2. Listener pengeluaran
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
+            lastTotalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+
+            // Update tabel pengeluaran
             const tbody = document.querySelector('#tabelPengeluaran tbody');
             tbody.innerHTML = items.map(item => `
                 <tr>
@@ -399,9 +394,48 @@ penyumbangRef.on('value', (snapshot) => {
                     <td>${formatRupiah(item.nominal)}</td>
                 </tr>
             `).join('');
+
+            // Panggil update ringkasan
+            updateRingkasanKeuangan();
         });
 
-        // 4. Update panitia
+        // 3. Listener penyumbang
+        penyumbangRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            
+            // Hitung total sumbangan
+            lastTotalSumbangan = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
+            
+            // Hitung jumlah donatur unik
+            const namaSet = new Set();
+            items.forEach(item => {
+                if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
+            });
+            lastJumlahDonatur = namaSet.size;
+
+            // Update elemen terkait sumbangan
+            document.getElementById('totalSumbangan').textContent = formatRupiah(lastTotalSumbangan);
+            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(lastTotalSumbangan);
+            document.getElementById('jumlahDonaturSumbangan').textContent = lastJumlahDonatur.toLocaleString();
+
+            // 5 data terbaru
+            const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+            const limaTerbaru = sorted.slice(0, 5);
+            const tbody = document.getElementById('sumbanganBody');
+            tbody.innerHTML = limaTerbaru.map(item => `
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.jumlah || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.keterangan || '-'}</td>
+                </tr>
+            `).join('');
+
+            // Panggil update ringkasan (karena mempengaruhi total gabungan)
+            updateRingkasanKeuangan();
+        });
+
+        // 4. Listener panitia
         panitiaRef.on('value', (snapshot) => {
             const data = snapshot.val();
             const daftar = (data && data.daftar) || [];
@@ -419,37 +453,6 @@ penyumbangRef.on('value', (snapshot) => {
                     </div>
                 `;
             }).join('');
-        });
-
-        // 5. Update data sumbangan dari penyumbang
-        penyumbangRef.on('value', (snapshot) => {
-            const items = snapshot.val() || [];
-            
-            // Total sumbangan
-            const total = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
-            document.getElementById('totalSumbangan').textContent = formatRupiah(total);
-            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(total);
-            
-            // Jumlah donatur unik
-            const namaSet = new Set();
-            items.forEach(item => {
-                if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
-            });
-            document.getElementById('jumlahDonaturSumbangan').textContent = namaSet.size.toLocaleString();
-            
-            // 5 data terbaru (urut berdasarkan tanggal descending)
-            const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
-            const limaTerbaru = sorted.slice(0, 5);
-            
-            const tbody = document.getElementById('sumbanganBody');
-            tbody.innerHTML = limaTerbaru.map(item => `
-                <tr>
-                    <td>${item.nama || '-'}</td>
-                    <td>${formatRupiah(item.jumlah || 0)}</td>
-                    <td>${item.tanggal || '-'}</td>
-                    <td>${item.keterangan || '-'}</td>
-                </tr>
-            `).join('');
         });
     </script>
 </body>
