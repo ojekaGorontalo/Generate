@@ -70,6 +70,22 @@
             display: block; 
         }
 
+        /* Marquee (teks berjalan) */
+        .marquee-container {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #fbbf24;
+        }
+        .marquee-container marquee {
+            display: block;
+            width: 100%;
+        }
+        .marquee-container span {
+            margin-right: 3rem;
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -196,7 +212,6 @@
         footer {
             background-color: #1e3a5f; color: white; text-align: center; padding: 1.2rem 0;
             font-size: 0.9rem;
-            /* Karena ada bottom nav, footer tidak perlu margin-bottom */
         }
 
         /* Responsif untuk mobile */
@@ -271,6 +286,13 @@
 
     <!-- Konten admin (tersembunyi sampai login) -->
     <div id="adminContent">
+        <!-- Teks berjalan (marquee) -->
+        <div class="marquee-container">
+            <marquee behavior="scroll" direction="left" scrollamount="5" loop="infinite">
+                <span id="marqueeText">Memuat data donasi terbaru...</span>
+            </marquee>
+        </div>
+
         <main class="container">
             <h2 class="section-title">🏠 Beranda Masjid (Admin)</h2>
             
@@ -294,7 +316,7 @@
                 <div class="stats-grid" id="statsContainer">
                     <div class="stat-item">
                         <i class="fas fa-arrow-down"></i>
-                        <h3>Total Pemasukan + Sumbangan</h3>
+                        <h3>Total Pemasukan + Sumbangan + Donasi</h3>
                         <div class="value" id="totalPemasukanGabungan">-</div>
                     </div>
                     <div class="stat-item">
@@ -315,13 +337,38 @@
                 </div>
             </div>
 
-            <!-- Total Pemasukan & Sumbangan -->
+            <!-- Total Pemasukan, Sumbangan, dan Donasi -->
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan & Donasi</h3>
                 <div class="total-row">
                     <div class="total-box"><p>Total Pemasukan</p><p class="nilai" id="totalPemasukanLangsung">-</p></div>
                     <div class="total-box"><p>Total Sumbangan</p><p class="nilai" id="totalSumbanganLangsung">-</p></div>
+                    <div class="total-box"><p>Total Donasi</p><p class="nilai" id="totalDonasiLangsung">-</p></div>
                 </div>
+            </div>
+
+            <!-- Donasi Via Rekening -->
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Donasi Via Rekening</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
+                    <span><strong>Total Donasi:</strong> <span id="totalDonasi">-</span></span>
+                    <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturDonasi">-</span></span>
+                </div>
+                <table id="tabelDonasi">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
+                            <th>Tanggal</th>
+                            <th>Kategori</th>
+                            <th>Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donasiBody"></tbody>
+                </table>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
+                    <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
+                </p>
             </div>
 
             <!-- Sumbangan Terbaru -->
@@ -397,12 +444,14 @@
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
         const userNameRef = database.ref('panitia/UserName');
         const passwordRef = database.ref('panitia/Password');
+        const donasiRef = database.ref('donasi/daftar');
 
         // State
         let apiKey = '';
         let validUsername = '';
         let validPassword = '';
         let lastTotalPemasukan = 0, lastTotalPengeluaran = 0, lastTotalSumbangan = 0, lastJumlahDonatur = 0;
+        let lastTotalDonasi = 0, lastJumlahDonaturDonasi = 0;
 
         // Elemen DOM
         const loginOverlay = document.getElementById('loginOverlay');
@@ -418,6 +467,7 @@
         const fileInput = document.getElementById('bannerFileInput');
         const uploadStatus = document.getElementById('uploadStatus');
         const headerLogoutDiv = document.getElementById('headerLogout');
+        const marqueeText = document.getElementById('marqueeText');
 
         // Ambil kredensial dari Firebase
         Promise.all([
@@ -465,7 +515,6 @@
 
         // Logout
         function addLogoutButton() {
-            // Buat tombol logout di header
             headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtnHeader"><i class="fas fa-sign-out-alt"></i> Logout</button>';
             document.getElementById('logoutBtnHeader').addEventListener('click', () => {
                 localStorage.removeItem('adminLoggedIn');
@@ -537,14 +586,53 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
+        // Fungsi update ringkasan keuangan (termasuk donasi)
         function updateRingkasanKeuangan() {
-            const totalGabungan = lastTotalPemasukan + lastTotalSumbangan;
+            const totalGabungan = lastTotalPemasukan + lastTotalSumbangan + lastTotalDonasi;
             document.getElementById('totalPemasukanGabungan').textContent = formatRupiah(totalGabungan);
             document.getElementById('totalPengeluaran').textContent = formatRupiah(lastTotalPengeluaran);
             document.getElementById('saldoAkhir').textContent = formatRupiah(totalGabungan - lastTotalPengeluaran);
-            document.getElementById('donaturBulanIni').textContent = lastJumlahDonatur.toLocaleString();
+            document.getElementById('donaturBulanIni').textContent = (lastJumlahDonatur + lastJumlahDonaturDonasi).toLocaleString();
         }
 
+        // Fungsi untuk memperbarui teks berjalan
+        function updateMarquee() {
+            let messages = [];
+
+            // Ambil dari penyumbang (sumbangan)
+            penyumbangRef.once('value', (snap) => {
+                const items = snap.val() || [];
+                items.forEach(item => {
+                    if (item.nama && item.jumlah) {
+                        const nominal = formatRupiah(item.jumlah);
+                        const catatan = item.keterangan ? ` - ${item.keterangan}` : '';
+                        messages.push(`${item.nama} donasi ${nominal}${catatan}`);
+                    }
+                });
+
+                // Ambil dari donasi via rekening
+                donasiRef.once('value', (snapDonasi) => {
+                    const donasiItems = snapDonasi.val() || [];
+                    const donasiArray = Object.keys(donasiItems).map(key => donasiItems[key]);
+                    donasiArray.forEach(item => {
+                        if (item.nama && item.nominal) {
+                            const nominal = formatRupiah(item.nominal);
+                            const catatan = item.catatan ? ` - ${item.catatan}` : '';
+                            messages.push(`${item.nama} donasi ${nominal}${catatan}`);
+                        }
+                    });
+
+                    // Gabung dengan pemisah
+                    if (messages.length > 0) {
+                        marqueeText.innerHTML = messages.join(' • ');
+                    } else {
+                        marqueeText.innerHTML = 'Belum ada donasi masuk.';
+                    }
+                });
+            });
+        }
+
+        // Listener pemasukan
         pemasukanRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             lastTotalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
@@ -555,6 +643,7 @@
             updateRingkasanKeuangan();
         });
 
+        // Listener pengeluaran
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             lastTotalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
@@ -564,6 +653,7 @@
             updateRingkasanKeuangan();
         });
 
+        // Listener penyumbang (sumbangan)
         penyumbangRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             lastTotalSumbangan = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
@@ -580,9 +670,47 @@
             document.getElementById('sumbanganBody').innerHTML = limaTerbaru.map(item => `
                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
             `).join('');
+
             updateRingkasanKeuangan();
+            updateMarquee(); // Perbarui teks berjalan
         });
 
+        // Listener donasi via rekening
+        donasiRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            const donasiArray = Object.keys(items).map(key => ({
+                ...items[key],
+                key: key
+            }));
+
+            lastTotalDonasi = donasiArray.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            
+            const namaSet = new Set();
+            donasiArray.forEach(item => { if (item.nama) namaSet.add(item.nama.trim().toLowerCase()); });
+            lastJumlahDonaturDonasi = namaSet.size;
+
+            document.getElementById('totalDonasi').textContent = formatRupiah(lastTotalDonasi);
+            document.getElementById('totalDonasiLangsung').textContent = formatRupiah(lastTotalDonasi); // tambahan
+            document.getElementById('jumlahDonaturDonasi').textContent = lastJumlahDonaturDonasi.toLocaleString();
+
+            const sorted = [...donasiArray].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            const limaTerbaru = sorted.slice(0, 5);
+            const tbody = document.getElementById('donasiBody');
+            tbody.innerHTML = limaTerbaru.map(item => `
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.nominal || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.kategori || '-'}</td>
+                    <td>${item.catatan || '-'}</td>
+                </tr>
+            `).join('');
+
+            updateRingkasanKeuangan();
+            updateMarquee(); // Perbarui teks berjalan
+        });
+
+        // Listener panitia
         panitiaRef.on('value', (snapshot) => {
             const data = snapshot.val();
             const daftar = (data && data.daftar) || [];
