@@ -535,7 +535,7 @@
         const panitiaRef = database.ref('panitia/daftar');
         const penyumbangRef = database.ref('penyumbang/daftar');
         const bannerRef = database.ref('banner/imageUrl');
-        const donasiRef = database.ref('donasi/daftar'); // data donasi via rekening
+        const donasiRef = database.ref('donasi/daftar');
 
         // Elemen DOM
         const bannerContainer = document.getElementById('bannerContainer');
@@ -550,12 +550,12 @@
         // Variabel untuk menyimpan total
         let lastTotalPemasukan = 0;
         let lastTotalPengeluaran = 0;
-        let lastTotalSumbangan = 0;      // dari penyumbang
-        let lastTotalDonasi = 0;          // dari donasi via rekening
-        let lastJumlahDonatur = 0;        // dari penyumbang (sumbangan)
-        let lastJumlahDonaturDonasi = 0;  // dari donasi via rekening
+        let lastTotalSumbangan = 0;
+        let lastTotalDonasi = 0;
+        let lastJumlahDonatur = 0;
+        let lastJumlahDonaturDonasi = 0;
 
-        // Fungsi update ringkasan (total gabungan = pemasukan + sumbangan + donasi)
+        // Fungsi update ringkasan
         function updateRingkasan() {
             const totalGabungan = lastTotalPemasukan + lastTotalSumbangan + lastTotalDonasi;
             document.getElementById('totalPemasukanGabungan').textContent = formatRupiah(totalGabungan);
@@ -568,7 +568,6 @@
         function updateMarquee() {
             let messages = [];
 
-            // Ambil dari penyumbang (sumbangan)
             penyumbangRef.once('value', (snap) => {
                 const items = snap.val() || [];
                 items.forEach(item => {
@@ -579,10 +578,8 @@
                     }
                 });
 
-                // Ambil dari donasi via rekening
                 donasiRef.once('value', (snapDonasi) => {
                     const donasiItems = snapDonasi.val() || [];
-                    // Karena data bisa berupa object dengan key, konversi ke array
                     const donasiArray = Object.keys(donasiItems).map(key => donasiItems[key]);
                     donasiArray.forEach(item => {
                         if (item.nama && item.nominal) {
@@ -592,7 +589,6 @@
                         }
                     });
 
-                    // Gabung dengan pemisah
                     if (messages.length > 0) {
                         marqueeText.innerHTML = messages.join(' • ');
                     } else {
@@ -666,13 +662,12 @@
             `).join('');
 
             updateRingkasan();
-            updateMarquee(); // Perbarui teks berjalan
+            updateMarquee();
         });
 
         // Donasi via rekening
         donasiRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
-            // Karena data bisa berupa object dengan key, konversi ke array
             const donasiArray = Object.keys(items).map(key => ({
                 ...items[key],
                 key: key
@@ -685,10 +680,9 @@
             lastJumlahDonaturDonasi = namaSet.size;
 
             document.getElementById('totalDonasi').textContent = formatRupiah(lastTotalDonasi);
-            document.getElementById('totalDonasiDana').textContent = formatRupiah(lastTotalDonasi); // untuk tab Dana
+            document.getElementById('totalDonasiDana').textContent = formatRupiah(lastTotalDonasi);
             document.getElementById('jumlahDonaturDonasi').textContent = lastJumlahDonaturDonasi.toLocaleString();
 
-            // Urutkan berdasarkan timestamp (terbaru)
             const sorted = [...donasiArray].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             const limaTerbaru = sorted.slice(0, 5);
             const tbody = document.getElementById('donasiBody');
@@ -703,30 +697,54 @@
             `).join('');
 
             updateRingkasan();
-            updateMarquee(); // Perbarui teks berjalan
+            updateMarquee();
         });
 
-        // Panitia
-        panitiaRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            const daftar = (data && data.daftar) || [];
-            const container = document.getElementById('panitiaContainer');
-            container.innerHTML = daftar.map(item => {
-                const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
-                return `
-                    <div class="panitia-card">
-                        <div class="avatar">${inisial}</div>
-                        <div class="info">
-                            <h4>${item.nama}</h4>
-                            <p>${item.jabatan}</p>
-                            <small>${item.kontak || ''}</small>
-                        </div>
+        // Panitia (Kepengurusan) - DIPERBAIKI
+        // Panitia (Kepengurusan) - DIPERBAIKI (dengan foto)
+panitiaRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    let daftar = [];
+    
+    if (Array.isArray(data)) {
+        daftar = data;
+    } else if (data && data.daftar && Array.isArray(data.daftar)) {
+        daftar = data.daftar;
+    }
+
+    const container = document.getElementById('panitiaContainer');
+    container.innerHTML = daftar.map(item => {
+        // Buat inisial sebagai cadangan jika tidak ada foto
+        const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
+        
+        // Jika fotoUrl tersedia, tampilkan gambar. Jika tidak, tampilkan avatar inisial.
+        if (item.fotoUrl) {
+            return `
+                <div class="panitia-card">
+                    <img src="${item.fotoUrl}" alt="${item.nama}" class="avatar" style="object-fit: cover; border-radius: 50%;">
+                    <div class="info">
+                        <h4>${item.nama}</h4>
+                        <p>${item.jabatan}</p>
+                        <small>${item.kontak || ''}</small>
                     </div>
-                `;
-            }).join('');
-        });
+                </div>
+            `;
+        } else {
+            return `
+                <div class="panitia-card">
+                    <div class="avatar">${inisial}</div>
+                    <div class="info">
+                        <h4>${item.nama}</h4>
+                        <p>${item.jabatan}</p>
+                        <small>${item.kontak || ''}</small>
+                    </div>
+                </div>
+            `;
+        }
+    }).join('');
+});
 
-        // Panggil updateMarquee sekali saat halaman dimuat untuk inisialisasi
+        // Panggil updateMarquee sekali saat halaman dimuat
         window.addEventListener('load', function() {
             updateMarquee();
         });
