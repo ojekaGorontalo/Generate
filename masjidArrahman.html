@@ -56,6 +56,22 @@
             display: block; 
         }
 
+        /* Marquee (teks berjalan) */
+        .marquee-container {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #fbbf24;
+        }
+        .marquee-container marquee {
+            display: block;
+            width: 100%;
+        }
+        .marquee-container span {
+            margin-right: 3rem;
+        }
+
         .section-title {
             font-size: 1.8rem; 
             font-weight: 700; 
@@ -326,6 +342,13 @@
         <img id="bannerImage" src="" alt="Banner Masjid">
     </div>
 
+    <!-- Teks berjalan (marquee) -->
+    <div class="marquee-container">
+        <marquee behavior="scroll" direction="left" scrollamount="5" loop="infinite">
+            <span id="marqueeText">Memuat data donasi terbaru...</span>
+        </marquee>
+    </div>
+
     <main class="container">
         <!-- Judul halaman (tetap) -->
         <h2 class="section-title">🏠 Informasi Keuangan & Kepengurusan</h2>
@@ -373,13 +396,14 @@
             </div>
         </div>
 
-        <!-- Konten Dana (Total Pemasukan & Sumbangan) -->
+        <!-- Konten Dana (Total Pemasukan, Sumbangan & Donasi) -->
         <div id="dana-content" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan, Sumbangan & Donasi</h3>
                 <div class="total-row">
                     <div class="total-box"><p>Total Pemasukan</p><p class="nilai" id="totalPemasukanLangsung">-</p></div>
                     <div class="total-box"><p>Total Sumbangan</p><p class="nilai" id="totalSumbanganLangsung">-</p></div>
+                    <div class="total-box"><p>Total Donasi</p><p class="nilai" id="totalDonasiDana">-</p></div>
                 </div>
             </div>
         </div>
@@ -516,6 +540,7 @@
         // Elemen DOM
         const bannerContainer = document.getElementById('bannerContainer');
         const bannerImage = document.getElementById('bannerImage');
+        const marqueeText = document.getElementById('marqueeText');
 
         // Format Rupiah
         function formatRupiah(angka) {
@@ -537,6 +562,44 @@
             document.getElementById('totalPengeluaran').textContent = formatRupiah(lastTotalPengeluaran);
             document.getElementById('saldoAkhir').textContent = formatRupiah(totalGabungan - lastTotalPengeluaran);
             document.getElementById('donaturBulanIni').textContent = (lastJumlahDonatur + lastJumlahDonaturDonasi).toLocaleString();
+        }
+
+        // Fungsi untuk memperbarui teks berjalan
+        function updateMarquee() {
+            let messages = [];
+
+            // Ambil dari penyumbang (sumbangan)
+            penyumbangRef.once('value', (snap) => {
+                const items = snap.val() || [];
+                items.forEach(item => {
+                    if (item.nama && item.jumlah) {
+                        const nominal = formatRupiah(item.jumlah);
+                        const catatan = item.keterangan ? ` - ${item.keterangan}` : '';
+                        messages.push(`${item.nama} donasi ${nominal}${catatan}`);
+                    }
+                });
+
+                // Ambil dari donasi via rekening
+                donasiRef.once('value', (snapDonasi) => {
+                    const donasiItems = snapDonasi.val() || [];
+                    // Karena data bisa berupa object dengan key, konversi ke array
+                    const donasiArray = Object.keys(donasiItems).map(key => donasiItems[key]);
+                    donasiArray.forEach(item => {
+                        if (item.nama && item.nominal) {
+                            const nominal = formatRupiah(item.nominal);
+                            const catatan = item.catatan ? ` - ${item.catatan}` : '';
+                            messages.push(`${item.nama} donasi ${nominal}${catatan}`);
+                        }
+                    });
+
+                    // Gabung dengan pemisah
+                    if (messages.length > 0) {
+                        marqueeText.innerHTML = messages.join(' • ');
+                    } else {
+                        marqueeText.innerHTML = 'Belum ada donasi masuk.';
+                    }
+                });
+            });
         }
 
         // Load banner
@@ -603,6 +666,7 @@
             `).join('');
 
             updateRingkasan();
+            updateMarquee(); // Perbarui teks berjalan
         });
 
         // Donasi via rekening
@@ -621,6 +685,7 @@
             lastJumlahDonaturDonasi = namaSet.size;
 
             document.getElementById('totalDonasi').textContent = formatRupiah(lastTotalDonasi);
+            document.getElementById('totalDonasiDana').textContent = formatRupiah(lastTotalDonasi); // untuk tab Dana
             document.getElementById('jumlahDonaturDonasi').textContent = lastJumlahDonaturDonasi.toLocaleString();
 
             // Urutkan berdasarkan timestamp (terbaru)
@@ -638,6 +703,7 @@
             `).join('');
 
             updateRingkasan();
+            updateMarquee(); // Perbarui teks berjalan
         });
 
         // Panitia
@@ -658,6 +724,11 @@
                     </div>
                 `;
             }).join('');
+        });
+
+        // Panggil updateMarquee sekali saat halaman dimuat untuk inisialisasi
+        window.addEventListener('load', function() {
+            updateMarquee();
         });
     </script>
 
