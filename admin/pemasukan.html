@@ -122,14 +122,15 @@
             return tr;
         }
 
-        // Hitung ulang total pemasukan
+        // Hitung ulang total pemasukan dan update stats
         async function hitungTotalPemasukan() {
             try {
+                // Ambil data pemasukan terbaru
                 const snapshot = await pemasukanRef.once('value');
                 const items = snapshot.val() || [];
-                const total = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+                const totalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
                 
-                // Update stats di Firebase
+                // Ambil stats saat ini (termasuk donaturBulanIni jika sudah ada)
                 const statsSnapshot = await statsRef.once('value');
                 let stats = statsSnapshot.val() || {
                     totalPemasukan: 0,
@@ -138,16 +139,19 @@
                     donaturBulanIni: 0
                 };
                 
-                stats.totalPemasukan = total;
+                // Update field yang relevan
+                stats.totalPemasukan = totalPemasukan;
                 stats.saldoAkhir = stats.totalPemasukan - stats.totalPengeluaran;
                 
+                // Simpan kembali stats (pertahankan donaturBulanIni yang mungkin sudah diisi oleh penyumbang)
                 await statsRef.set(stats);
+                console.log('Stats pemasukan diperbarui:', stats);
             } catch (error) {
-                console.error('Error hitung total:', error);
+                console.error('Error hitung total pemasukan:', error);
             }
         }
 
-        // Load data
+        // Load data dan perbarui stats setiap kali ada perubahan di pemasukan
         pemasukanRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             const tbody = document.getElementById('pemasukanBody');
@@ -160,6 +164,9 @@
                     tbody.appendChild(buatBaris(item.kategori, item.nominal));
                 });
             }
+
+            // Setelah menampilkan data, perbarui stats (otomatis)
+            hitungTotalPemasukan();
         });
 
         // Tambah baris
@@ -167,7 +174,7 @@
             document.getElementById('pemasukanBody').appendChild(buatBaris());
         });
 
-        // Simpan data
+        // Simpan data (tetap ada sebagai cadangan, tapi sebenarnya sudah otomatis karena listener di atas)
         document.getElementById('simpanPemasukan').addEventListener('click', async () => {
             const rows = document.querySelectorAll('#pemasukanBody tr');
             const items = [];
@@ -182,7 +189,7 @@
 
             try {
                 await pemasukanRef.set(items);
-                await hitungTotalPemasukan();
+                // Tidak perlu panggil hitungTotalPemasukan() lagi karena listener akan otomatis menjalankannya
                 showMessage('Data pemasukan berhasil disimpan!');
             } catch (error) {
                 showMessage('Gagal menyimpan: ' + error.message, 'error');
