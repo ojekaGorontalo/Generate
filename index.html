@@ -99,6 +99,29 @@
             font-weight: 700;
             color: #1e3a5f;
         }
+        .total-row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .total-box {
+            flex: 1;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin: 0 0.5rem;
+        }
+        .total-box p:first-child {
+            font-size: 1.2rem;
+            color: #1e3a5f;
+            margin-bottom: 0.5rem;
+        }
+        .total-box .nilai {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -186,9 +209,9 @@
     <main class="container">
         <h2 class="section-title">🏠 Beranda Masjid</h2>
         
-        <!-- Ringkasan Keuangan -->
+        <!-- Ringkasan Keuangan (berdasarkan stats) -->
         <div class="card">
-            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan</h3>
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan (dari Statistik)</h3>
             <div class="stats-grid" id="statsContainer">
                 <div class="stat-item">
                     <i class="fas fa-arrow-down"></i>
@@ -213,7 +236,22 @@
             </div>
         </div>
 
-        <!-- CARD BARU: DATA SUMBANGAN DARI PENYUMBANG -->
+        <!-- CARD BARU: Total Pemasukan & Sumbangan (langsung dari data) -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan (Langsung dari Data)</h3>
+            <div class="total-row">
+                <div class="total-box">
+                    <p>Total Pemasukan</p>
+                    <p class="nilai" id="totalPemasukanLangsung">-</p>
+                </div>
+                <div class="total-box">
+                    <p>Total Sumbangan</p>
+                    <p class="nilai" id="totalSumbanganLangsung">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD: Sumbangan Terbaru (dari penyumbang) -->
         <div class="card">
             <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -282,7 +320,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    <!-- Konfigurasi Firebase (sama dengan file admin/js/firebase-config.js) -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
@@ -302,7 +339,6 @@
         const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const panitiaRef = database.ref('panitia/daftar');
-        // Referensi baru untuk penyumbang
         const penyumbangRef = database.ref('penyumbang/daftar');
 
         // Format Rupiah
@@ -310,18 +346,36 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Update statistik (ringkasan keuangan)
-        statsRef.on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            document.getElementById('totalPemasukan').textContent = formatRupiah(data.totalPemasukan || 0);
-            document.getElementById('totalPengeluaran').textContent = formatRupiah(data.totalPengeluaran || 0);
-            document.getElementById('saldoAkhir').textContent = formatRupiah(data.saldoAkhir || 0);
-            document.getElementById('donaturBulanIni').textContent = (data.donaturBulanIni || 0).toLocaleString();
-        });
+        // 1. Update statistik (ringkasan keuangan dari node stats)
+        // Update total pemasukan dan pengeluaran langsung dari data
+pemasukanRef.on('value', (snapshot) => {
+    const items = snapshot.val() || [];
+    const totalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+    document.getElementById('totalPemasukan').textContent = formatRupiah(totalPemasukan);
+    
+    // Ambil data pengeluaran untuk menghitung saldo
+    pengeluaranRef.once('value', (snapPeng) => {
+        const pengItems = snapPeng.val() || [];
+        const totalPengeluaran = pengItems.reduce((sum, item) => sum + (item.nominal || 0), 0);
+        document.getElementById('totalPengeluaran').textContent = formatRupiah(totalPengeluaran);
+        document.getElementById('saldoAkhir').textContent = formatRupiah(totalPemasukan - totalPengeluaran);
+    });
+});
 
-        // Update pemasukan
+// Update jumlah donatur dari penyumbang
+penyumbangRef.on('value', (snapshot) => {
+    const items = snapshot.val() || [];
+    const namaSet = new Set();
+    items.forEach(item => {
+        if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
+    });
+    document.getElementById('donaturBulanIni').textContent = namaSet.size.toLocaleString();
+});
+
+        // 2. Update pemasukan (tabel dan total langsung)
         pemasukanRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
+            // Tabel pemasukan
             const tbody = document.querySelector('#tabelPemasukan tbody');
             tbody.innerHTML = items.map(item => `
                 <tr>
@@ -329,9 +383,13 @@
                     <td>${formatRupiah(item.nominal)}</td>
                 </tr>
             `).join('');
+
+            // Hitung total pemasukan langsung dari data
+            const totalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(totalPemasukan);
         });
 
-        // Update pengeluaran
+        // 3. Update pengeluaran (tabel)
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             const tbody = document.querySelector('#tabelPengeluaran tbody');
@@ -343,13 +401,12 @@
             `).join('');
         });
 
-        // Update panitia
+        // 4. Update panitia
         panitiaRef.on('value', (snapshot) => {
             const data = snapshot.val();
             const daftar = (data && data.daftar) || [];
             const container = document.getElementById('panitiaContainer');
             container.innerHTML = daftar.map(item => {
-                // Ambil inisial dari nama
                 const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
                 return `
                     <div class="panitia-card">
@@ -364,22 +421,23 @@
             }).join('');
         });
 
-        // Update data sumbangan dari penyumbang
+        // 5. Update data sumbangan dari penyumbang
         penyumbangRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
-            // Hitung total sumbangan
+            
+            // Total sumbangan
             const total = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
             document.getElementById('totalSumbangan').textContent = formatRupiah(total);
+            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(total);
             
-            // Hitung jumlah donatur unik (berdasarkan nama)
+            // Jumlah donatur unik
             const namaSet = new Set();
             items.forEach(item => {
                 if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
             });
             document.getElementById('jumlahDonaturSumbangan').textContent = namaSet.size.toLocaleString();
             
-            // Ambil 5 data terbaru (asumsi data diurutkan berdasarkan tanggal, tetapi karena tidak ada timestamp, kita ambil 5 terakhir dari array)
-            // Untuk lebih akurat, kita bisa mengurutkan berdasarkan tanggal (string) secara descending.
+            // 5 data terbaru (urut berdasarkan tanggal descending)
             const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
             const limaTerbaru = sorted.slice(0, 5);
             
