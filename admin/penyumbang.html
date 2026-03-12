@@ -119,8 +119,8 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const penyumbangRef = database.ref('penyumbang/daftar');
-        // Referensi ke statistik donatur di laporanKeuangan
-        const donaturStatsRef = database.ref('laporanKeuangan/bulanIni/stats/donaturBulanIni');
+        // Referensi ke seluruh objek stats (bukan hanya donaturBulanIni)
+        const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
 
         function showMessage(text, type = 'success') {
             const msg = document.getElementById('statusMessage');
@@ -134,13 +134,14 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Fungsi untuk menghitung jumlah donatur unik (berdasarkan nama) dan update ke stats
+        // Fungsi untuk menghitung jumlah donatur unik dan update ke stats (tanpa menghapus field lain)
         async function updateJumlahDonatur() {
             try {
+                // Ambil data penyumbang
                 const snapshot = await penyumbangRef.once('value');
                 const data = snapshot.val() || [];
                 
-                // Hitung donatur unik (nama case-insensitive, trim)
+                // Hitung donatur unik
                 const namaSet = new Set();
                 data.forEach(item => {
                     if (item.nama) {
@@ -149,8 +150,20 @@
                 });
                 const jumlahUnik = namaSet.size;
                 
-                // Simpan ke node stats
-                await donaturStatsRef.set(jumlahUnik);
+                // Ambil stats saat ini (pertahankan totalPemasukan, totalPengeluaran, saldoAkhir)
+                const statsSnapshot = await statsRef.once('value');
+                let stats = statsSnapshot.val() || {
+                    totalPemasukan: 0,
+                    totalPengeluaran: 0,
+                    saldoAkhir: 0,
+                    donaturBulanIni: 0
+                };
+                
+                // Update donaturBulanIni
+                stats.donaturBulanIni = jumlahUnik;
+                
+                // Simpan kembali stats lengkap
+                await statsRef.set(stats);
                 console.log(`Jumlah donatur unik diperbarui: ${jumlahUnik}`);
             } catch (error) {
                 console.error('Gagal update jumlah donatur:', error);
