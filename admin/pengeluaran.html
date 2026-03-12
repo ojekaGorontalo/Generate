@@ -121,14 +121,15 @@
             return tr;
         }
 
-        // Hitung ulang total pengeluaran
+        // Hitung ulang total pengeluaran dan update stats
         async function hitungTotalPengeluaran() {
             try {
+                // Ambil data pengeluaran terbaru
                 const snapshot = await pengeluaranRef.once('value');
                 const items = snapshot.val() || [];
-                const total = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+                const totalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
                 
-                // Update stats di Firebase
+                // Ambil stats saat ini (termasuk totalPemasukan dan donaturBulanIni)
                 const statsSnapshot = await statsRef.once('value');
                 let stats = statsSnapshot.val() || {
                     totalPemasukan: 0,
@@ -137,16 +138,19 @@
                     donaturBulanIni: 0
                 };
                 
-                stats.totalPengeluaran = total;
+                // Update field yang relevan
+                stats.totalPengeluaran = totalPengeluaran;
                 stats.saldoAkhir = stats.totalPemasukan - stats.totalPengeluaran;
                 
+                // Simpan kembali stats (pertahankan field lain)
                 await statsRef.set(stats);
+                console.log('Stats pengeluaran diperbarui:', stats);
             } catch (error) {
-                console.error('Error hitung total:', error);
+                console.error('Error hitung total pengeluaran:', error);
             }
         }
 
-        // Load data
+        // Load data dan perbarui stats setiap kali ada perubahan di pengeluaran
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             const tbody = document.getElementById('pengeluaranBody');
@@ -159,6 +163,9 @@
                     tbody.appendChild(buatBaris(item.kategori, item.nominal));
                 });
             }
+
+            // Setelah menampilkan data, perbarui stats (otomatis)
+            hitungTotalPengeluaran();
         });
 
         // Tambah baris
@@ -181,7 +188,7 @@
 
             try {
                 await pengeluaranRef.set(items);
-                await hitungTotalPengeluaran();
+                // Tidak perlu panggil hitungTotalPengeluaran() lagi karena listener akan otomatis menjalankannya
                 showMessage('Data pengeluaran berhasil disimpan!');
             } catch (error) {
                 showMessage('Gagal menyimpan: ' + error.message, 'error');
