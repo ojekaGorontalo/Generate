@@ -4,33 +4,210 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Pengeluaran - Masjid Ar-Rahman</title>
+    <!-- Font Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #f3f4f6; color: #1f2937; }
+        body { 
+            background-color: #f3f4f6; 
+            color: #1f2937; 
+            padding-bottom: 80px; /* ruang untuk bottom navigation */
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { background-color: #1e3a5f; color: white; padding: 1rem 0; }
-        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .logo h1 { font-size: 1.8rem; }
-        nav a { color: white; text-decoration: none; margin-left: 1.5rem; }
-        .section-title { font-size: 1.8rem; color: #1e3a5f; border-bottom: 3px solid #fbbf24; display: inline-block; margin-bottom: 1.5rem; }
-        .card { background: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        /* Header dengan warna #3FB6A8 */
+        header { 
+            background-color: #3FB6A8; 
+            color: white; 
+            padding: 0.8rem 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .logo h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+        }
+        .logo p { 
+            font-size: 0.8rem; 
+            opacity: 0.9; 
+        }
+        
+        /* Tombol logout di header */
+        .logout-btn-header {
+            background: transparent; 
+            border: 2px solid white; 
+            color: white; 
+            padding: 0.3rem 1rem;
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .logout-btn-header:hover { 
+            background: white; 
+            color: #1e3a5f; 
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0.2rem;
+            z-index: 1000;
+            border-top: 1px solid #e5e7eb;
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .bottom-nav a i {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+        .bottom-nav a.active {
+            color: #3FB6A8;
+        }
+        .bottom-nav a:hover {
+            color: #3FB6A8;
+        }
+
+        .section-title {
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: #1e3a5f; 
+            margin: 2rem 0 1.5rem;
+            border-bottom: 3px solid #fbbf24; 
+            display: inline-block; 
+            padding-bottom: 0.3rem;
+        }
+        
+        /* Card lebih kecil untuk mobile */
+        .card {
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem;
+        }
+
         .form-group { margin-bottom: 1rem; }
-        label { font-weight: 500; display: block; }
-        input { width: 100%; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 8px; }
-        .btn { background-color: #1e3a5f; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn-secondary { background-color: #fbbf24; color: #1e3a5f; }
-        .btn-danger { background-color: #dc2626; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        th { background-color: #f9fafb; }
-        .status-message { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        label { font-weight: 500; display: block; font-size: 0.9rem; }
+        input { 
+            width: 100%; 
+            padding: 0.8rem; 
+            border: 1px solid #d1d5db; 
+            border-radius: 8px; 
+            font-size: 1rem;
+        }
+
+        .btn { 
+            background-color: #1e3a5f; 
+            color: white; 
+            border: none; 
+            padding: 0.8rem 1.5rem; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.95rem;
+        }
+        .btn-secondary { 
+            background-color: #fbbf24; 
+            color: #1e3a5f; 
+        }
+        .btn-danger { 
+            background-color: #dc2626; 
+            color: white; 
+            padding: 0.5rem 1rem; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 1rem; 
+            font-size: 0.9rem;
+        }
+        th, td { 
+            padding: 0.75rem; 
+            text-align: left; 
+            border-bottom: 1px solid #e5e7eb; 
+            vertical-align: middle;
+        }
+        th { 
+            background-color: #f9fafb; 
+            font-weight: 600; 
+        }
+        td input { 
+            width: 100%; 
+            padding: 0.5rem; 
+            font-size: 0.9rem;
+        }
+
+        .status-message { 
+            padding: 1rem; 
+            border-radius: 8px; 
+            margin-bottom: 1rem; 
+            display: none; 
+        }
         .success { background-color: #d1fae5; color: #065f46; }
         .error { background-color: #fee2e2; color: #991b1b; }
-        footer { background-color: #1e3a5f; color: white; text-align: center; padding: 1.5rem 0; margin-top: 2rem; }
+
+        footer { 
+            background-color: #1e3a5f; 
+            color: white; 
+            text-align: center; 
+            padding: 1.2rem 0; 
+            font-size: 0.9rem;
+        }
+
+        /* Responsif untuk mobile */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
+            .logo h1 { font-size: 1.5rem; }
+            .logo p { font-size: 0.8rem; }
+            .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
+            .card { padding: 1rem; margin-bottom: 1rem; }
+            
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.5rem; }
+            td input { font-size: 0.8rem; padding: 0.4rem; }
+            
+            .btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
+            .btn-danger { padding: 0.4rem 0.8rem; }
+            
+            /* Agar tabel bisa discroll horizontal */
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -40,36 +217,46 @@
                 <h1>Admin Pengeluaran</h1>
                 <p>Kelola Data Pengeluaran Masjid</p>
             </div>
-            <nav>
-                <a href="../index.html">Beranda</a>
-                <a href="panitia.html">Panitia</a>
-                <a href="pemasukan.html">Pemasukan</a>
-                <a href="bukti.html">Bukti</a>
-                <a href="penyumbang.html">Penyumbang</a>
-            </nav>
+            <!-- Tombol Logout akan diisi lewat JS -->
+            <div id="headerLogout"></div>
         </div>
     </header>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="../index.html"><i class="fas fa-home"></i><span>Beranda</span></a>
+        <a href="panitia.html"><i class="fas fa-users-cog"></i><span>Panitia</span></a>
+        <a href="pemasukan.html"><i class="fas fa-arrow-down"></i><span>Pemasukan</span></a>
+        <a href="pengeluaran.html" class="active"><i class="fas fa-arrow-up"></i><span>Pengeluaran</span></a>
+        <a href="bukti.html"><i class="fas fa-file-invoice"></i><span>Bukti</span></a>
+        <a href="penyumbang.html"><i class="fas fa-hand-holding-heart"></i><span>Penyumbang</span></a>
+    </nav>
 
     <main class="container">
         <h2 class="section-title"><i class="fas fa-arrow-up"></i> Kelola Data Pengeluaran</h2>
         <div id="statusMessage" class="status-message"></div>
 
         <div class="card">
-            <h3 style="margin-bottom: 1rem;">Daftar Kategori Pengeluaran</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Kategori</th>
-                        <th>Nominal (Rp)</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="pengeluaranBody">
-                    <!-- Akan diisi JavaScript -->
-                </tbody>
-            </table>
-            <button class="btn-secondary" id="tambahBaris" style="margin-top: 1rem;"><i class="fas fa-plus"></i> Tambah Baris</button>
-            <button class="btn" id="simpanPengeluaran" style="margin-top: 1rem; margin-left: 1rem;"><i class="fas fa-save"></i> Simpan Perubahan</button>
+            <h3 style="margin-bottom: 1rem;">Daftar Pengeluaran</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Nominal (Rp)</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pengeluaranBody">
+                        <!-- Akan diisi JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="btn-secondary" id="tambahBaris"><i class="fas fa-plus"></i> Tambah Baris</button>
+                <button class="btn" id="simpanPengeluaran"><i class="fas fa-save"></i> Simpan Perubahan</button>
+            </div>
         </div>
     </main>
 
@@ -79,10 +266,17 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
+        // Cek login: jika tidak ada localStorage, redirect ke index.html
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = '../index.html';
+        }
+
+        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
             authDomain: "steady-fin-368617.firebaseapp.com",
@@ -99,37 +293,58 @@
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
 
+        // Elemen DOM
+        const headerLogoutDiv = document.getElementById('headerLogout');
+        const statusMsg = document.getElementById('statusMessage');
+        const tbody = document.getElementById('pengeluaranBody');
+        const tambahBtn = document.getElementById('tambahBaris');
+        const simpanBtn = document.getElementById('simpanPengeluaran');
+
+        // Tambah tombol logout
+        headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = '../index.html';
+        });
+
         function showMessage(text, type = 'success') {
-            const msg = document.getElementById('statusMessage');
-            msg.textContent = text;
-            msg.className = `status-message ${type}`;
-            msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
+            statusMsg.textContent = text;
+            statusMsg.className = `status-message ${type}`;
+            statusMsg.style.display = 'block';
+            setTimeout(() => statusMsg.style.display = 'none', 3000);
         }
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        function buatBaris(kategori = '', nominal = 0) {
+        // Helper untuk mendapatkan tanggal hari ini format YYYY-MM-DD
+        function getTodayDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function buatBaris(kategori = '', nominal = 0, tanggal = getTodayDate()) {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" class="kategori" value="${kategori}" placeholder="Kategori"></td>
+                <td><input type="text" class="kategori" value="${kategori.replace(/"/g, '&quot;')}" placeholder="Kategori"></td>
                 <td><input type="number" class="nominal" value="${nominal}" placeholder="Nominal"></td>
+                <td><input type="date" class="tanggal" value="${tanggal}"></td>
                 <td><button class="btn-danger" onclick="this.closest('tr').remove()">Hapus</button></td>
             `;
             return tr;
         }
 
-        // Hitung ulang total pengeluaran dan update stats
+        // Hitung ulang total pengeluaran
         async function hitungTotalPengeluaran() {
             try {
-                // Ambil data pengeluaran terbaru
                 const snapshot = await pengeluaranRef.once('value');
                 const items = snapshot.val() || [];
-                const totalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+                const total = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
                 
-                // Ambil stats saat ini (termasuk totalPemasukan dan donaturBulanIni)
                 const statsSnapshot = await statsRef.once('value');
                 let stats = statsSnapshot.val() || {
                     totalPemasukan: 0,
@@ -138,62 +353,62 @@
                     donaturBulanIni: 0
                 };
                 
-                // Update field yang relevan
-                stats.totalPengeluaran = totalPengeluaran;
+                stats.totalPengeluaran = total;
                 stats.saldoAkhir = stats.totalPemasukan - stats.totalPengeluaran;
                 
-                // Simpan kembali stats (pertahankan field lain)
                 await statsRef.set(stats);
-                console.log('Stats pengeluaran diperbarui:', stats);
             } catch (error) {
-                console.error('Error hitung total pengeluaran:', error);
+                console.error('Error hitung total:', error);
             }
         }
 
-        // Load data dan perbarui stats setiap kali ada perubahan di pengeluaran
+        // Load data
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
-            const tbody = document.getElementById('pengeluaranBody');
             tbody.innerHTML = '';
             
             if (items.length === 0) {
                 tbody.appendChild(buatBaris());
             } else {
                 items.forEach(item => {
-                    tbody.appendChild(buatBaris(item.kategori, item.nominal));
+                    tbody.appendChild(buatBaris(item.kategori, item.nominal, item.tanggal || getTodayDate()));
                 });
             }
-
-            // Setelah menampilkan data, perbarui stats (otomatis)
-            hitungTotalPengeluaran();
         });
 
         // Tambah baris
-        document.getElementById('tambahBaris').addEventListener('click', () => {
-            document.getElementById('pengeluaranBody').appendChild(buatBaris());
+        tambahBtn.addEventListener('click', () => {
+            tbody.appendChild(buatBaris());
         });
 
         // Simpan data
-        document.getElementById('simpanPengeluaran').addEventListener('click', async () => {
+        simpanBtn.addEventListener('click', async () => {
             const rows = document.querySelectorAll('#pengeluaranBody tr');
             const items = [];
             
             rows.forEach(row => {
                 const kategori = row.querySelector('.kategori').value.trim();
                 const nominal = parseInt(row.querySelector('.nominal').value) || 0;
+                const tanggal = row.querySelector('.tanggal').value; // format YYYY-MM-DD
                 if (kategori && nominal > 0) {
-                    items.push({ kategori, nominal });
+                    items.push({ 
+                        kategori, 
+                        nominal,
+                        tanggal: tanggal || getTodayDate() 
+                    });
                 }
             });
 
             try {
                 await pengeluaranRef.set(items);
-                // Tidak perlu panggil hitungTotalPengeluaran() lagi karena listener akan otomatis menjalankannya
+                await hitungTotalPengeluaran();
                 showMessage('Data pengeluaran berhasil disimpan!');
             } catch (error) {
                 showMessage('Gagal menyimpan: ' + error.message, 'error');
             }
         });
+
+        // Set active menu di bottom nav (sudah ada class active di HTML)
     </script>
 </body>
 </html>
