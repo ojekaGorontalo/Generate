@@ -119,6 +119,8 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const penyumbangRef = database.ref('penyumbang/daftar');
+        // Referensi ke statistik donatur di laporanKeuangan
+        const donaturStatsRef = database.ref('laporanKeuangan/bulanIni/stats/donaturBulanIni');
 
         function showMessage(text, type = 'success') {
             const msg = document.getElementById('statusMessage');
@@ -132,9 +134,33 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Load data
-        function loadData() {
-            penyumbangRef.once('value', (snapshot) => {
+        // Fungsi untuk menghitung jumlah donatur unik (berdasarkan nama) dan update ke stats
+        async function updateJumlahDonatur() {
+            try {
+                const snapshot = await penyumbangRef.once('value');
+                const data = snapshot.val() || [];
+                
+                // Hitung donatur unik (nama case-insensitive, trim)
+                const namaSet = new Set();
+                data.forEach(item => {
+                    if (item.nama) {
+                        namaSet.add(item.nama.trim().toLowerCase());
+                    }
+                });
+                const jumlahUnik = namaSet.size;
+                
+                // Simpan ke node stats
+                await donaturStatsRef.set(jumlahUnik);
+                console.log(`Jumlah donatur unik diperbarui: ${jumlahUnik}`);
+            } catch (error) {
+                console.error('Gagal update jumlah donatur:', error);
+            }
+        }
+
+        // Load data dan perbarui jumlah donatur
+        async function loadData() {
+            try {
+                const snapshot = await penyumbangRef.once('value');
                 const data = snapshot.val() || [];
                 const tbody = document.getElementById('penyumbangBody');
                 tbody.innerHTML = data.map((item, index) => `
@@ -150,7 +176,12 @@
                         </td>
                     </tr>
                 `).join('');
-            });
+                
+                // Setelah load, update jumlah donatur
+                await updateJumlahDonatur();
+            } catch (error) {
+                showMessage('Gagal memuat data: ' + error.message, 'error');
+            }
         }
         loadData();
 
@@ -182,11 +213,14 @@
                 }
 
                 await penyumbangRef.set(data);
+                // Update jumlah donatur setelah perubahan data
+                await updateJumlahDonatur();
+                
                 showMessage('Data tersimpan!');
                 document.getElementById('formPenyumbang').reset();
                 document.getElementById('editKey').value = '';
                 document.getElementById('batalBtn').style.display = 'none';
-                loadData();
+                loadData(); // reload tabel
             } catch (error) {
                 showMessage('Gagal menyimpan: ' + error.message, 'error');
             }
@@ -208,12 +242,18 @@
         // Hapus data
         window.hapusData = async (index) => {
             if (!confirm('Yakin ingin menghapus?')) return;
-            const snapshot = await penyumbangRef.once('value');
-            let data = snapshot.val() || [];
-            data.splice(index, 1);
-            await penyumbangRef.set(data);
-            showMessage('Data dihapus');
-            loadData();
+            try {
+                const snapshot = await penyumbangRef.once('value');
+                let data = snapshot.val() || [];
+                data.splice(index, 1);
+                await penyumbangRef.set(data);
+                // Update jumlah donatur setelah hapus
+                await updateJumlahDonatur();
+                showMessage('Data dihapus');
+                loadData();
+            } catch (error) {
+                showMessage('Gagal menghapus: ' + error.message, 'error');
+            }
         };
 
         // Batal edit
