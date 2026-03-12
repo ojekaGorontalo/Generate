@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Bukti - Masjid Ar-Rahman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #f3f4f6; color: #1f2937; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background-color: #1e3a5f; color: white; padding: 1rem 0; }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo h1 { font-size: 1.8rem; }
+        nav a { color: white; text-decoration: none; margin-left: 1.5rem; }
+        .section-title { font-size: 1.8rem; color: #1e3a5f; border-bottom: 3px solid #fbbf24; display: inline-block; margin-bottom: 1.5rem; }
+        .card { background: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: 500; display: block; }
+        input { width: 100%; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 8px; }
+        .btn { background-color: #1e3a5f; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-secondary { background-color: #fbbf24; color: #1e3a5f; }
+        .btn-danger { background-color: #dc2626; color: white; }
+        .btn-success { background-color: #10b981; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background-color: #f9fafb; }
+        .status-message { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        .success { background-color: #d1fae5; color: #065f46; }
+        .error { background-color: #fee2e2; color: #991b1b; }
+        .list-item { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .list-item input { flex: 2; }
+        .list-item .file-input { flex: 1; }
+        .preview-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        footer { background-color: #1e3a5f; color: white; text-align: center; padding: 1.5rem 0; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Admin Bukti Pengeluaran</h1>
+                <p>Kelola Bukti Transaksi Pengeluaran</p>
+            </div>
+            <nav>
+                <a href="../index.html">Beranda</a>
+                <a href="panitia.html">Panitia</a>
+                <a href="pemasukan.html">Pemasukan</a>
+                <a href="pengeluaran.html">Pengeluaran</a>
+                <a href="penyumbang.html">Penyumbang</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title"><i class="fas fa-camera"></i> Kelola Bukti Pengeluaran</h2>
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;">Daftar Bukti Pengeluaran</h3>
+            <div id="buktiList">
+                <!-- Akan diisi JavaScript -->
+            </div>
+            <button class="btn-secondary" id="tambahBukti" style="margin-top: 1rem;"><i class="fas fa-plus"></i> Tambah Bukti</button>
+            <button class="btn" id="simpanBukti" style="margin-top: 1rem; margin-left: 1rem;"><i class="fas fa-save"></i> Simpan Perubahan</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Takmir Masjid Ar-Rahman - Panel Admin Bukti</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
+            authDomain: "steady-fin-368617.firebaseapp.com",
+            databaseURL: "https://steady-fin-368617-default-rtdb.firebaseio.com",
+            projectId: "steady-fin-368617",
+            storageBucket: "steady-fin-368617.firebasestorage.app",
+            messagingSenderId: "626971902484",
+            appId: "1:626971902484:web:85323d8526217c26fe9d01",
+            measurementId: "G-VMK7V753MW"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const buktiRef = database.ref('laporanKeuangan/bulanIni/bukti');
+        const apiKeyImageBBRef = database.ref('panitia/apikeyimagsbb');
+
+        function showMessage(text, type = 'success') {
+            const msg = document.getElementById('statusMessage');
+            msg.textContent = text;
+            msg.className = `status-message ${type}`;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+
+        // Fungsi upload ke ImageBB
+        async function uploadToImageBB(file) {
+            const snapshot = await apiKeyImageBBRef.once('value');
+            const apiKey = snapshot.val();
+            if (!apiKey) throw new Error('API Key tidak ditemukan');
+
+            const formData = new FormData();
+            formData.append('key', apiKey);
+            formData.append('image', file);
+
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (!data.success) throw new Error('Upload gagal');
+            return data.data.url;
+        }
+
+        function buatItem(keterangan = '', url = '', isNew = false) {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            
+            if (isNew) {
+                div.innerHTML = `
+                    <input type="text" class="keterangan" placeholder="Keterangan (contoh: Nota material)" value="${keterangan}">
+                    <input type="file" class="file-input" accept="image/*">
+                    <button class="btn-success upload-btn" style="padding: 0.5rem 1rem;">Upload</button>
+                    <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                    <input type="hidden" class="url" value="">
+                `;
+                
+                const uploadBtn = div.querySelector('.upload-btn');
+                const fileInput = div.querySelector('.file-input');
+                const urlInput = div.querySelector('.url');
+                const keteranganInput = div.querySelector('.keterangan');
+                
+                uploadBtn.addEventListener('click', async () => {
+                    if (!fileInput.files || !fileInput.files[0]) {
+                        alert('Pilih file terlebih dahulu!');
+                        return;
+                    }
+                    
+                    uploadBtn.disabled = true;
+                    uploadBtn.textContent = 'Uploading...';
+                    
+                    try {
+                        const imageUrl = await uploadToImageBB(fileInput.files[0]);
+                        urlInput.value = imageUrl;
+                        
+                        // Ganti tampilan
+                        div.innerHTML = `
+                            <input type="text" class="keterangan" value="${keteranganInput.value}">
+                            <input type="text" class="url" value="${imageUrl}" readonly style="background-color: #f3f4f6;">
+                            <img src="${imageUrl}" class="preview-image" alt="preview">
+                            <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                        `;
+                        
+                        div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+                        showMessage('Upload berhasil!');
+                    } catch (error) {
+                        alert('Gagal upload: ' + error.message);
+                        uploadBtn.disabled = false;
+                        uploadBtn.textContent = 'Upload';
+                    }
+                });
+            } else {
+                div.innerHTML = `
+                    <input type="text" class="keterangan" value="${keterangan}" placeholder="Keterangan">
+                    <input type="text" class="url" value="${url}" readonly style="background-color: #f3f4f6;">
+                    <img src="${url}" class="preview-image" alt="preview" onerror="this.style.display='none'">
+                    <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                `;
+            }
+            
+            div.querySelector('.remove-btn')?.addEventListener('click', () => div.remove());
+            return div;
+        }
+
+        // Load data
+        buktiRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            const container = document.getElementById('buktiList');
+            container.innerHTML = '';
+            
+            if (items.length === 0) {
+                container.appendChild(buatItem('', '', true));
+            } else {
+                items.forEach(item => {
+                    container.appendChild(buatItem(item.keterangan, item.url, false));
+                });
+            }
+        });
+
+        // Tambah bukti
+        document.getElementById('tambahBukti').addEventListener('click', () => {
+            document.getElementById('buktiList').appendChild(buatItem('', '', true));
+        });
+
+        // Simpan data
+        document.getElementById('simpanBukti').addEventListener('click', async () => {
+            const items = [];
+            const rows = document.querySelectorAll('#buktiList .list-item');
+            
+            rows.forEach(row => {
+                const keterangan = row.querySelector('.keterangan')?.value.trim();
+                const url = row.querySelector('.url')?.value.trim();
+                if (keterangan && url) {
+                    items.push({ keterangan, url });
+                }
+            });
+
+            try {
+                await buktiRef.set(items);
+                showMessage('Data bukti berhasil disimpan!');
+            } catch (error) {
+                showMessage('Gagal menyimpan: ' + error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
