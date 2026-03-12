@@ -4,38 +4,240 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Bukti - Masjid Ar-Rahman</title>
+    <!-- Font Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #f3f4f6; color: #1f2937; }
+        body { 
+            background-color: #f3f4f6; 
+            color: #1f2937; 
+            padding-bottom: 80px; /* ruang untuk bottom navigation */
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { background-color: #1e3a5f; color: white; padding: 1rem 0; }
-        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .logo h1 { font-size: 1.8rem; }
-        nav a { color: white; text-decoration: none; margin-left: 1.5rem; }
-        .section-title { font-size: 1.8rem; color: #1e3a5f; border-bottom: 3px solid #fbbf24; display: inline-block; margin-bottom: 1.5rem; }
-        .card { background: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        /* Header dengan warna #3FB6A8 */
+        header { 
+            background-color: #3FB6A8; 
+            color: white; 
+            padding: 0.8rem 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .logo h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+        }
+        .logo p { 
+            font-size: 0.8rem; 
+            opacity: 0.9; 
+        }
+        
+        /* Tombol logout di header */
+        .logout-btn-header {
+            background: transparent; 
+            border: 2px solid white; 
+            color: white; 
+            padding: 0.3rem 1rem;
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .logout-btn-header:hover { 
+            background: white; 
+            color: #1e3a5f; 
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0.2rem;
+            z-index: 1000;
+            border-top: 1px solid #e5e7eb;
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .bottom-nav a i {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+        .bottom-nav a.active {
+            color: #3FB6A8;
+        }
+        .bottom-nav a:hover {
+            color: #3FB6A8;
+        }
+
+        .section-title {
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: #1e3a5f; 
+            margin: 2rem 0 1.5rem;
+            border-bottom: 3px solid #fbbf24; 
+            display: inline-block; 
+            padding-bottom: 0.3rem;
+        }
+        
+        /* Card lebih kecil untuk mobile */
+        .card {
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem;
+        }
+
         .form-group { margin-bottom: 1rem; }
-        label { font-weight: 500; display: block; }
-        input { width: 100%; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 8px; }
-        .btn { background-color: #1e3a5f; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn-secondary { background-color: #fbbf24; color: #1e3a5f; }
-        .btn-danger { background-color: #dc2626; color: white; }
-        .btn-success { background-color: #10b981; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        th { background-color: #f9fafb; }
-        .status-message { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        label { font-weight: 500; display: block; font-size: 0.9rem; }
+        input { 
+            width: 100%; 
+            padding: 0.8rem; 
+            border: 1px solid #d1d5db; 
+            border-radius: 8px; 
+            font-size: 1rem;
+        }
+
+        .btn { 
+            background-color: #1e3a5f; 
+            color: white; 
+            border: none; 
+            padding: 0.8rem 1.5rem; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.95rem;
+        }
+        .btn-secondary { 
+            background-color: #fbbf24; 
+            color: #1e3a5f; 
+        }
+        .btn-danger { 
+            background-color: #dc2626; 
+            color: white; 
+            padding: 0.5rem 1rem; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .btn-success { 
+            background-color: #10b981; 
+            color: white; 
+            padding: 0.5rem 1rem; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .status-message { 
+            padding: 1rem; 
+            border-radius: 8px; 
+            margin-bottom: 1rem; 
+            display: none; 
+        }
         .success { background-color: #d1fae5; color: #065f46; }
         .error { background-color: #fee2e2; color: #991b1b; }
-        .list-item { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .list-item input { flex: 2; }
-        .list-item .file-input { flex: 1; }
-        .preview-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
-        footer { background-color: #1e3a5f; color: white; text-align: center; padding: 1.5rem 0; margin-top: 2rem; }
+
+        /* Daftar bukti */
+        .bukti-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .list-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .list-item input[type="text"] {
+            flex: 2;
+            min-width: 150px;
+            padding: 0.5rem;
+        }
+        .list-item input[type="file"] {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.3rem;
+        }
+        .list-item .preview-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+        }
+        .list-item .url {
+            background-color: #f3f4f6;
+            font-size: 0.8rem;
+            flex: 2;
+        }
+        .list-item button {
+            white-space: nowrap;
+        }
+
+        footer { 
+            background-color: #1e3a5f; 
+            color: white; 
+            text-align: center; 
+            padding: 1.2rem 0; 
+            font-size: 0.9rem;
+        }
+
+        /* Responsif untuk mobile */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
+            .logo h1 { font-size: 1.5rem; }
+            .logo p { font-size: 0.8rem; }
+            .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
+            .card { padding: 1rem; margin-bottom: 1rem; }
+            
+            .list-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .list-item input, .list-item .preview-image, .list-item button {
+                width: 100%;
+            }
+            .list-item .preview-image {
+                margin: 0 auto;
+            }
+            .btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
+            .btn-success, .btn-danger { padding: 0.4rem 0.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -45,15 +247,20 @@
                 <h1>Admin Bukti Pengeluaran</h1>
                 <p>Kelola Bukti Transaksi Pengeluaran</p>
             </div>
-            <nav>
-                <a href="../index.html">Beranda</a>
-                <a href="panitia.html">Panitia</a>
-                <a href="pemasukan.html">Pemasukan</a>
-                <a href="pengeluaran.html">Pengeluaran</a>
-                <a href="penyumbang.html">Penyumbang</a>
-            </nav>
+            <!-- Tombol Logout akan diisi lewat JS -->
+            <div id="headerLogout"></div>
         </div>
     </header>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="../index.html"><i class="fas fa-home"></i><span>Beranda</span></a>
+        <a href="panitia.html"><i class="fas fa-users-cog"></i><span>Panitia</span></a>
+        <a href="pemasukan.html"><i class="fas fa-arrow-down"></i><span>Pemasukan</span></a>
+        <a href="pengeluaran.html"><i class="fas fa-arrow-up"></i><span>Pengeluaran</span></a>
+        <a href="bukti.html" class="active"><i class="fas fa-file-invoice"></i><span>Bukti</span></a>
+        <a href="penyumbang.html"><i class="fas fa-hand-holding-heart"></i><span>Penyumbang</span></a>
+    </nav>
 
     <main class="container">
         <h2 class="section-title"><i class="fas fa-camera"></i> Kelola Bukti Pengeluaran</h2>
@@ -61,11 +268,13 @@
 
         <div class="card">
             <h3 style="margin-bottom: 1rem;">Daftar Bukti Pengeluaran</h3>
-            <div id="buktiList">
+            <div id="buktiList" class="bukti-list">
                 <!-- Akan diisi JavaScript -->
             </div>
-            <button class="btn-secondary" id="tambahBukti" style="margin-top: 1rem;"><i class="fas fa-plus"></i> Tambah Bukti</button>
-            <button class="btn" id="simpanBukti" style="margin-top: 1rem; margin-left: 1rem;"><i class="fas fa-save"></i> Simpan Perubahan</button>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="btn-secondary" id="tambahBukti"><i class="fas fa-plus"></i> Tambah Bukti</button>
+                <button class="btn" id="simpanBukti"><i class="fas fa-save"></i> Simpan Perubahan</button>
+            </div>
         </div>
     </main>
 
@@ -75,10 +284,17 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
+        // Cek login: jika tidak ada localStorage, redirect ke index.html
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = '../index.html';
+        }
+
+        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
             authDomain: "steady-fin-368617.firebaseapp.com",
@@ -95,12 +311,25 @@
         const buktiRef = database.ref('laporanKeuangan/bulanIni/bukti');
         const apiKeyImageBBRef = database.ref('panitia/apikeyimagsbb');
 
+        // Elemen DOM
+        const headerLogoutDiv = document.getElementById('headerLogout');
+        const statusMsg = document.getElementById('statusMessage');
+        const buktiListDiv = document.getElementById('buktiList');
+        const tambahBtn = document.getElementById('tambahBukti');
+        const simpanBtn = document.getElementById('simpanBukti');
+
+        // Tambah tombol logout
+        headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = '../index.html';
+        });
+
         function showMessage(text, type = 'success') {
-            const msg = document.getElementById('statusMessage');
-            msg.textContent = text;
-            msg.className = `status-message ${type}`;
-            msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
+            statusMsg.textContent = text;
+            statusMsg.className = `status-message ${type}`;
+            statusMsg.style.display = 'block';
+            setTimeout(() => statusMsg.style.display = 'none', 3000);
         }
 
         // Fungsi upload ke ImageBB
@@ -129,10 +358,10 @@
             
             if (isNew) {
                 div.innerHTML = `
-                    <input type="text" class="keterangan" placeholder="Keterangan (contoh: Nota material)" value="${keterangan}">
+                    <input type="text" class="keterangan" placeholder="Keterangan (contoh: Nota material)" value="${keterangan.replace(/"/g, '&quot;')}">
                     <input type="file" class="file-input" accept="image/*">
-                    <button class="btn-success upload-btn" style="padding: 0.5rem 1rem;">Upload</button>
-                    <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                    <button class="btn-success upload-btn"><i class="fas fa-upload"></i> Upload</button>
+                    <button class="btn-danger remove-btn"><i class="fas fa-trash"></i> Hapus</button>
                     <input type="hidden" class="url" value="">
                 `;
                 
@@ -148,18 +377,18 @@
                     }
                     
                     uploadBtn.disabled = true;
-                    uploadBtn.textContent = 'Uploading...';
+                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
                     
                     try {
                         const imageUrl = await uploadToImageBB(fileInput.files[0]);
                         urlInput.value = imageUrl;
                         
-                        // Ganti tampilan
+                        // Ganti tampilan menjadi mode readonly dengan preview
                         div.innerHTML = `
-                            <input type="text" class="keterangan" value="${keteranganInput.value}">
+                            <input type="text" class="keterangan" value="${keteranganInput.value.replace(/"/g, '&quot;')}">
                             <input type="text" class="url" value="${imageUrl}" readonly style="background-color: #f3f4f6;">
-                            <img src="${imageUrl}" class="preview-image" alt="preview">
-                            <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                            <img src="${imageUrl}" class="preview-image" alt="preview" onerror="this.style.display='none'">
+                            <button class="btn-danger remove-btn"><i class="fas fa-trash"></i> Hapus</button>
                         `;
                         
                         div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
@@ -167,15 +396,15 @@
                     } catch (error) {
                         alert('Gagal upload: ' + error.message);
                         uploadBtn.disabled = false;
-                        uploadBtn.textContent = 'Upload';
+                        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
                     }
                 });
             } else {
                 div.innerHTML = `
-                    <input type="text" class="keterangan" value="${keterangan}" placeholder="Keterangan">
+                    <input type="text" class="keterangan" value="${keterangan.replace(/"/g, '&quot;')}" placeholder="Keterangan">
                     <input type="text" class="url" value="${url}" readonly style="background-color: #f3f4f6;">
                     <img src="${url}" class="preview-image" alt="preview" onerror="this.style.display='none'">
-                    <button class="btn-danger remove-btn" style="padding: 0.5rem 1rem;">Hapus</button>
+                    <button class="btn-danger remove-btn"><i class="fas fa-trash"></i> Hapus</button>
                 `;
             }
             
@@ -186,25 +415,24 @@
         // Load data
         buktiRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
-            const container = document.getElementById('buktiList');
-            container.innerHTML = '';
+            buktiListDiv.innerHTML = '';
             
             if (items.length === 0) {
-                container.appendChild(buatItem('', '', true));
+                buktiListDiv.appendChild(buatItem('', '', true));
             } else {
                 items.forEach(item => {
-                    container.appendChild(buatItem(item.keterangan, item.url, false));
+                    buktiListDiv.appendChild(buatItem(item.keterangan, item.url, false));
                 });
             }
         });
 
         // Tambah bukti
-        document.getElementById('tambahBukti').addEventListener('click', () => {
-            document.getElementById('buktiList').appendChild(buatItem('', '', true));
+        tambahBtn.addEventListener('click', () => {
+            buktiListDiv.appendChild(buatItem('', '', true));
         });
 
         // Simpan data
-        document.getElementById('simpanBukti').addEventListener('click', async () => {
+        simpanBtn.addEventListener('click', async () => {
             const items = [];
             const rows = document.querySelectorAll('#buktiList .list-item');
             
