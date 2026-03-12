@@ -178,7 +178,6 @@
                 <a href="admin/pemasukan.html">Admin Pemasukan</a>
                 <a href="admin/pengeluaran.html">Admin Pengeluaran</a>
                 <a href="admin/bukti.html">Admin Bukti</a>
-                <!-- Menu baru: Admin Penyumbang -->
                 <a href="admin/penyumbang.html">Admin Penyumbang</a>
             </nav>
         </div>
@@ -214,6 +213,31 @@
             </div>
         </div>
 
+        <!-- CARD BARU: DATA SUMBANGAN DARI PENYUMBANG -->
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span><strong>Total Sumbangan:</strong> <span id="totalSumbangan">-</span></span>
+                <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturSumbangan">-</span></span>
+            </div>
+            <table id="tabelSumbangan">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Jumlah</th>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody id="sumbanganBody">
+                    <!-- Diisi JavaScript -->
+                </tbody>
+            </table>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
+            </p>
+        </div>
+
         <!-- Daftar Panitia -->
         <div class="card">
             <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
@@ -222,7 +246,7 @@
             </div>
         </div>
 
-        <!-- Rincian Pemasukan & Pengeluaran (opsional, bisa ditambahkan) -->
+        <!-- Rincian Pemasukan & Pengeluaran -->
         <div class="card">
             <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Rincian Pemasukan & Pengeluaran</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
@@ -278,13 +302,15 @@
         const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const panitiaRef = database.ref('panitia/daftar');
+        // Referensi baru untuk penyumbang
+        const penyumbangRef = database.ref('penyumbang/daftar');
 
         // Format Rupiah
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Update statistik
+        // Update statistik (ringkasan keuangan)
         statsRef.on('value', (snapshot) => {
             const data = snapshot.val() || {};
             document.getElementById('totalPemasukan').textContent = formatRupiah(data.totalPemasukan || 0);
@@ -336,6 +362,36 @@
                     </div>
                 `;
             }).join('');
+        });
+
+        // Update data sumbangan dari penyumbang
+        penyumbangRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            // Hitung total sumbangan
+            const total = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
+            document.getElementById('totalSumbangan').textContent = formatRupiah(total);
+            
+            // Hitung jumlah donatur unik (berdasarkan nama)
+            const namaSet = new Set();
+            items.forEach(item => {
+                if (item.nama) namaSet.add(item.nama.trim().toLowerCase());
+            });
+            document.getElementById('jumlahDonaturSumbangan').textContent = namaSet.size.toLocaleString();
+            
+            // Ambil 5 data terbaru (asumsi data diurutkan berdasarkan tanggal, tetapi karena tidak ada timestamp, kita ambil 5 terakhir dari array)
+            // Untuk lebih akurat, kita bisa mengurutkan berdasarkan tanggal (string) secara descending.
+            const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+            const limaTerbaru = sorted.slice(0, 5);
+            
+            const tbody = document.getElementById('sumbanganBody');
+            tbody.innerHTML = limaTerbaru.map(item => `
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.jumlah || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.keterangan || '-'}</td>
+                </tr>
+            `).join('');
         });
     </script>
 </body>
