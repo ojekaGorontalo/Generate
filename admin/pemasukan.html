@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pemasukan - Masjid Ar-Rahman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #f3f4f6; color: #1f2937; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background-color: #1e3a5f; color: white; padding: 1rem 0; }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo h1 { font-size: 1.8rem; }
+        nav a { color: white; text-decoration: none; margin-left: 1.5rem; }
+        .section-title { font-size: 1.8rem; color: #1e3a5f; border-bottom: 3px solid #fbbf24; display: inline-block; margin-bottom: 1.5rem; }
+        .card { background: white; border-radius: 12px; padding: 1.8rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: 500; display: block; }
+        input { width: 100%; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 8px; }
+        .btn { background-color: #1e3a5f; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-secondary { background-color: #fbbf24; color: #1e3a5f; }
+        .btn-danger { background-color: #dc2626; color: white; }
+        .btn-success { background-color: #10b981; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background-color: #f9fafb; }
+        .status-message { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: none; }
+        .success { background-color: #d1fae5; color: #065f46; }
+        .error { background-color: #fee2e2; color: #991b1b; }
+        footer { background-color: #1e3a5f; color: white; text-align: center; padding: 1.5rem 0; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Admin Pemasukan</h1>
+                <p>Kelola Data Pemasukan Masjid</p>
+            </div>
+            <nav>
+                <a href="../index.html">Beranda</a>
+                <a href="panitia.html">Panitia</a>
+                <a href="pengeluaran.html">Pengeluaran</a>
+                <a href="bukti.html">Bukti</a>
+                <a href="penyumbang.html">Penyumbang</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title"><i class="fas fa-arrow-down"></i> Kelola Data Pemasukan</h2>
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem;">Daftar Kategori Pemasukan</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Nominal (Rp)</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="pemasukanBody">
+                    <!-- Akan diisi JavaScript -->
+                </tbody>
+            </table>
+            <button class="btn-secondary" id="tambahBaris" style="margin-top: 1rem;"><i class="fas fa-plus"></i> Tambah Baris</button>
+            <button class="btn" id="simpanPemasukan" style="margin-top: 1rem; margin-left: 1rem;"><i class="fas fa-save"></i> Simpan Perubahan</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Takmir Masjid Ar-Rahman - Panel Admin Pemasukan</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
+            authDomain: "steady-fin-368617.firebaseapp.com",
+            databaseURL: "https://steady-fin-368617-default-rtdb.firebaseio.com",
+            projectId: "steady-fin-368617",
+            storageBucket: "steady-fin-368617.firebasestorage.app",
+            messagingSenderId: "626971902484",
+            appId: "1:626971902484:web:85323d8526217c26fe9d01",
+            measurementId: "G-VMK7V753MW"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
+        const statsRef = database.ref('laporanKeuangan/bulanIni/stats');
+
+        function showMessage(text, type = 'success') {
+            const msg = document.getElementById('statusMessage');
+            msg.textContent = text;
+            msg.className = `status-message ${type}`;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toLocaleString('id-ID');
+        }
+
+        function buatBaris(kategori = '', nominal = 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="kategori" value="${kategori}" placeholder="Kategori"></td>
+                <td><input type="number" class="nominal" value="${nominal}" placeholder="Nominal"></td>
+                <td><button class="btn-danger" onclick="this.closest('tr').remove()">Hapus</button></td>
+            `;
+            return tr;
+        }
+
+        // Hitung ulang total pemasukan
+        async function hitungTotalPemasukan() {
+            try {
+                const snapshot = await pemasukanRef.once('value');
+                const items = snapshot.val() || [];
+                const total = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
+                
+                // Update stats di Firebase
+                const statsSnapshot = await statsRef.once('value');
+                let stats = statsSnapshot.val() || {
+                    totalPemasukan: 0,
+                    totalPengeluaran: 0,
+                    saldoAkhir: 0,
+                    donaturBulanIni: 0
+                };
+                
+                stats.totalPemasukan = total;
+                stats.saldoAkhir = stats.totalPemasukan - stats.totalPengeluaran;
+                
+                await statsRef.set(stats);
+            } catch (error) {
+                console.error('Error hitung total:', error);
+            }
+        }
+
+        // Load data
+        pemasukanRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            const tbody = document.getElementById('pemasukanBody');
+            tbody.innerHTML = '';
+            
+            if (items.length === 0) {
+                tbody.appendChild(buatBaris());
+            } else {
+                items.forEach(item => {
+                    tbody.appendChild(buatBaris(item.kategori, item.nominal));
+                });
+            }
+        });
+
+        // Tambah baris
+        document.getElementById('tambahBaris').addEventListener('click', () => {
+            document.getElementById('pemasukanBody').appendChild(buatBaris());
+        });
+
+        // Simpan data
+        document.getElementById('simpanPemasukan').addEventListener('click', async () => {
+            const rows = document.querySelectorAll('#pemasukanBody tr');
+            const items = [];
+            
+            rows.forEach(row => {
+                const kategori = row.querySelector('.kategori').value.trim();
+                const nominal = parseInt(row.querySelector('.nominal').value) || 0;
+                if (kategori && nominal > 0) {
+                    items.push({ kategori, nominal });
+                }
+            });
+
+            try {
+                await pemasukanRef.set(items);
+                await hitungTotalPemasukan();
+                showMessage('Data pemasukan berhasil disimpan!');
+            } catch (error) {
+                showMessage('Gagal menyimpan: ' + error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
