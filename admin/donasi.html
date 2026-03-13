@@ -11,9 +11,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ====== TEMA ISLAMI (SAMA DENGAN MASJID.HTML) ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { 
-            background-color: #f3f4f6; 
+            background-color: #faf7f0;  /* Krem lembut */
             color: #1f2937; 
             display: flex;
             flex-direction: column;
@@ -21,12 +22,12 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Header dengan warna masjid */
+        /* Header hijau tua dengan teks putih */
         header { 
-            background-color: #3FB6A8; 
+            background-color: #1e4a3a; 
             color: white; 
-            padding: 0.8rem 0; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15); 
         }
         header .container { 
             display: flex; 
@@ -50,16 +51,18 @@
             padding: 0.3rem 1rem;
             border-radius: 30px;
             transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .back-link a:hover {
             background: white;
-            color: #1e3a5f;
+            color: #1e4a3a;
+            border-color: white;
         }
 
         .section-title {
             font-size: 1.8rem; 
             font-weight: 700; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
             margin: 2rem 0 1rem;
             border-bottom: 3px solid #fbbf24; 
             display: inline-block; 
@@ -96,7 +99,7 @@
         .quote strong {
             display: block;
             margin-top: 0.5rem;
-            color: #1e3a5f;
+            color: #1e4a3a;
         }
 
         .form-group {
@@ -118,11 +121,11 @@
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #3FB6A8;
-            box-shadow: 0 0 0 3px rgba(63,182,168,0.2);
+            border-color: #1e4a3a;
+            box-shadow: 0 0 0 3px rgba(30,74,58,0.2);
         }
         .btn {
-            background-color: #1e3a5f;
+            background-color: #1e4a3a;
             color: white;
             border: none;
             padding: 0.9rem 2rem;
@@ -134,7 +137,7 @@
             width: 100%;
         }
         .btn:hover {
-            background-color: #2b4c7a;
+            background-color: #2d6a4f;
             transform: translateY(-2px);
         }
         .btn:disabled {
@@ -145,7 +148,7 @@
 
         .rekening-box {
             background: linear-gradient(145deg, #f9fafb, #ffffff);
-            border: 2px dashed #3FB6A8;
+            border: 2px dashed #1e4a3a;
             border-radius: 16px;
             padding: 1.5rem;
             text-align: center;
@@ -155,12 +158,12 @@
         .bank-name {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #1e3a5f;
+            color: #1e4a3a;
         }
         .rekening-number {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #1e3a5f;
+            color: #1e4a3a;
             letter-spacing: 2px;
             margin: 0.3rem 0;
             background: white;
@@ -171,7 +174,7 @@
         }
         .btn-copy {
             background: #fbbf24;
-            color: #1e3a5f;
+            color: #1e4a3a;
             border: none;
             padding: 0.5rem 1.5rem;
             border-radius: 50px;
@@ -230,7 +233,7 @@
         }
 
         footer { 
-            background-color: #1e3a5f; 
+            background-color: #1e4a3a; 
             color: white; 
             text-align: center; 
             padding: 1.2rem 0; 
@@ -242,6 +245,8 @@
             .container { padding: 15px; }
             .logo h1 { font-size: 1.3rem; }
             .rekening-number { font-size: 1.4rem; }
+            /* Header lebih kecil di mobile */
+            header { padding: 0.3rem 0; }
         }
     </style>
 </head>
@@ -253,7 +258,7 @@
                 <p>Transparan, Amanah, Berkah</p>
             </div>
             <div class="back-link">
-                <a href="../masjidArrahman.html"><i class="fas fa-arrow-left"></i> Kembali</a>
+                <a href="../masjid.html"><i class="fas fa-arrow-left"></i> Kembali</a>
             </div>
         </div>
     </header>
@@ -341,7 +346,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        // Konfigurasi Firebase
+        // Konfigurasi Firebase (sama dengan sebelumnya)
         const firebaseConfig = {
             apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
             authDomain: "steady-fin-368617.firebaseapp.com",
@@ -359,7 +364,7 @@
         const namaRekRef = database.ref('panitia/RekeningDonasi/Nama:');
         const rekeningRef = database.ref('panitia/RekeningDonasi/Rekening');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
-        const donasiRef = database.ref('donasi/daftar'); // tempat menyimpan data donasi
+        const donasiRef = database.ref('donasi/daftar');
 
         // Elemen DOM
         const rekeningContainer = document.getElementById('rekeningContainer');
@@ -431,7 +436,6 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Validasi sederhana
             const nama = document.getElementById('nama').value.trim();
             const alamat = document.getElementById('alamat').value.trim();
             const kategori = document.getElementById('kategori').value;
@@ -444,7 +448,6 @@
                 return;
             }
 
-            // Validasi ukuran file (maks 5MB)
             if (file.size > 5 * 1024 * 1024) {
                 showMessage('Ukuran file maksimal 5 MB.', 'error');
                 return;
@@ -454,22 +457,19 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
 
             try {
-                // Upload bukti ke ImgBB
                 const imageUrl = await uploadToImageBB(file);
 
-                // Siapkan data donasi
                 const donasiData = {
                     nama,
                     alamat,
                     kategori,
                     nominal,
                     catatan: catatan || '',
-                    tanggal: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                    tanggal: new Date().toISOString().split('T')[0],
                     buktiUrl: imageUrl,
                     timestamp: Date.now()
                 };
 
-                // Simpan ke Firebase (push untuk menambah data baru)
                 await donasiRef.push(donasiData);
 
                 showMessage('Donasi Anda berhasil dikirim! Terima kasih.', 'success');
@@ -487,11 +487,11 @@
         function showMessage(text, type) {
             statusMsg.textContent = text;
             statusMsg.className = `status-message ${type}`;
+            statusMsg.style.display = 'block';
             setTimeout(() => {
                 statusMsg.style.display = 'none';
             }, 5000);
         }
     </script>
 </body>
-
 </html>
