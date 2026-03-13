@@ -15,11 +15,10 @@
         body { 
             background-color: #f3f4f6; 
             color: #1f2937; 
-            padding-bottom: 80px; /* Memberi ruang untuk bottom navigation */
+            padding-bottom: 80px;
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Header hanya dengan logo dan logout */
         header { 
             background-color: #3FB6A8; 
             color: white; 
@@ -41,7 +40,6 @@
             opacity: 0.9; 
         }
         
-        /* Tombol logout di header */
         .logout-btn-header {
             background: transparent; 
             border: 2px solid white; 
@@ -58,7 +56,6 @@
             color: #1e3a5f; 
         }
         
-        /* Banner di bawah header */
         #bannerContainer { 
             width: 100%; 
             overflow: hidden; 
@@ -70,13 +67,14 @@
             display: block; 
         }
 
-        /* Marquee (teks berjalan) */
         .marquee-container {
             background-color: #1e3a5f;
             color: white;
             padding: 0.5rem 0;
             font-size: 0.95rem;
             border-bottom: 2px solid #fbbf24;
+            overflow: hidden;
+            white-space: nowrap;
         }
         .marquee-container marquee {
             display: block;
@@ -86,7 +84,6 @@
             margin-right: 3rem;
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -123,7 +120,6 @@
             color: #3FB6A8;
         }
 
-        /* Login Overlay */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
@@ -147,19 +143,16 @@
         .login-card button:hover { background: #2b4c7a; }
         #loginError { color: #dc2626; margin-top: 1rem; font-size: 0.9rem; }
 
-        /* Konten Admin (tersembunyi saat belum login) */
         #adminContent { display: none; }
 
         .section-title {
             font-size: 1.8rem; font-weight: 700; color: #1e3a5f; margin: 2rem 0 1.5rem;
             border-bottom: 3px solid #fbbf24; display: inline-block; padding-bottom: 0.3rem;
         }
-        /* Card lebih kecil untuk mobile */
         .card {
             background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             padding: 1.5rem; margin-bottom: 1.5rem;
         }
-        /* Grid 4 kolom untuk ringkasan keuangan */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -194,7 +187,6 @@
         .panitia-card .info h4 { font-weight: 600; font-size: 0.95rem; }
         .panitia-card .info p { color: #6b7280; font-size: 0.8rem; }
 
-        /* Panel Upload Banner */
         .banner-panel {
             background: #f9fafb; border-radius: 10px; padding: 1.2rem; margin-top: 1rem;
             border: 1px dashed #cbd5e1;
@@ -214,7 +206,6 @@
             font-size: 0.9rem;
         }
 
-        /* Responsif untuk mobile */
         @media (max-width: 768px) {
             .container { padding: 15px; }
             header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
@@ -222,7 +213,6 @@
             .logo p { font-size: 0.8rem; }
             .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
             .card { padding: 1rem; margin-bottom: 1rem; }
-            /* Grid 2 kolom di mobile */
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.8rem;
@@ -252,17 +242,14 @@
                 <h1>Masjid Ar-Rahman</h1>
                 <p>Transparan, Amanah, Berkah</p>
             </div>
-            <!-- Tombol Logout akan ditambahkan lewat JS di header -->
             <div id="headerLogout"></div>
         </div>
     </header>
 
-    <!-- Banner Container di bawah header -->
     <div id="bannerContainer" style="display: none;">
         <img id="bannerImage" src="" alt="Banner Masjid">
     </div>
 
-    <!-- Login Overlay -->
     <div id="loginOverlay">
         <div class="login-card">
             <h2>🔐 Akses Admin</h2>
@@ -274,7 +261,6 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation (tersembunyi sampai login) -->
     <nav class="bottom-nav" id="bottomNav" style="display: none;">
         <a href="index.html" class="active"><i class="fas fa-home"></i><span>Beranda</span></a>
         <a href="admin/panitia.html"><i class="fas fa-users-cog"></i><span>Panitia</span></a>
@@ -284,9 +270,7 @@
         <a href="admin/penyumbang.html"><i class="fas fa-hand-holding-heart"></i><span>Penyumbang</span></a>
     </nav>
 
-    <!-- Konten admin (tersembunyi sampai login) -->
     <div id="adminContent">
-        <!-- Teks berjalan (marquee) -->
         <div class="marquee-container">
             <marquee behavior="scroll" direction="left" scrollamount="5" loop="infinite">
                 <span id="marqueeText">Memuat data donasi terbaru...</span>
@@ -296,7 +280,6 @@
         <main class="container">
             <h2 class="section-title">🏠 Beranda Masjid (Admin)</h2>
             
-            <!-- Panel kelola banner -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-image"></i> Kelola Banner Header</h3>
                 <div class="banner-panel">
@@ -310,7 +293,6 @@
                 </div>
             </div>
 
-            <!-- Ringkasan Keuangan -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Ringkasan Keuangan</h3>
                 <div class="stats-grid" id="statsContainer">
@@ -337,7 +319,6 @@
                 </div>
             </div>
 
-            <!-- Total Pemasukan, Sumbangan, dan Donasi -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan & Sumbangan & Donasi</h3>
                 <div class="total-row">
@@ -347,7 +328,6 @@
                 </div>
             </div>
 
-            <!-- Donasi Via Rekening -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Donasi Via Rekening</h3>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
@@ -371,7 +351,6 @@
                 </p>
             </div>
 
-            <!-- Sumbangan Terbaru -->
             <div class="card">
                 <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
@@ -385,12 +364,6 @@
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
                     <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
                 </p>
-            </div>
-
-            <!-- Daftar Panitia -->
-            <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
-                <div id="panitiaContainer" class="panitia-list"></div>
             </div>
 
             <!-- Rincian Pemasukan & Pengeluaran -->
@@ -407,6 +380,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Daftar Panitia (dipindah ke sini) -->
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
+                <div id="panitiaContainer" class="panitia-list"></div>
+            </div>
         </main>
 
         <footer>
@@ -416,7 +395,6 @@
         </footer>
     </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
@@ -494,7 +472,6 @@
             loginError.textContent = 'Gagal memuat data login. Refresh halaman.';
         });
 
-        // Fungsi login
         function handleLogin() {
             const user = usernameInput.value.trim();
             const pass = passwordInput.value.trim();
@@ -513,7 +490,6 @@
         loginBtn.addEventListener('click', handleLogin);
         passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
 
-        // Logout
         function addLogoutButton() {
             headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtnHeader"><i class="fas fa-sign-out-alt"></i> Logout</button>';
             document.getElementById('logoutBtnHeader').addEventListener('click', () => {
@@ -522,7 +498,6 @@
             });
         }
 
-        // Load banner
         function loadBanner() {
             bannerRef.once('value', (snapshot) => {
                 const url = snapshot.val();
@@ -535,7 +510,6 @@
             });
         }
 
-        // Upload banner
         async function uploadBanner(file) {
             if (!apiKey) {
                 uploadStatus.style.color = '#dc2626';
@@ -581,12 +555,10 @@
             uploadBanner(file);
         });
 
-        // Fungsi format Rupiah
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Fungsi update ringkasan keuangan (termasuk donasi)
         function updateRingkasanKeuangan() {
             const totalGabungan = lastTotalPemasukan + lastTotalSumbangan + lastTotalDonasi;
             document.getElementById('totalPemasukanGabungan').textContent = formatRupiah(totalGabungan);
@@ -672,7 +644,7 @@
             `).join('');
 
             updateRingkasanKeuangan();
-            updateMarquee(); // Perbarui teks berjalan
+            updateMarquee();
         });
 
         // Listener donasi via rekening
@@ -690,7 +662,7 @@
             lastJumlahDonaturDonasi = namaSet.size;
 
             document.getElementById('totalDonasi').textContent = formatRupiah(lastTotalDonasi);
-            document.getElementById('totalDonasiLangsung').textContent = formatRupiah(lastTotalDonasi); // tambahan
+            document.getElementById('totalDonasiLangsung').textContent = formatRupiah(lastTotalDonasi);
             document.getElementById('jumlahDonaturDonasi').textContent = lastJumlahDonaturDonasi.toLocaleString();
 
             const sorted = [...donasiArray].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
@@ -707,26 +679,26 @@
             `).join('');
 
             updateRingkasanKeuangan();
-            updateMarquee(); // Perbarui teks berjalan
+            updateMarquee();
         });
 
-        // Listener panitia
+        // Listener panitia (diperbaiki: menerima array langsung)
         panitiaRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            const daftar = (data && data.daftar) || [];
+            // Data bisa berupa array langsung atau null
+            const daftar = Array.isArray(data) ? data : [];
             const container = document.getElementById('panitiaContainer');
             container.innerHTML = daftar.map(item => {
-                const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
+                const inisial = item.nama ? item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '--';
                 return `
                     <div class="panitia-card">
                         <div class="avatar">${inisial}</div>
-                        <div class="info"><h4>${item.nama}</h4><p>${item.jabatan}</p><small>${item.kontak || ''}</small></div>
+                        <div class="info"><h4>${item.nama || '-'}</h4><p>${item.jabatan || '-'}</p><small>${item.kontak || ''}</small></div>
                     </div>
                 `;
             }).join('');
         });
 
-        // Set active menu berdasarkan halaman saat ini
         function setActiveMenu() {
             const currentPath = window.location.pathname;
             const links = bottomNav.querySelectorAll('a');
@@ -740,7 +712,6 @@
             });
         }
 
-        // Panggil saat halaman dimuat
         window.addEventListener('load', setActiveMenu);
     </script>
 </body>
