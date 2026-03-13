@@ -11,22 +11,22 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ====== TEMA ISLAMI ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
         body { 
-            background-color: #f3f4f6; 
+            background-color: #faf7f0;  /* Krem lembut */
             color: #1f2937; 
-            padding-bottom: 80px;
+            padding-bottom: 80px; 
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
+        /* Header hijau tua dengan teks putih */
         header { 
-            background-color: #3FB6A8; 
+            background-color: #1e4a3a; 
             color: white; 
-            padding: 0.8rem 0; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            padding: 0.5rem 0;   /* dikurangi dari 0.8rem */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15); 
         }
         header .container { 
             display: flex; 
@@ -55,7 +55,7 @@
         }
 
         .marquee-container {
-            background-color: #1e3a5f;
+            background-color: #1e4a3a;
             color: white;
             padding: 0.5rem 0;
             font-size: 0.95rem;
@@ -72,7 +72,7 @@
         .section-title {
             font-size: 1.8rem; 
             font-weight: 700; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
             margin: 2rem 0 1.5rem;
             border-bottom: 3px solid #fbbf24; 
             display: inline-block; 
@@ -85,6 +85,13 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             padding: 1.5rem; 
             margin-bottom: 1.5rem;
+        }
+        .card-description {
+            font-size: 0.9rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #d1d5db;
         }
 
         .stats-grid {
@@ -100,7 +107,7 @@
         }
         .stat-item i { 
             font-size: 1.8rem; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
             margin-bottom: 0.3rem; 
         }
         .stat-item h3 { 
@@ -112,7 +119,7 @@
         .stat-item .value { 
             font-size: 1.5rem; 
             font-weight: 700; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
         }
         
         .total-row { 
@@ -130,13 +137,19 @@
         }
         .total-box p:first-child { 
             font-size: 1rem; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
             margin-bottom: 0.3rem; 
         }
         .total-box .nilai { 
             font-size: 1.5rem; 
             font-weight: 700; 
-            color: #1e3a5f; 
+            color: #1e4a3a; 
+        }
+        .total-box small { 
+            font-size: 0.7rem; 
+            color: #6b7280; 
+            display: block; 
+            margin-top: 0.3rem; 
         }
 
         table { 
@@ -171,7 +184,7 @@
         .panitia-card .avatar {
             width: 40px; 
             height: 40px; 
-            background-color: #1e3a5f; 
+            background-color: #1e4a3a; 
             color: white; 
             border-radius: 50%;
             display: flex; 
@@ -190,25 +203,26 @@
             font-size: 0.8rem; 
         }
 
+        /* Bottom Navigation dengan warna gelap */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            background: #1e4a3a;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 0.5rem 0.2rem;
             z-index: 1000;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #fbbf24;
         }
         .bottom-nav a {
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #6b7280;
+            color: #e5e7eb;
             text-decoration: none;
             font-size: 0.7rem;
             transition: color 0.2s;
@@ -221,13 +235,13 @@
             margin-bottom: 0.2rem;
         }
         .bottom-nav a.active {
-            color: #3FB6A8;
+            color: #fbbf24;
         }
         .bottom-nav a.donate {
-            color: #e11d48;
+            color: #fbbf24;
         }
         .bottom-nav a.donate i {
-            color: #e11d48;
+            color: #fbbf24;
         }
 
         .tab-content {
@@ -237,43 +251,6 @@
             display: block;
         }
 
-        .prayer-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-        .prayer-item {
-            background: #f9fafb;
-            padding: 0.8rem;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .prayer-item i {
-            font-size: 1.2rem;
-            color: #1e3a5f;
-        }
-        .prayer-item h4 {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #6b7280;
-            margin: 0.2rem 0;
-        }
-        .prayer-item .time {
-            font-weight: 700;
-            color: #1e3a5f;
-        }
-        .prayer-full {
-            grid-column: span 2;
-        }
-        .method-badge {
-            background: #f3f4f6;
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-        }
-
-        /* Filter tanggal */
         .filter-container {
             display: flex;
             gap: 1rem;
@@ -283,7 +260,7 @@
         }
         .filter-container label {
             font-weight: 600;
-            color: #1e3a5f;
+            color: #1e4a3a;
         }
         .filter-container input[type="date"] {
             padding: 0.5rem;
@@ -292,7 +269,7 @@
             font-size: 0.9rem;
         }
         .filter-container button {
-            background: #1e3a5f;
+            background: #1e4a3a;
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -302,11 +279,21 @@
             font-size: 0.9rem;
         }
         .filter-container button:hover {
-            background: #2b4c7a;
+            background: #2d6a4f;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            background: #f9fafb;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
         footer { 
-            background-color: #1e3a5f; 
+            background-color: #1e4a3a; 
             color: white; 
             text-align: center; 
             padding: 1.2rem 0; 
@@ -314,11 +301,83 @@
             font-size: 0.9rem;
         }
 
+        /* ====== TEMA RAMADHAN UNTUK JADWAL SHOLAT ====== */
+        .ramadan-card {
+            background: linear-gradient(145deg, #1e4a3a, #2d6a4f);
+            color: #fefae0;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 12px 24px rgba(0, 40, 20, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .ramadan-card::before {
+            content: "🌙";
+            font-size: 6rem;
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            opacity: 0.12;
+            transform: rotate(10deg);
+            color: #fbbf24;
+        }
+        .ramadan-card h3, .ramadan-card .method-badge {
+            color: #fbbf24;
+        }
+        .prayer-grid-ramadan {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .prayer-item-ramadan {
+            background: rgba(255, 250, 210, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid #fbbf24;
+            border-radius: 12px;
+            padding: 0.8rem;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .prayer-item-ramadan i {
+            font-size: 1.3rem;
+            color: #fbbf24;
+            margin-bottom: 0.2rem;
+        }
+        .prayer-item-ramadan h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fefae0;
+            margin: 0.2rem 0;
+        }
+        .prayer-item-ramadan .time {
+            font-weight: 700;
+            color: #fbbf24;
+            font-size: 1.1rem;
+        }
+        .prayer-full-ramadan {
+            grid-column: span 2;
+        }
+        .ramadan-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #fefae0;
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+        }
+        .ramadan-footer i {
+            color: #fbbf24;
+        }
+
+        /* Responsif */
         @media (max-width: 768px) {
             .container { padding: 15px; }
             header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
-            .logo h1 { font-size: 1.5rem; }
-            .logo p { font-size: 0.8rem; }
+            .logo h1 { font-size: 1.3rem; } /* sedikit diperkecil */
+            .logo p { font-size: 0.7rem; }
             .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
             .card { padding: 1rem; margin-bottom: 1rem; }
             .stats-grid {
@@ -338,13 +397,10 @@
             .panitia-list { grid-template-columns: 1fr; }
             .panitia-card { padding: 0.6rem; }
             .panitia-card .avatar { width: 35px; height: 35px; font-size: 0.9rem; }
-            .table-responsive {
-                overflow-x: auto;
-            }
-            .filter-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
+            .table-responsive { overflow-x: auto; }
+            .filter-container { flex-direction: column; align-items: stretch; }
+            /* Header lebih kecil di mobile */
+            header { padding: 0.3rem 0; }
         }
     </style>
 </head>
@@ -369,7 +425,7 @@
     </div>
 
     <main class="container">
-        <h2 class="section-title">🏠 Informasi Keuangan & Kepengurusan</h2>
+        <h2 class="section-title">🏠 Informasi</h2>
         
         <!-- Beranda -->
         <div id="beranda-content" class="tab-content active">
@@ -399,37 +455,43 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-mosque"></i> Jadwal Sholat Gorontalo</h3>
-                <div id="prayerContent" class="loading" style="min-height: 150px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #1e3a5f;"></i>
-                    <span style="margin-top: 10px; color: #6b7280;">Memuat jadwal sholat...</span>
+            <!-- CARD JADWAL SHOLAT DENGAN TEMA RAMADHAN -->
+            <div class="card ramadan-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-moon"></i> Jadwal Sholat Bone Bolango</h3>
+                <div id="prayerContent" class="loading" style="min-height: 200px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #fbbf24;"></i>
+                    <span style="margin-top: 10px; color: #fefae0;">Memuat jadwal sholat...</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.8rem; color: #6b7280; flex-wrap: wrap;">
+                <!-- Tempat untuk menampilkan tanggal hijriah & masehi dari Aladhan -->
+                <div class="ramadan-footer" id="ramadanFooter">
                     <span><i class="fas fa-calendar-alt"></i> <span id="hijriDate">-</span> | <span id="gregorianDate">-</span></span>
                     <span class="method-badge"><i class="fas fa-check-circle" style="color: #10b981;"></i> Kemenag RI</span>
                 </div>
             </div>
         </div>
 
-        <!-- Dana -->
-        <div id="dana-content" class="tab-content">
+        <!-- Pengurus -->
+        <div id="pengurus-content" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan, Sumbangan & Donasi</h3>
-                <div class="total-row">
-                    <div class="total-box"><p>Total Pemasukan</p><p class="nilai" id="totalPemasukanLangsung">-</p></div>
-                    <div class="total-box"><p>Total Sumbangan</p><p class="nilai" id="totalSumbanganLangsung">-</p></div>
-                    <div class="total-box"><p>Total Donasi</p><p class="nilai" id="totalDonasiDana">-</p></div>
-                </div>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
+                <div id="panitiaContainer" class="panitia-list"></div>
             </div>
         </div>
 
-        <!-- Terbaru (sekarang termasuk rincian dengan filter tanggal) -->
+        <!-- Rincian (tab Rincian) -->
         <div id="terbaru-content" class="tab-content">
             <!-- Donasi Via Rekening -->
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Donasi Via Rekening</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
+                <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-hand-holding-heart"></i> Donasi Via Rekening</h3>
+                <div class="card-description">
+                    <i class="fas fa-info-circle"></i> Dana yang masuk melalui transfer bank atau aplikasi donasi online. Setiap donasi tercatat dengan nama, jumlah, dan tanggal.
+                </div>
+                <div class="filter-container">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
+                    <input type="date" id="filterDonasiTanggal">
+                    <button id="filterDonasiBtn"><i class="fas fa-filter"></i> Tampilkan</button>
+                </div>
+                <div class="info-row">
                     <span><strong>Total Donasi:</strong> <span id="totalDonasi">-</span></span>
                     <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturDonasi">-</span></span>
                 </div>
@@ -448,14 +510,22 @@
                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
-                    <i class="fas fa-info-circle"></i> <span id="donasiInfo">Menampilkan 5 data terbaru</span>
+                    <i class="fas fa-info-circle"></i> <span id="donasiInfo">Menampilkan data</span>
                 </p>
             </div>
 
-            <!-- Sumbangan Terbaru -->
+            <!-- Sumbangan Langsung Masjid -->
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Terbaru</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem;">
+                <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-hand-holding-heart"></i> Sumbangan Langsung Masjid</h3>
+                <div class="card-description">
+                    <i class="fas fa-info-circle"></i> Sumbangan yang diterima secara langsung oleh pengurus masjid, baik melalui kotak amal, acara, atau donatur langsung.
+                </div>
+                <div class="filter-container">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
+                    <input type="date" id="filterSumbanganTanggal">
+                    <button id="filterSumbanganBtn"><i class="fas fa-filter"></i> Tampilkan</button>
+                </div>
+                <div class="info-row">
                     <span><strong>Total Sumbangan:</strong> <span id="totalSumbangan">-</span></span>
                     <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturSumbangan">-</span></span>
                 </div>
@@ -466,53 +536,78 @@
                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
-                    <i class="fas fa-info-circle"></i> <span id="sumbanganInfo">Menampilkan semua data</span>
+                    <i class="fas fa-info-circle"></i> <span id="sumbanganInfo">Menampilkan data</span>
                 </p>
             </div>
 
-            <!-- Rincian Pemasukan & Pengeluaran (dipindah dari tab rincian) -->
+            <!-- Rincian Pemasukan -->
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Rincian Pemasukan & Pengeluaran</h3>
-                
-                <!-- Filter Tanggal Pemasukan -->
-                <div style="margin-bottom: 2rem;">
-                    <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pemasukan</h4>
-                    <div class="filter-container">
-                        <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
-                        <input type="date" id="filterPemasukanTanggal">
-                        <button id="filterPemasukanBtn"><i class="fas fa-filter"></i> Tampilkan</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="tabelPemasukan">
-                            <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-arrow-down"></i> Pemasukan Masjid</h3>
+                <div class="card-description">
+                    <i class="fas fa-info-circle"></i> Pemasukan dari kotak amal, bantuan pemerintah, atau sumber lain yang tidak terikat donatur perorangan. Setiap pemasukan dicatat dengan kategori dan nominal.
                 </div>
+                <div class="filter-container">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
+                    <input type="date" id="filterPemasukanTanggal">
+                    <button id="filterPemasukanBtn"><i class="fas fa-filter"></i> Tampilkan</button>
+                </div>
+                <div class="info-row">
+                    <span><strong>Total Pemasukan:</strong> <span id="totalPemasukanLangsung2">-</span></span>
+                    <span><strong>Jumlah Item:</strong> <span id="jumlahTransaksiPemasukan">-</span></span>
+                </div>
+                <div class="table-responsive">
+                    <table id="tabelPemasukan">
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
 
-                <!-- Filter Tanggal Pengeluaran -->
-                <div>
-                    <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pengeluaran</h4>
-                    <div class="filter-container">
-                        <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
-                        <input type="date" id="filterPengeluaranTanggal">
-                        <button id="filterPengeluaranBtn"><i class="fas fa-filter"></i> Tampilkan</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="tabelPengeluaran">
-                            <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <!-- Rincian Pengeluaran -->
+            <div class="card">
+                <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-arrow-up"></i> Pengeluaran Masjid</h3>
+                <div class="card-description">
+                    <i class="fas fa-info-circle"></i> Dana yang dikeluarkan untuk operasional masjid, pembangunan, kegiatan, dan kebutuhan lainnya.
+                </div>
+                <div class="filter-container">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal:</label>
+                    <input type="date" id="filterPengeluaranTanggal">
+                    <button id="filterPengeluaranBtn"><i class="fas fa-filter"></i> Tampilkan</button>
+                </div>
+                <div class="info-row">
+                    <span><strong>Total Pengeluaran:</strong> <span id="totalPengeluaranLangsung">-</span></span>
+                    <span><strong>Jumlah Item:</strong> <span id="jumlahTransaksiPengeluaran">-</span></span>
+                </div>
+                <div class="table-responsive">
+                    <table id="tabelPengeluaran">
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- Pengurus -->
-        <div id="pengurus-content" class="tab-content">
+        <!-- Kas (sebelumnya Dana) -->
+        <div id="dana-content" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-user-tie"></i> Kepengurusan Masjid</h3>
-                <div id="panitiaContainer" class="panitia-list"></div>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Total Pemasukan, Sumbangan & Donasi</h3>
+                <div class="total-row">
+                    <div class="total-box">
+                        <p>Total Pemasukan</p>
+                        <p class="nilai" id="totalPemasukanLangsung">-</p>
+                        <small><i class="fas fa-info-circle"></i> Dari kotak amal, bantuan pemerintah, dll.</small>
+                    </div>
+                    <div class="total-box">
+                        <p>Total Sumbangan</p>
+                        <p class="nilai" id="totalSumbanganLangsung">-</p>
+                        <small><i class="fas fa-info-circle"></i> Sumbangan langsung ke masjid.</small>
+                    </div>
+                    <div class="total-box">
+                        <p>Total Donasi</p>
+                        <p class="nilai" id="totalDonasiDana">-</p>
+                        <small><i class="fas fa-info-circle"></i> Donasi via transfer/online.</small>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -523,13 +618,13 @@
         </div>
     </footer>
 
-    <!-- Bottom Navigation (tab rincian dihapus) -->
+    <!-- Bottom Navigation (urutan baru: Beranda, Pengurus, Donasi, Rincian, Kas) -->
     <nav class="bottom-nav">
         <a id="tab-beranda" class="active" onclick="showTab('beranda')"><i class="fas fa-home"></i><span>Beranda</span></a>
-        <a id="tab-dana" onclick="showTab('dana')"><i class="fas fa-chart-pie"></i><span>Dana</span></a>
-        <a id="tab-terbaru" onclick="showTab('terbaru')"><i class="fas fa-clock"></i><span>Terbaru</span></a>
         <a id="tab-pengurus" onclick="showTab('pengurus')"><i class="fas fa-users"></i><span>Pengurus</span></a>
         <a href="admin/donasi.html" class="donate"><i class="fas fa-heart"></i><span>Donasi</span></a>
+        <a id="tab-terbaru" onclick="showTab('terbaru')"><i class="fas fa-clock"></i><span>Rincian</span></a>
+        <a id="tab-dana" onclick="showTab('dana')"><i class="fas fa-chart-pie"></i><span>Kas</span></a>
     </nav>
 
     <!-- Firebase SDK -->
@@ -560,7 +655,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Referensi
+        // Referensi Firebase
         const pemasukanRef = database.ref('laporanKeuangan/bulanIni/pemasukan');
         const pengeluaranRef = database.ref('laporanKeuangan/bulanIni/pengeluaran');
         const panitiaRef = database.ref('panitia/daftar');
@@ -576,18 +671,20 @@
         // State untuk menyimpan data asli
         let allPemasukan = [];
         let allPengeluaran = [];
+        let allSumbangan = [];
+        let allDonasi = [];
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Variabel total
+        // Variabel total (global)
         let lastTotalPemasukan = 0;
         let lastTotalPengeluaran = 0;
         let lastTotalSumbangan = 0;
         let lastTotalDonasi = 0;
-        let lastJumlahDonatur = 0;
-        let lastJumlahDonaturDonasi = 0;
+        let lastJumlahDonatur = 0;          // jumlah baris sumbangan (global)
+        let lastJumlahDonaturDonasi = 0;    // jumlah baris donasi (global)
 
         function updateRingkasan() {
             const totalGabungan = lastTotalPemasukan + lastTotalSumbangan + lastTotalDonasi;
@@ -637,11 +734,9 @@
         // Pemasukan
         pemasukanRef.on('value', (snapshot) => {
             allPemasukan = snapshot.val() || [];
-            // Hitung total semua pemasukan (tanpa filter)
             lastTotalPemasukan = allPemasukan.reduce((sum, item) => sum + (item.nominal || 0), 0);
             document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(lastTotalPemasukan);
-            
-            // Tampilkan semua (default)
+            document.getElementById('totalPemasukanLangsung2').textContent = formatRupiah(lastTotalPemasukan);
             filterPemasukan();
             updateRingkasan();
         });
@@ -650,12 +745,25 @@
         pengeluaranRef.on('value', (snapshot) => {
             allPengeluaran = snapshot.val() || [];
             lastTotalPengeluaran = allPengeluaran.reduce((sum, item) => sum + (item.nominal || 0), 0);
-            
+            document.getElementById('totalPengeluaranLangsung').textContent = formatRupiah(lastTotalPengeluaran);
             filterPengeluaran();
             updateRingkasan();
         });
 
-        // Fungsi filter pemasukan berdasarkan tanggal
+        // Penyumbang (sumbangan)
+        penyumbangRef.on('value', (snapshot) => {
+            allSumbangan = snapshot.val() || [];
+            updateSumbangan();
+        });
+
+        // Donasi via rekening
+        donasiRef.on('value', (snapshot) => {
+            const items = snapshot.val() || [];
+            allDonasi = Object.keys(items).map(key => ({ ...items[key], key }));
+            updateDonasi();
+        });
+
+        // Fungsi filter dan tampil untuk masing-masing
         function filterPemasukan() {
             const tgl = document.getElementById('filterPemasukanTanggal').value;
             let filtered = allPemasukan;
@@ -670,6 +778,7 @@
                     <td>${item.tanggal || '-'}</td>
                 </tr>
             `).join('');
+            document.getElementById('jumlahTransaksiPemasukan').textContent = filtered.length;
         }
 
         function filterPengeluaran() {
@@ -686,25 +795,58 @@
                     <td>${item.tanggal || '-'}</td>
                 </tr>
             `).join('');
+            document.getElementById('jumlahTransaksiPengeluaran').textContent = filtered.length;
         }
 
-        // Event listener filter
-        document.getElementById('filterPemasukanBtn').addEventListener('click', filterPemasukan);
-        document.getElementById('filterPengeluaranBtn').addEventListener('click', filterPengeluaran);
+        function filterDonasi() {
+            const tgl = document.getElementById('filterDonasiTanggal').value;
+            let filtered = allDonasi;
+            if (tgl) {
+                filtered = allDonasi.filter(item => item.tanggal === tgl);
+            }
+            // Hitung total dan jumlah baris (donatur = jumlah baris)
+            const totalFiltered = filtered.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            const jumlahBaris = filtered.length;
 
-        // Penyumbang (sumbangan) - semua data
-        penyumbangRef.on('value', (snapshot) => {
-            const items = snapshot.val() || [];
-            lastTotalSumbangan = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
-            const namaSet = new Set();
-            items.forEach(item => { if (item.nama) namaSet.add(item.nama.trim().toLowerCase()); });
-            lastJumlahDonatur = namaSet.size;
+            // Update info-row sesuai filter
+            document.getElementById('totalDonasi').textContent = formatRupiah(totalFiltered);
+            document.getElementById('jumlahDonaturDonasi').textContent = jumlahBaris.toLocaleString();
 
-            document.getElementById('totalSumbangan').textContent = formatRupiah(lastTotalSumbangan);
-            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(lastTotalSumbangan);
-            document.getElementById('jumlahDonaturSumbangan').textContent = lastJumlahDonatur.toLocaleString();
+            // Tampilkan tabel: jika ada filter, tampilkan semua; jika tidak, tampilkan 5 terbaru
+            let ditampilkan = filtered;
+            if (!tgl) {
+                ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 5);
+            } else {
+                ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+            const tbody = document.getElementById('donasiBody');
+            tbody.innerHTML = ditampilkan.map(item => `
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.nominal || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.kategori || '-'}</td>
+                    <td>${item.catatan || '-'}</td>
+                </tr>
+            `).join('');
+            document.getElementById('donasiInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan 5 data terbaru`;
+        }
 
-            const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
+        function filterSumbangan() {
+            const tgl = document.getElementById('filterSumbanganTanggal').value;
+            let filtered = allSumbangan;
+            if (tgl) {
+                filtered = allSumbangan.filter(item => item.tanggal === tgl);
+            }
+            // Hitung total dan jumlah baris (donatur = jumlah baris)
+            const totalFiltered = filtered.reduce((sum, item) => sum + (item.jumlah || 0), 0);
+            const jumlahBaris = filtered.length;
+
+            // Update info-row sesuai filter
+            document.getElementById('totalSumbangan').textContent = formatRupiah(totalFiltered);
+            document.getElementById('jumlahDonaturSumbangan').textContent = jumlahBaris.toLocaleString();
+
+            const sorted = [...filtered].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
             const tbody = document.getElementById('sumbanganBody');
             tbody.innerHTML = sorted.map(item => `
                 <tr>
@@ -714,42 +856,40 @@
                     <td>${item.keterangan || '-'}</td>
                 </tr>
             `).join('');
-            document.getElementById('sumbanganInfo').innerText = `Menampilkan ${sorted.length} data`;
+            document.getElementById('sumbanganInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan semua data (${filtered.length})`;
+        }
 
-            updateRingkasan();
-            updateMarquee();
-        });
+        function updateDonasi() {
+            // Hitung total dan jumlah baris global
+            lastTotalDonasi = allDonasi.reduce((sum, item) => sum + (item.nominal || 0), 0);
+            lastJumlahDonaturDonasi = allDonasi.length;  // jumlah baris, bukan unik
 
-        // Donasi via rekening (5 terbaru)
-        donasiRef.on('value', (snapshot) => {
-            const items = snapshot.val() || [];
-            const donasiArray = Object.keys(items).map(key => ({ ...items[key], key }));
-            lastTotalDonasi = donasiArray.reduce((sum, item) => sum + (item.nominal || 0), 0);
-            const namaSet = new Set();
-            donasiArray.forEach(item => { if (item.nama) namaSet.add(item.nama.trim().toLowerCase()); });
-            lastJumlahDonaturDonasi = namaSet.size;
-
-            document.getElementById('totalDonasi').textContent = formatRupiah(lastTotalDonasi);
+            // Perbarui elemen di tab Dana
             document.getElementById('totalDonasiDana').textContent = formatRupiah(lastTotalDonasi);
-            document.getElementById('jumlahDonaturDonasi').textContent = lastJumlahDonaturDonasi.toLocaleString();
 
-            const sorted = [...donasiArray].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            const limaTerbaru = sorted.slice(0, 5);
-            const tbody = document.getElementById('donasiBody');
-            tbody.innerHTML = limaTerbaru.map(item => `
-                <tr>
-                    <td>${item.nama || '-'}</td>
-                    <td>${formatRupiah(item.nominal || 0)}</td>
-                    <td>${item.tanggal || '-'}</td>
-                    <td>${item.kategori || '-'}</td>
-                    <td>${item.catatan || '-'}</td>
-                </tr>
-            `).join('');
-            document.getElementById('donasiInfo').innerText = `Menampilkan ${limaTerbaru.length} data terbaru`;
-
+            // Tampilkan default (tanpa filter) dengan memanggil filterDonasi
+            filterDonasi();
             updateRingkasan();
             updateMarquee();
-        });
+        }
+
+        function updateSumbangan() {
+            lastTotalSumbangan = allSumbangan.reduce((sum, item) => sum + (item.jumlah || 0), 0);
+            lastJumlahDonatur = allSumbangan.length;  // jumlah baris, bukan unik
+
+            // Perbarui elemen di tab Dana
+            document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(lastTotalSumbangan);
+
+            filterSumbangan();
+            updateRingkasan();
+            updateMarquee();
+        }
+
+        // Event listener filter
+        document.getElementById('filterPemasukanBtn').addEventListener('click', filterPemasukan);
+        document.getElementById('filterPengeluaranBtn').addEventListener('click', filterPengeluaran);
+        document.getElementById('filterDonasiBtn').addEventListener('click', filterDonasi);
+        document.getElementById('filterSumbanganBtn').addEventListener('click', filterSumbangan);
 
         // Panitia
         panitiaRef.on('value', (snapshot) => {
@@ -794,53 +934,109 @@
         });
     </script>
 
-    <!-- Jadwal Sholat -->
+    <!-- ====== JADWAL SHOLAT BARU (MyQuran + Aladhan) ====== -->
     <script>
         async function getJadwalSholat() {
             const today = new Date();
-            const tanggal = today.getDate();
-            const bulan = today.getMonth() + 1;
             const tahun = today.getFullYear();
+            const bulan = String(today.getMonth() + 1).padStart(2, '0');
+            const tanggal = String(today.getDate()).padStart(2, '0');
 
-            const url = `https://api.aladhan.com/v1/timingsByCity/${tanggal}-${bulan}-${tahun}?city=Gorontalo&country=Indonesia&method=20`;
+            // 1. Panggil API MyQuran untuk jadwal sholat (Kab. Bone Bolango, kode 2502)
+            const myQuranUrl = `https://api.myquran.com/v2/sholat/jadwal/2502/${tahun}/${bulan}/${tanggal}`;
+            
+            // 2. Panggil API Aladhan untuk mendapatkan tanggal Hijriah & Masehi (kota Gorontalo)
+            const aladhanUrl = `https://api.aladhan.com/v1/timingsByCity/${tanggal}-${bulan}-${tahun}?city=Gorontalo&country=Indonesia&method=20`;
 
             try {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error('Gagal memuat data');
-                const data = await res.json();
-                const t = data.data.timings;
-                const dateInfo = data.data.date;
+                // Jalankan kedua request secara paralel
+                const [myQuranRes, aladhanRes] = await Promise.all([
+                    fetch(myQuranUrl),
+                    fetch(aladhanUrl)
+                ]);
 
+                if (!myQuranRes.ok) throw new Error('Gagal memuat jadwal sholat');
+                if (!aladhanRes.ok) throw new Error('Gagal memuat data tanggal');
+
+                const myQuranData = await myQuranRes.json();
+                const aladhanData = await aladhanRes.json();
+
+                // Cek status response MyQuran
+                if (!myQuranData.status) throw new Error('Data jadwal tidak tersedia');
+
+                const jadwal = myQuranData.data.jadwal; // objek jadwal
+                const t = jadwal; // untuk memudahkan
+
+                // Ambil tanggal dari Aladhan
+                const dateInfo = aladhanData.data.date;
                 const hijri = dateInfo.hijri;
-                const hijriString = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
                 const gregorian = dateInfo.gregorian;
+
+                // Format sesuai keinginan: "24 Ramaḍān 1447 H | 13 March 2026"
+                const hijriString = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
                 const gregorianString = `${gregorian.day} ${gregorian.month.en} ${gregorian.year}`;
 
                 document.getElementById('hijriDate').innerText = hijriString;
                 document.getElementById('gregorianDate').innerText = gregorianString;
 
+                // Susun HTML jadwal sholat dengan tema Ramadhan
                 const prayerHTML = `
-                    <div class="prayer-grid">
-                        <div class="prayer-item"><i class="fas fa-moon"></i><h4>Imsak</h4><span class="time">${t.Imsak}</span></div>
-                        <div class="prayer-item"><i class="fas fa-star"></i><h4>Subuh</h4><span class="time">${t.Fajr}</span></div>
-                        <div class="prayer-item"><i class="fas fa-sun"></i><h4>Terbit</h4><span class="time">${t.Sunrise}</span></div>
-                        <div class="prayer-item"><i class="fas fa-cloud-sun"></i><h4>Dzuhur</h4><span class="time">${t.Dhuhr}</span></div>
-                        <div class="prayer-item"><i class="fas fa-sun-plant-wilt"></i><h4>Ashar</h4><span class="time">${t.Asr}</span></div>
-                        <div class="prayer-item"><i class="fas fa-sunset"></i><h4>Maghrib</h4><span class="time">${t.Maghrib}</span></div>
-                        <div class="prayer-item prayer-full"><i class="fas fa-moon-stars"></i><h4>Isya</h4><span class="time">${t.Isha}</span></div>
+                    <div class="prayer-grid-ramadan">
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-moon"></i>
+                            <h4>Imsak</h4>
+                            <span class="time">${t.imsak}</span>
+                        </div>
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-star"></i>
+                            <h4>Subuh</h4>
+                            <span class="time">${t.subuh}</span>
+                        </div>
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-sun"></i>
+                            <h4>Terbit</h4>
+                            <span class="time">${t.terbit}</span>
+                        </div>
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-cloud-sun"></i>
+                            <h4>Dzuhur</h4>
+                            <span class="time">${t.dzuhur}</span>
+                        </div>
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-sun-plant-wilt"></i>
+                            <h4>Ashar</h4>
+                            <span class="time">${t.ashar}</span>
+                        </div>
+                        <div class="prayer-item-ramadan">
+                            <i class="fas fa-sunset"></i>
+                            <h4>Maghrib</h4>
+                            <span class="time">${t.maghrib}</span>
+                        </div>
+                        <div class="prayer-item-ramadan prayer-full-ramadan">
+                            <i class="fas fa-moon-stars"></i>
+                            <h4>Isya</h4>
+                            <span class="time">${t.isya}</span>
+                        </div>
                     </div>
                 `;
+
                 document.getElementById('prayerContent').innerHTML = prayerHTML;
             } catch (error) {
+                console.error(error);
                 document.getElementById('prayerContent').innerHTML = `
-                    <div style="text-align:center; color:#991b1b; padding:1rem;">
+                    <div style="text-align:center; color:#fca5a5; padding:1rem;">
                         <i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i>
                         <p style="margin-top:0.5rem;">Gagal memuat jadwal sholat.</p>
-                        <button onclick="getJadwalSholat()" style="background:#1e3a5f; color:white; border:none; padding:0.5rem 1rem; border-radius:8px; margin-top:0.5rem; cursor:pointer;"><i class="fas fa-sync-alt"></i> Coba lagi</button>
+                        <button onclick="getJadwalSholat()" style="background:#fbbf24; color:#1e3a5f; border:none; padding:0.5rem 1rem; border-radius:8px; margin-top:0.5rem; cursor:pointer;"><i class="fas fa-sync-alt"></i> Coba lagi</button>
                     </div>
                 `;
+                // Fallback tanggal
+                document.getElementById('hijriDate').innerText = '-';
+                document.getElementById('gregorianDate').innerText = '-';
             }
         }
+
+        // Panggil fungsi saat halaman dimuat
         getJadwalSholat();
     </script>
 </body>
