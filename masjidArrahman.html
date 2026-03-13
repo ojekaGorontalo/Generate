@@ -432,7 +432,7 @@
                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
-                    <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
+                    <i class="fas fa-info-circle"></i> <span id="donasiInfo">Menampilkan 5 data terbaru</span>
                 </p>
             </div>
             <!-- Card Sumbangan Terbaru -->
@@ -449,7 +449,7 @@
                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
-                    <i class="fas fa-info-circle"></i> Menampilkan 5 data terbaru
+                    <i class="fas fa-info-circle"></i> <span id="sumbanganInfo">Menampilkan 5 data terbaru</span>
                 </p>
             </div>
         </div>
@@ -636,7 +636,7 @@
             updateRingkasan();
         });
 
-        // Penyumbang (sumbangan)
+        // Penyumbang (sumbangan) - MENAMPILKAN SEMUA DATA
         penyumbangRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             lastTotalSumbangan = items.reduce((sum, item) => sum + (item.jumlah || 0), 0);
@@ -649,10 +649,12 @@
             document.getElementById('totalSumbanganLangsung').textContent = formatRupiah(lastTotalSumbangan);
             document.getElementById('jumlahDonaturSumbangan').textContent = lastJumlahDonatur.toLocaleString();
 
+            // Urutkan dari tanggal terbaru (untuk tampilan)
             const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
-            const limaTerbaru = sorted.slice(0, 5);
+            
+            // Tampilkan SEMUA data (tanpa batasan 5)
             const tbody = document.getElementById('sumbanganBody');
-            tbody.innerHTML = limaTerbaru.map(item => `
+            tbody.innerHTML = sorted.map(item => `
                 <tr>
                     <td>${item.nama || '-'}</td>
                     <td>${formatRupiah(item.jumlah || 0)}</td>
@@ -661,11 +663,14 @@
                 </tr>
             `).join('');
 
+            // Update teks info jumlah data
+            document.getElementById('sumbanganInfo').innerText = `Menampilkan ${sorted.length} data terbaru`;
+
             updateRingkasan();
             updateMarquee();
         });
 
-        // Donasi via rekening
+        // Donasi via rekening (tetap menampilkan 5 terbaru)
         donasiRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             const donasiArray = Object.keys(items).map(key => ({
@@ -696,53 +701,53 @@
                 </tr>
             `).join('');
 
+            // Update teks info jumlah data
+            document.getElementById('donasiInfo').innerText = `Menampilkan ${limaTerbaru.length} data terbaru`;
+
             updateRingkasan();
             updateMarquee();
         });
 
-        // Panitia (Kepengurusan) - DIPERBAIKI
-        // Panitia (Kepengurusan) - DIPERBAIKI (dengan foto)
-panitiaRef.on('value', (snapshot) => {
-    const data = snapshot.val();
-    let daftar = [];
-    
-    if (Array.isArray(data)) {
-        daftar = data;
-    } else if (data && data.daftar && Array.isArray(data.daftar)) {
-        daftar = data.daftar;
-    }
+        // Panitia (Kepengurusan) dengan foto
+        panitiaRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            let daftar = [];
+            
+            if (Array.isArray(data)) {
+                daftar = data;
+            } else if (data && data.daftar && Array.isArray(data.daftar)) {
+                daftar = data.daftar;
+            }
 
-    const container = document.getElementById('panitiaContainer');
-    container.innerHTML = daftar.map(item => {
-        // Buat inisial sebagai cadangan jika tidak ada foto
-        const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
-        
-        // Jika fotoUrl tersedia, tampilkan gambar. Jika tidak, tampilkan avatar inisial.
-        if (item.fotoUrl) {
-            return `
-                <div class="panitia-card">
-                    <img src="${item.fotoUrl}" alt="${item.nama}" class="avatar" style="object-fit: cover; border-radius: 50%;">
-                    <div class="info">
-                        <h4>${item.nama}</h4>
-                        <p>${item.jabatan}</p>
-                        <small>${item.kontak || ''}</small>
-                    </div>
-                </div>
-            `;
-        } else {
-            return `
-                <div class="panitia-card">
-                    <div class="avatar">${inisial}</div>
-                    <div class="info">
-                        <h4>${item.nama}</h4>
-                        <p>${item.jabatan}</p>
-                        <small>${item.kontak || ''}</small>
-                    </div>
-                </div>
-            `;
-        }
-    }).join('');
-});
+            const container = document.getElementById('panitiaContainer');
+            container.innerHTML = daftar.map(item => {
+                const inisial = item.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
+                
+                if (item.fotoUrl) {
+                    return `
+                        <div class="panitia-card">
+                            <img src="${item.fotoUrl}" alt="${item.nama}" class="avatar" style="object-fit: cover; border-radius: 50%;">
+                            <div class="info">
+                                <h4>${item.nama}</h4>
+                                <p>${item.jabatan}</p>
+                                <small>${item.kontak || ''}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="panitia-card">
+                            <div class="avatar">${inisial}</div>
+                            <div class="info">
+                                <h4>${item.nama}</h4>
+                                <p>${item.jabatan}</p>
+                                <small>${item.kontak || ''}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        });
 
         // Panggil updateMarquee sekali saat halaman dimuat
         window.addEventListener('load', function() {
