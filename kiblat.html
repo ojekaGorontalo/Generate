@@ -1,69 +1,58 @@
 <!doctype html>
-<html lang="id">
+<html lang=id>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>AR Kiblat - Garis & Ka'bah</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AR Kiblat - Garis & Ka'bah</title>
+<link rel=stylesheet href=style.css>
 </head>
 <body>
-    <div class="app">
-        <video id="camera" autoplay playsinline muted></video>
-
-        <div class="overlay">
-            <div class="topbar">
-                <div class="title">AR Arah Kiblat</div>
-                <div class="status" id="statusText">Tekan tombol mulai, lalu izinkan kamera, lokasi, dan sensor arah.</div>
-            </div>
-
-            <div class="notice" id="noticeBox">
-                Arahkan HP secara datar ke depan. Gerakkan membentuk angka 8 jika kompas goyang.
-            </div>
-
-            <div class="horizon"></div>
-            <div class="center-guide"></div>
-
-            <!-- Garis penunjuk kiblat + Ka'bah -->
-            <div class="qibla-line-container" id="qiblaLineContainer">
-                <div class="qibla-line" id="qiblaLine"></div>
-            </div>
-            <div class="kabah-icon" id="kabahIcon">🕋</div>
-
-            <!-- Panel kontrol -->
-            <div class="controls">
-                <button class="btn-primary" id="startBtn">Mulai AR Kiblat</button>
-                <button id="calibrateBtn">Kalibrasi Ulang</button>
-            </div>
-
-            <div class="bottom-panel">
-                <div class="row">
-                    <div>Arah HP</div>
-                    <div class="value" id="headingText">-</div>
-                </div>
-                <div class="row">
-                    <div>Arah Kiblat</div>
-                    <div class="value" id="qiblaText">-</div>
-                </div>
-                <div class="row">
-                    <div>Selisih</div>
-                    <div class="value" id="diffText">-</div>
-                </div>
-                <div class="row">
-                    <div>Petunjuk</div>
-                    <div class="value" id="guideText">Belum aktif</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Overlay sukses (kiblat ditemukan) -->
-        <div class="success-overlay" id="successOverlay">
-            <div class="success-kabah">🕋</div>
-            <div class="success-title">Kiblat Ditemukan!</div>
-            <div class="success-info" id="successInfo"></div>
-            <button class="success-btn" id="resetBtn">Cari Lagi</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<div class=app>
+<video id=camera autoplay playsinline muted></video>
+<div class=overlay>
+<div class=topbar>
+<div class=title>AR Arah Kiblat</div>
+<div class=status id=statusText>Tekan tombol mulai, lalu izinkan kamera, lokasi, dan sensor arah.</div>
+</div>
+<div class=notice id=noticeBox>
+Arahkan HP secara datar ke depan. Gerakkan membentuk angka 8 jika kompas goyang.
+</div>
+<div class=horizon></div>
+<div class=center-guide></div>
+<div class=qibla-line-container id=qiblaLineContainer>
+<div class=qibla-line id=qiblaLine></div>
+</div>
+<div class=kabah-icon id=kabahIcon>🕋</div>
+<div class=controls>
+<button class=btn-primary id=startBtn>Mulai AR Kiblat</button>
+<button id=calibrateBtn>Kalibrasi Ulang</button>
+</div>
+<div class=bottom-panel>
+<div class=row>
+<div>Arah HP</div>
+<div class=value id=headingText>-</div>
+</div>
+<div class=row>
+<div>Arah Kiblat</div>
+<div class=value id=qiblaText>-</div>
+</div>
+<div class=row>
+<div>Selisih</div>
+<div class=value id=diffText>-</div>
+</div>
+<div class=row>
+<div>Petunjuk</div>
+<div class=value id=guideText>Belum aktif</div>
+</div>
+</div>
+</div>
+<div class=success-overlay id=successOverlay>
+<div class=success-kabah>🕋</div>
+<div class=success-title>Kiblat Ditemukan!</div>
+<div class=success-info id=successInfo></div>
+<button class=success-btn id=resetBtn>Cari Lagi</button>
+</div>
+</div>
+<script src=script.js></script>
 </body>
 </html>
