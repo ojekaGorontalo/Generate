@@ -19,11 +19,11 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* Header dengan warna #3FB6A8 */
+        /* Header dengan warna islami hijau tua */
         header { 
-            background-color: #3FB6A8; 
+            background-color: #1B5E20; 
             color: white; 
-            padding: 0.8rem 0; 
+            padding: 0.5rem 0;  /* diperkecil */
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
         }
         header .container { 
@@ -33,11 +33,11 @@
             flex-wrap: wrap; 
         }
         .logo h1 { 
-            font-size: 1.5rem; 
+            font-size: 1.3rem;  /* lebih kecil */
             font-weight: 700; 
         }
         .logo p { 
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             opacity: 0.9; 
         }
         
@@ -46,19 +46,19 @@
             background: transparent; 
             border: 2px solid white; 
             color: white; 
-            padding: 0.3rem 1rem;
+            padding: 0.2rem 0.8rem; /* lebih kecil */
             border-radius: 30px; 
             cursor: pointer; 
             font-weight: 600; 
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: 0.2s;
         }
         .logout-btn-header:hover { 
             background: white; 
-            color: #1e3a5f; 
+            color: #1B5E20; 
         }
         
-        /* Bottom Navigation */
+        /* Bottom Navigation (5 menu) */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -89,29 +89,64 @@
             margin-bottom: 0.2rem;
         }
         .bottom-nav a.active {
-            color: #3FB6A8;
+            color: #1B5E20; /* hijau tua */
         }
         .bottom-nav a:hover {
-            color: #3FB6A8;
+            color: #1B5E20;
         }
 
         .section-title {
             font-size: 1.8rem; 
             font-weight: 700; 
-            color: #1e3a5f; 
+            color: #1B5E20; /* hijau tua */
             margin: 2rem 0 1.5rem;
-            border-bottom: 3px solid #fbbf24; 
+            border-bottom: 3px solid #D4AF37; /* emas */
             display: inline-block; 
             padding-bottom: 0.3rem;
         }
         
-        /* Card lebih kecil untuk mobile */
+        /* Card */
         .card {
             background: white; 
             border-radius: 12px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             padding: 1.5rem; 
             margin-bottom: 1.5rem;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .card-header i {
+            font-size: 1.8rem;
+            color: #1B5E20;
+        }
+        .card-header h3 {
+            font-size: 1.4rem;
+            color: #1B5E20;
+        }
+
+        .info-panel {
+            background-color: #E8F5E9; /* hijau muda */
+            border-left: 5px solid #1B5E20;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #1B5E20;
+        }
+        .info-panel i {
+            font-size: 1.8rem;
+            color: #1B5E20;
+        }
+        .info-panel p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .form-group { margin-bottom: 1rem; }
@@ -125,7 +160,7 @@
         }
 
         .btn { 
-            background-color: #1e3a5f; 
+            background-color: #1B5E20; /* hijau tua */
             color: white; 
             border: none; 
             padding: 0.8rem 1.5rem; 
@@ -135,8 +170,8 @@
             font-size: 0.95rem;
         }
         .btn-secondary { 
-            background-color: #fbbf24; 
-            color: #1e3a5f; 
+            background-color: #D4AF37; /* emas */
+            color: #1B5E20; 
         }
         .btn-danger { 
             background-color: #dc2626; 
@@ -146,6 +181,10 @@
             border-radius: 6px; 
             cursor: pointer;
             font-size: 0.85rem;
+        }
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
         }
 
         table { 
@@ -168,6 +207,8 @@
             width: 100%; 
             padding: 0.5rem; 
             font-size: 0.9rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
         }
 
         .status-message { 
@@ -180,7 +221,7 @@
         .error { background-color: #fee2e2; color: #991b1b; }
 
         footer { 
-            background-color: #1e3a5f; 
+            background-color: #1B5E20; 
             color: white; 
             text-align: center; 
             padding: 1.2rem 0; 
@@ -190,11 +231,27 @@
         /* Responsif untuk mobile */
         @media (max-width: 768px) {
             .container { padding: 15px; }
-            header .container { flex-direction: column; text-align: center; gap: 0.3rem; }
-            .logo h1 { font-size: 1.5rem; }
-            .logo p { font-size: 0.8rem; }
+            header .container { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 0.3rem;
+                padding: 0.3rem 0; 
+            }
+            .logo h1 { font-size: 1.1rem; }
+            .logo p { font-size: 0.65rem; }
+            .logout-btn-header {
+                padding: 0.15rem 0.6rem;
+                font-size: 0.75rem;
+            }
             .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
-            .card { padding: 1rem; margin-bottom: 1rem; }
+            .card { padding: 1rem; }
+            .card-header h3 { font-size: 1.2rem; }
+            .info-panel {
+                padding: 0.8rem;
+                gap: 0.5rem;
+            }
+            .info-panel i { font-size: 1.5rem; }
+            .info-panel p { font-size: 0.85rem; }
             
             table { font-size: 0.8rem; }
             th, td { padding: 0.5rem; }
@@ -203,9 +260,11 @@
             .btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
             .btn-danger { padding: 0.4rem 0.8rem; }
             
-            /* Agar tabel bisa discroll horizontal */
             .table-responsive {
                 overflow-x: auto;
+            }
+            td:last-child {
+                white-space: nowrap;
             }
         }
     </style>
@@ -222,19 +281,25 @@
         </div>
     </header>
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Navigation (tanpa Penyumbang) -->
     <nav class="bottom-nav">
         <a href="../index.html"><i class="fas fa-home"></i><span>Beranda</span></a>
         <a href="panitia.html"><i class="fas fa-users-cog"></i><span>Panitia</span></a>
         <a href="pemasukan.html"><i class="fas fa-arrow-down"></i><span>Pemasukan</span></a>
         <a href="pengeluaran.html" class="active"><i class="fas fa-arrow-up"></i><span>Pengeluaran</span></a>
         <a href="bukti.html"><i class="fas fa-file-invoice"></i><span>Bukti</span></a>
-        <a href="penyumbang.html"><i class="fas fa-hand-holding-heart"></i><span>Penyumbang</span></a>
+        <!-- Link Penyumbang dihapus -->
     </nav>
 
     <main class="container">
         <h2 class="section-title"><i class="fas fa-arrow-up"></i> Kelola Data Pengeluaran</h2>
         <div id="statusMessage" class="status-message"></div>
+
+        <!-- Panel informasi -->
+        <div class="info-panel">
+            <i class="fas fa-info-circle"></i>
+            <p><strong>Keterangan:</strong> Halaman ini mencatat pengeluaran masjid, seperti belanja kebutuhan, renovasi, operasional, dan lain-lain.</p>
+        </div>
 
         <div class="card">
             <h3 style="margin-bottom: 1rem;">Daftar Pengeluaran</h3>
@@ -271,7 +336,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        // Cek login: jika tidak ada localStorage, redirect ke index.html
+        // Cek login
         if (localStorage.getItem('adminLoggedIn') !== 'true') {
             window.location.href = '../index.html';
         }
@@ -300,7 +365,7 @@
         const tambahBtn = document.getElementById('tambahBaris');
         const simpanBtn = document.getElementById('simpanPengeluaran');
 
-        // Tambah tombol logout
+        // Tombol logout
         headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>';
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('adminLoggedIn');
@@ -318,7 +383,6 @@
             return 'Rp ' + angka.toLocaleString('id-ID');
         }
 
-        // Helper untuk mendapatkan tanggal hari ini format YYYY-MM-DD
         function getTodayDate() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -333,12 +397,11 @@
                 <td><input type="text" class="kategori" value="${kategori.replace(/"/g, '&quot;')}" placeholder="Kategori"></td>
                 <td><input type="number" class="nominal" value="${nominal}" placeholder="Nominal"></td>
                 <td><input type="date" class="tanggal" value="${tanggal}"></td>
-                <td><button class="btn-danger" onclick="this.closest('tr').remove()">Hapus</button></td>
+                <td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">Hapus</button></td>
             `;
             return tr;
         }
 
-        // Hitung ulang total pengeluaran
         async function hitungTotalPengeluaran() {
             try {
                 const snapshot = await pengeluaranRef.once('value');
@@ -362,7 +425,6 @@
             }
         }
 
-        // Load data
         pengeluaranRef.on('value', (snapshot) => {
             const items = snapshot.val() || [];
             tbody.innerHTML = '';
@@ -376,12 +438,10 @@
             }
         });
 
-        // Tambah baris
         tambahBtn.addEventListener('click', () => {
             tbody.appendChild(buatBaris());
         });
 
-        // Simpan data
         simpanBtn.addEventListener('click', async () => {
             const rows = document.querySelectorAll('#pengeluaranBody tr');
             const items = [];
@@ -389,13 +449,9 @@
             rows.forEach(row => {
                 const kategori = row.querySelector('.kategori').value.trim();
                 const nominal = parseInt(row.querySelector('.nominal').value) || 0;
-                const tanggal = row.querySelector('.tanggal').value; // format YYYY-MM-DD
+                const tanggal = row.querySelector('.tanggal').value;
                 if (kategori && nominal > 0) {
-                    items.push({ 
-                        kategori, 
-                        nominal,
-                        tanggal: tanggal || getTodayDate() 
-                    });
+                    items.push({ kategori, nominal, tanggal: tanggal || getTodayDate() });
                 }
             });
 
@@ -407,8 +463,6 @@
                 showMessage('Gagal menyimpan: ' + error.message, 'error');
             }
         });
-
-        // Set active menu di bottom nav (sudah ada class active di HTML)
     </script>
 </body>
 </html>
