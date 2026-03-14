@@ -54,6 +54,7 @@
             display: flex;
             align-items: center;
             gap: 0.3rem;
+            white-space: nowrap; /* agar tidak terpotong */
         }
         .visitor-header i {
             color: #fbbf24;
@@ -561,17 +562,38 @@
             margin-right: 0.5rem;
         }
 
-        /* Responsif */
+        /* ====== RESPONSIVE: HEADER DIPERKECIL & VISITOR DI SEBELAH KANAN ====== */
         @media (max-width: 768px) {
-            .container { padding: 15px; }
-            header .container { 
-                flex-direction: column; 
-                text-align: center; 
-                gap: 0.5rem; 
+            .container { 
+                padding: 10px; /* UI lebih sempit */
             }
-            .logo h1 { font-size: 1.3rem; }
-            .logo p { font-size: 0.7rem; }
-            .visitor-header { font-size: 0.8rem; padding: 0.2rem 0.8rem; }
+            header {
+                padding: 0.25rem 0; /* header lebih kecil */
+            }
+            header .container { 
+                flex-direction: row; /* tetap sejajar */
+                align-items: center;
+                gap: 0.3rem;
+            }
+            .logo h1 { 
+                font-size: 1.1rem; 
+                margin: 0;
+                line-height: 1.2;
+            }
+            .logo p { 
+                font-size: 0.55rem; 
+                line-height: 1.2;
+                opacity: 0.8;
+            }
+            .visitor-header {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.5rem;
+                gap: 0.15rem;
+                white-space: nowrap;
+            }
+            .visitor-header i {
+                font-size: 0.8rem;
+            }
             .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
             .card { padding: 1rem; margin-bottom: 1rem; }
             .stats-grid {
@@ -593,9 +615,8 @@
             .panitia-card .avatar { width: 35px; height: 35px; font-size: 0.9rem; }
             .table-responsive { overflow-x: auto; }
             .filter-container { flex-direction: column; align-items: stretch; }
-            header { padding: 0.3rem 0; }
             
-            /* ===== JADWAL SHOLAT TETAP 4 KOLOM DENGAN TEKS DIPERKECIL ===== */
+            /* Jadwal sholat tetap 4 kolom dengan teks diperkecil */
             .prayer-item-ramadan h4 {
                 font-size: 0.7rem;
             }
@@ -633,7 +654,7 @@
     </div>
 
     <main class="container">
-        <h2 class="section-title">🕌 Informasi</h2>
+        <h2 class="section-title">📌 Informasi</h2>
         
         <!-- Beranda -->
         <div id="beranda-content" class="tab-content active">
@@ -676,6 +697,13 @@
                     <span class="method-badge"><i class="fas fa-check-circle" style="color: #10b981;"></i> Kemenag RI</span>
                 </div>
             </div>
+
+            <!-- Kutipan Hadits di bawah jadwal sholat (TAMBAHAN) -->
+            <div class="hadith">
+                <i class="fas fa-quote-right"></i> 
+                "Sesungguhnya shalat itu mencegah dari perbuatan keji dan mungkar." (QS. Al-Ankabut: 45)
+                <br><i class="fas fa-star"></i> Rasulullah ﷺ bersabda: "Perumpamaan shalat lima waktu seperti sungai yang mengalir di depan pintu rumah salah seorang di antara kalian, ia mandi di dalamnya lima kali sehari." (HR. Muslim)
+            </div>
         </div>
 
         <!-- Pengurus -->
@@ -702,7 +730,7 @@
                 <div class="quote">
                     <i class="fas fa-quote-right"></i>
                     <p>"Perumpamaan (nafkah yang dikeluarkan oleh) orang-orang yang menafkahkan hartanya di jalan Allah adalah serupa dengan sebutir benih yang menumbuhkan tujuh bulir, pada tiap-tiap bulir seratus biji. Allah melipatgandakan (ganjaran) bagi siapa yang Dia kehendaki."</p>
-                    <strong>— QS. Al-Baqarah: 261</strong>
+                    <strong>📖 QS. Al-Baqarah: 261</strong>
                 </div>
 
                 <!-- Form Donasi -->
