@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneSignal Player ID</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 10px; }
+        h1 { color: #1B5E20; }
+        #status { margin: 20px 0; padding: 10px; background: #f5f5f5; border-radius: 5px; font-weight: bold; }
+        #playerId { margin: 20px 0; padding: 15px; background: #e8f5e9; border: 2px solid #1B5E20; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 1.2em; display: none; }
+        button { background: #1B5E20; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #2e7d32; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .hidden { display: none; }
+    </style>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+</head>
+<body>
+    <h1>🔔 OneSignal Player ID</h1>
+    <div id="status">Memeriksa status notifikasi...</div>
+    <div id="playerId"></div>
+    <button id="subscribeBtn" class="hidden">Izinkan Notifikasi</button>
+
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async (OneSignal) => {
+            try {
+                await OneSignal.init({
+                    appId: '007d7eba-9cfc-40d1-a92e-f2299f770282',
+                    autoRegister: false,
+                    notifyButton: { enable: false },
+                    allowLocalhostAsSecureOrigin: true, // penting untuk localhost
+                });
+                console.log('✅ OneSignal init sukses');
+
+                // Ambil status dan Player ID
+                const isOptedIn = await OneSignal.User.PushSubscription.optedIn;
+                const userId = await OneSignal.User.PushSubscription.id;
+
+                const statusEl = document.getElementById('status');
+                const playerIdEl = document.getElementById('playerId');
+                const subscribeBtn = document.getElementById('subscribeBtn');
+
+                function updateUI(subscribed, id) {
+                    if (subscribed && id) {
+                        statusEl.innerText = '✅ Anda sudah berlangganan notifikasi.';
+                        playerIdEl.innerText = '🆔 Player ID: ' + id;
+                        playerIdEl.style.display = 'block';
+                        subscribeBtn.classList.add('hidden');
+                    } else {
+                        statusEl.innerText = '🔔 Klik tombol untuk mengizinkan notifikasi.';
+                        playerIdEl.style.display = 'none';
+                        subscribeBtn.classList.remove('hidden');
+                    }
+                }
+
+                updateUI(isOptedIn, userId);
+
+                // Event perubahan izin
+                OneSignal.Notifications.addEventListener('permissionChange', async (perm) => {
+                    const newOptedIn = await OneSignal.User.PushSubscription.optedIn;
+                    const newId = await OneSignal.User.PushSubscription.id;
+                    updateUI(newOptedIn, newId);
+                });
+
+                // Tombol minta izin
+                subscribeBtn.addEventListener('click', async () => {
+                    subscribeBtn.disabled = true;
+                    statusEl.innerText = 'Meminta izin notifikasi...';
+                    try {
+                        await OneSignal.Notifications.requestPermission();
+                        // UI akan diperbarui via event permissionChange
+                    } catch (err) {
+                        console.error(err);
+                        statusEl.innerText = '❌ Gagal: ' + err.message;
+                        subscribeBtn.disabled = false;
+                    }
+                });
+            } catch (err) {
+                console.error('❌ OneSignal init error:', err);
+                document.getElementById('status').innerText = '❌ Gagal inisialisasi. Periksa konsol.';
+            }
+        });
+    </script>
+</body>
+</html>
