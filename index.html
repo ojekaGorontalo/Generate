@@ -1490,7 +1490,7 @@
 
         window.addEventListener('load', updateMarquee);
 
-        // ==================== ONE SIGNAL INTEGRATION (ENHANCED) ====================
+        // ==================== ONE SIGNAL INTEGRATION (FINAL) ====================
         // Variabel untuk interval pengecekan
         let oneSignalCheckInterval = null;
 
@@ -1514,11 +1514,10 @@
                             stopOneSignalCheck();
                         }
                     }).catch(err => console.log('Gagal ambil info via interval:', err));
-                } else {
-                    console.log('median.onesignal masih belum tersedia');
                 }
             }, 3000);
-            // Hentikan setelah 2 menit (40 kali percobaan) agar tidak berjalan selamanya
+            
+            // Hentikan setelah 2 menit
             setTimeout(() => {
                 if (oneSignalCheckInterval) {
                     console.log('Pengecekan OneSignal dihentikan karena waktu habis.');
@@ -1549,12 +1548,26 @@
                     console.log('OneSignal info:', info);
                     const playerId = info.oneSignalUserId;
                     const subscribed = info.oneSignalSubscribed;
+                    
                     if (playerId && subscribed) {
                         console.log('Player ID ditemukan:', playerId);
                         savePlayerIdToFirebase(playerId);
                     } else {
-                        console.log('Player ID tidak tersedia atau belum subscribe, memulai pengecekan berkala...');
-                        startOneSignalCheck();
+                        console.log('Player ID tidak tersedia atau belum subscribe, mencoba register...');
+                        
+                        // === METHOD UNTUK REGISTER ===
+                        if (window.median && window.median.onesignal && window.median.onesignal.register) {
+                            window.median.onesignal.register().then(() => {
+                                console.log('Register berhasil dipanggil, menunggu konfirmasi user...');
+                                startOneSignalCheck();
+                            }).catch(err => {
+                                console.log('Gagal register:', err);
+                                startOneSignalCheck();
+                            });
+                        } else {
+                            console.log('Method register tidak tersedia, fallback ke interval');
+                            startOneSignalCheck();
+                        }
                     }
                 }).catch(err => {
                     console.log('Gagal ambil OneSignal info:', err);
@@ -1566,14 +1579,13 @@
             }
         }
 
-        // Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
+        // Panggil saat perangkat siap
         document.addEventListener('deviceready', function() {
             console.log('deviceready event fired');
-            // Tunggu sedikit agar plugin sempat inisialisasi
             setTimeout(() => getOneSignalPlayerId(), 1000);
         }, false);
 
-        // Fallback jika deviceready tidak terdeteksi
+        // Fallback
         window.addEventListener('load', function() {
             console.log('load event fired');
             setTimeout(() => getOneSignalPlayerId(), 3000);
