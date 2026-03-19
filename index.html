@@ -10,20 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- OneSignal Push Notifications -->
+    <!-- OneSignal Web SDK (tidak digunakan di dalam app, tapi disertakan untuk keperluan web biasa) -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-                appId: "007d7eba-9cfc-40d1-a92e-f2299f770282",
-                safari_web_id: "web.onesignal.auto.18427476-d96c-4d38-9e88-40d33a9d693d",
-                notifyButton: {
-                    enable: true, // Menampilkan tombol notifikasi di pojok kanan bawah
-                },
-            });
-        });
-    </script>
     <style>
         /* ====== TEMA ISLAMI ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -1263,7 +1251,7 @@
         const namaRekRef = database.ref('panitia/RekeningDonasi/Nama:');
         const rekeningRef = database.ref('panitia/RekeningDonasi/Rekening');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
-        const pengumumanRef = database.ref('pengumuman'); // Tambahan
+        const pengumumanRef = database.ref('pengumuman');
 
         // Elemen
         const bannerContainer = document.getElementById('bannerContainer');
@@ -1396,7 +1384,7 @@
             }
         }
 
-        // Filter functions (sama seperti sebelumnya)
+        // Filter functions
         function filterPemasukan() {
             const tgl = document.getElementById('filterPemasukanTanggal').value;
             let filtered = allPemasukan;
@@ -1501,6 +1489,51 @@
         });
 
         window.addEventListener('load', updateMarquee);
+
+        // ==================== ONE SIGNAL INTEGRATION ====================
+        // Fungsi untuk menyimpan Player ID ke Firebase
+        function savePlayerIdToFirebase(playerId) {
+            const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
+            playerIdsRef.transaction(function(current) {
+                if (!current) current = [];
+                if (!current.includes(playerId)) {
+                    current.push(playerId);
+                }
+                return current;
+            }).then(() => {
+                console.log('Player ID saved:', playerId);
+            }).catch(err => console.error('Gagal simpan player ID:', err));
+        }
+
+        // Fungsi untuk mendapatkan Player ID dari plugin Median.co
+        function getOneSignalPlayerId() {
+            // Cek apakah di dalam environment Median.co (Cordova/WebView)
+            if (window.median && window.median.onesignal) {
+                window.median.onesignal.onesignalInfo().then(function(info) {
+                    const playerId = info.oneSignalUserId;
+                    const subscribed = info.oneSignalSubscribed;
+                    if (playerId && subscribed) {
+                        savePlayerIdToFirebase(playerId);
+                    }
+                }).catch(err => console.log('Gagal ambil OneSignal info:', err));
+            } else {
+                // Jika tidak di dalam app (misal dibuka di browser biasa), kita bisa gunakan web SDK
+                // Tapi untuk web biasa, kita tidak simpan player ID karena akan berbeda.
+                console.log('Not in median.co environment, skipping player ID save.');
+            }
+        }
+
+        // Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
+        document.addEventListener('deviceready', getOneSignalPlayerId, false);
+        // Fallback jika deviceready tidak terdeteksi
+        window.addEventListener('load', function() {
+            // Tunggu sebentar agar plugin sempat inisialisasi
+            setTimeout(getOneSignalPlayerId, 2000);
+        });
+
+        // Jika menggunakan OneSignal web SDK (untuk web biasa), kita bisa tangani subscription change
+        // Tapi tidak wajib karena focus di aplikasi.
+        // ================================================================
 
         // Form donasi
         const rekeningContainer = document.getElementById('rekeningContainer');
