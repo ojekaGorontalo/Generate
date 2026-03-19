@@ -89,6 +89,8 @@
         .btn:hover { background-color: #2e7d32; transform: translateY(-2px); }
         .btn-danger { background-color: #dc2626; }
         .btn-danger:hover { background-color: #b91c1c; }
+        .btn-success { background-color: #059669; }
+        .btn-success:hover { background-color: #047857; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
         th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
@@ -167,7 +169,10 @@
                         <option value="bullhorn">Pengumuman</option>
                     </select>
                 </div>
-                <button class="btn" id="tambahPengumumanBtn"><i class="fas fa-paper-plane"></i> Kirim Pengumuman</button>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" id="tambahPengumumanBtn"><i class="fas fa-paper-plane"></i> Kirim Pengumuman & Notifikasi</button>
+                    <button class="btn btn-success" id="simpanTanpaNotifBtn"><i class="fas fa-save"></i> Simpan Tanpa Notifikasi</button>
+                </div>
                 <div id="tambahStatus" style="margin-top: 1rem; font-size: 0.9rem;"></div>
             </div>
 
@@ -219,9 +224,11 @@
         const pengumumanRef = database.ref('pengumuman');
         const userNameRef = database.ref('panitia/UserName');
         const passwordRef = database.ref('panitia/Password');
+        const onesignalApiKeyRef = database.ref('panitia/onesignal_api_key'); // REST API Key
 
         let validUsername = '';
         let validPassword = '';
+        let onesignalApiKey = '';
 
         const loginOverlay = document.getElementById('loginOverlay');
         const adminContent = document.getElementById('adminContent');
@@ -234,15 +241,19 @@
         const teksInput = document.getElementById('teks');
         const iconSelect = document.getElementById('icon');
         const tambahBtn = document.getElementById('tambahPengumumanBtn');
+        const simpanTanpaNotifBtn = document.getElementById('simpanTanpaNotifBtn');
         const tambahStatus = document.getElementById('tambahStatus');
         const tabelBody = document.getElementById('pengumumanBody');
 
+        // Ambil data login dan API key
         Promise.all([
             userNameRef.once('value'),
-            passwordRef.once('value')
-        ]).then(([snapUser, snapPass]) => {
+            passwordRef.once('value'),
+            onesignalApiKeyRef.once('value')
+        ]).then(([snapUser, snapPass, snapApi]) => {
             validUsername = snapUser.val();
             validPassword = String(snapPass.val());
+            onesignalApiKey = snapApi.val();
             if (localStorage.getItem('adminLoggedIn') === 'true') {
                 loginOverlay.style.display = 'none';
                 adminContent.style.display = 'block';
@@ -334,7 +345,55 @@
             });
         }
 
-        tambahBtn.addEventListener('click', () => {
+        // ==================== KIRIM NOTIFIKASI KE SEMUA SUBSCRIBER (SEGMEN "ALL") ====================
+        async function sendPushNotification(teks, icon) {
+            if (!onesignalApiKey) {
+                console.warn('API Key OneSignal tidak tersedia');
+                return false;
+            }
+
+            try {
+                const notificationData = {
+                    app_id: "007d7eba-9cfc-40d1-a92e-f2299f770282",
+                    included_segments: ["All"], // Kirim ke semua subscriber
+                    headings: { en: "📢 Pengumuman Baru" },
+                    contents: { en: teks.substring(0, 50) + (teks.length > 50 ? '...' : '') },
+                    data: { 
+                        type: "announcement",
+                        icon: icon,
+                        timestamp: Date.now()
+                    }
+                };
+
+                console.log('Mengirim ke OneSignal (segmen All):', notificationData);
+
+                const response = await fetch('https://onesignal.com/api/v1/notifications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Basic ${onesignalApiKey}`
+                    },
+                    body: JSON.stringify(notificationData)
+                });
+
+                const result = await response.json();
+                console.log('Respon OneSignal:', result);
+                
+                if (result.id) {
+                    return true;
+                } else {
+                    console.error('Gagal:', result);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error kirim notifikasi:', error);
+                return false;
+            }
+        }
+        // =======================================================================
+
+        // Fungsi untuk menambah pengumuman (dengan atau tanpa notifikasi)
+        async function tambahPengumuman(kirimNotif = true) {
             const teks = teksInput.value.trim();
             if (!teks) {
                 alert('Teks pengumuman harus diisi.');
@@ -343,22 +402,44 @@
             const icon = iconSelect.value;
             const timestamp = Date.now();
 
-            pengumumanRef.once('value').then(snapshot => {
+            tambahStatus.style.color = '#6b7280';
+            tambahStatus.textContent = 'Menyimpan pengumuman...';
+
+            try {
+                // Simpan ke Firebase (node pengumuman)
+                const snapshot = await pengumumanRef.once('value');
                 let data = snapshot.val() || [];
                 if (!Array.isArray(data)) data = [];
                 data.push({ teks, icon, timestamp });
-                return pengumumanRef.set(data);
-            }).then(() => {
+                await pengumumanRef.set(data);
+
+                // Jika diminta kirim notifikasi
+                if (kirimNotif) {
+                    tambahStatus.textContent = 'Mengirim notifikasi...';
+                    const notifSent = await sendPushNotification(teks, icon);
+                    if (notifSent) {
+                        tambahStatus.style.color = '#059669';
+                        tambahStatus.textContent = 'Pengumuman ditambahkan dan notifikasi terkirim ke semua subscriber!';
+                    } else {
+                        tambahStatus.style.color = '#f59e0b';
+                        tambahStatus.textContent = 'Pengumuman tersimpan, tetapi gagal mengirim notifikasi. Periksa API Key.';
+                    }
+                } else {
+                    tambahStatus.style.color = '#059669';
+                    tambahStatus.textContent = 'Pengumuman tersimpan (tanpa notifikasi).';
+                }
+
                 teksInput.value = '';
                 iconSelect.value = 'info-circle';
-                tambahStatus.style.color = '#059669';
-                tambahStatus.textContent = 'Pengumuman berhasil ditambahkan!';
-                setTimeout(() => tambahStatus.textContent = '', 3000);
-            }).catch(err => {
+                setTimeout(() => tambahStatus.textContent = '', 4000);
+            } catch (err) {
                 tambahStatus.style.color = '#dc2626';
-                tambahStatus.textContent = 'Gagal menambah: ' + err.message;
-            });
-        });
+                tambahStatus.textContent = 'Gagal menyimpan: ' + err.message;
+            }
+        }
+
+        tambahBtn.addEventListener('click', () => tambahPengumuman(true));
+        simpanTanpaNotifBtn.addEventListener('click', () => tambahPengumuman(false));
 
         function setActiveMenu() {
             const links = bottomNav.querySelectorAll('a');
