@@ -1491,45 +1491,48 @@
         window.addEventListener('load', updateMarquee);
 
         // ==================== ONE SIGNAL INTEGRATION ====================
-        // Fungsi untuk menyimpan Player ID ke Firebase
-        function savePlayerIdToFirebase(playerId) {
-            const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
-            playerIdsRef.transaction(function(current) {
-                if (!current) current = [];
-                if (!current.includes(playerId)) {
-                    current.push(playerId);
-                }
-                return current;
-            }).then(() => {
-                console.log('Player ID saved:', playerId);
-            }).catch(err => console.error('Gagal simpan player ID:', err));
+// Fungsi untuk menyimpan Player ID ke Firebase
+function savePlayerIdToFirebase(playerId) {
+    const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
+    playerIdsRef.transaction(function(current) {
+        if (!current) current = [];
+        if (!current.includes(playerId)) {
+            current.push(playerId);
         }
+        return current;
+    }).then(() => {
+        console.log('Player ID saved:', playerId);
+    }).catch(err => console.error('Gagal simpan player ID:', err));
+}
 
-        // Fungsi untuk mendapatkan Player ID dari plugin Median.co
-        function getOneSignalPlayerId() {
-            // Cek apakah di dalam environment Median.co (Cordova/WebView)
-            if (window.median && window.median.onesignal) {
-                window.median.onesignal.onesignalInfo().then(function(info) {
-                    const playerId = info.oneSignalUserId;
-                    const subscribed = info.oneSignalSubscribed;
-                    if (playerId && subscribed) {
-                        savePlayerIdToFirebase(playerId);
-                    }
-                }).catch(err => console.log('Gagal ambil OneSignal info:', err));
+// Fungsi untuk mendapatkan Player ID dari plugin Median.co (dengan log debug)
+function getOneSignalPlayerId() {
+    console.log('Mencoba ambil OneSignal info...');
+    if (window.median && window.median.onesignal) {
+        window.median.onesignal.onesignalInfo().then(function(info) {
+            console.log('OneSignal info:', info);
+            const playerId = info.oneSignalUserId;
+            const subscribed = info.oneSignalSubscribed;
+            if (playerId && subscribed) {
+                console.log('Player ID ditemukan:', playerId);
+                savePlayerIdToFirebase(playerId);
             } else {
-                // Jika tidak di dalam app (misal dibuka di browser biasa), kita bisa gunakan web SDK
-                // Tapi untuk web biasa, kita tidak simpan player ID karena akan berbeda.
-                console.log('Not in median.co environment, skipping player ID save.');
+                console.log('Player ID tidak tersedia atau belum subscribe');
             }
-        }
+        }).catch(err => console.log('Gagal ambil OneSignal info:', err));
+    } else {
+        console.log('median.onesignal tidak tersedia');
+    }
+}
 
-        // Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
-        document.addEventListener('deviceready', getOneSignalPlayerId, false);
-        // Fallback jika deviceready tidak terdeteksi
-        window.addEventListener('load', function() {
-            // Tunggu sebentar agar plugin sempat inisialisasi
-            setTimeout(getOneSignalPlayerId, 2000);
-        });
+// Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
+document.addEventListener('deviceready', getOneSignalPlayerId, false);
+// Fallback jika deviceready tidak terdeteksi
+window.addEventListener('load', function() {
+    // Tunggu sebentar agar plugin sempat inisialisasi
+    setTimeout(getOneSignalPlayerId, 2000);
+});
+// ================================================================
 
         // Jika menggunakan OneSignal web SDK (untuk web biasa), kita bisa tangani subscription change
         // Tapi tidak wajib karena focus di aplikasi.
