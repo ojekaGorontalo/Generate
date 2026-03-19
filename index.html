@@ -10,6 +10,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- OneSignal Push Notifications -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "007d7eba-9cfc-40d1-a92e-f2299f770282",
+                safari_web_id: "web.onesignal.auto.18427476-d96c-4d38-9e88-40d33a9d693d",
+                notifyButton: {
+                    enable: true, // Menampilkan tombol notifikasi di pojok kanan bawah
+                },
+            });
+        });
+    </script>
     <style>
         /* ====== TEMA ISLAMI ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -1836,8 +1850,8 @@
         });
 
         routeBtn.addEventListener('click', () => {
-            const lat = 0.5626845;
-            const lng = 123.1226588;
+            const lat = 0.5626898635945491;
+            const lng = 123.1200838777164;
             const label = 'Masjid Ar-Rahman';
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             const url = `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`;
