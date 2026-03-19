@@ -1490,52 +1490,94 @@
 
         window.addEventListener('load', updateMarquee);
 
-        // ==================== ONE SIGNAL INTEGRATION ====================
-// Fungsi untuk menyimpan Player ID ke Firebase
-function savePlayerIdToFirebase(playerId) {
-    const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
-    playerIdsRef.transaction(function(current) {
-        if (!current) current = [];
-        if (!current.includes(playerId)) {
-            current.push(playerId);
-        }
-        return current;
-    }).then(() => {
-        console.log('Player ID saved:', playerId);
-    }).catch(err => console.error('Gagal simpan player ID:', err));
-}
+        // ==================== ONE SIGNAL INTEGRATION (ENHANCED) ====================
+        // Variabel untuk interval pengecekan
+        let oneSignalCheckInterval = null;
 
-// Fungsi untuk mendapatkan Player ID dari plugin Median.co (dengan log debug)
-function getOneSignalPlayerId() {
-    console.log('Mencoba ambil OneSignal info...');
-    if (window.median && window.median.onesignal) {
-        window.median.onesignal.onesignalInfo().then(function(info) {
-            console.log('OneSignal info:', info);
-            const playerId = info.oneSignalUserId;
-            const subscribed = info.oneSignalSubscribed;
-            if (playerId && subscribed) {
-                console.log('Player ID ditemukan:', playerId);
-                savePlayerIdToFirebase(playerId);
-            } else {
-                console.log('Player ID tidak tersedia atau belum subscribe');
+        function stopOneSignalCheck() {
+            if (oneSignalCheckInterval) {
+                clearInterval(oneSignalCheckInterval);
+                oneSignalCheckInterval = null;
+                console.log('Pengecekan OneSignal dihentikan.');
             }
-        }).catch(err => console.log('Gagal ambil OneSignal info:', err));
-    } else {
-        console.log('median.onesignal tidak tersedia');
-    }
-}
+        }
 
-// Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
-document.addEventListener('deviceready', getOneSignalPlayerId, false);
-// Fallback jika deviceready tidak terdeteksi
-window.addEventListener('load', function() {
-    // Tunggu sebentar agar plugin sempat inisialisasi
-    setTimeout(getOneSignalPlayerId, 2000);
-});
-// ================================================================
+        function startOneSignalCheck() {
+            if (oneSignalCheckInterval) return;
+            console.log('Memulai pengecekan OneSignal secara periodik...');
+            oneSignalCheckInterval = setInterval(() => {
+                if (window.median && window.median.onesignal) {
+                    window.median.onesignal.onesignalInfo().then(info => {
+                        if (info.oneSignalUserId && info.oneSignalSubscribed) {
+                            console.log('Player ID ditemukan via interval:', info.oneSignalUserId);
+                            savePlayerIdToFirebase(info.oneSignalUserId);
+                            stopOneSignalCheck();
+                        }
+                    }).catch(err => console.log('Gagal ambil info via interval:', err));
+                } else {
+                    console.log('median.onesignal masih belum tersedia');
+                }
+            }, 3000);
+            // Hentikan setelah 2 menit (40 kali percobaan) agar tidak berjalan selamanya
+            setTimeout(() => {
+                if (oneSignalCheckInterval) {
+                    console.log('Pengecekan OneSignal dihentikan karena waktu habis.');
+                    stopOneSignalCheck();
+                }
+            }, 120000);
+        }
 
-        // Jika menggunakan OneSignal web SDK (untuk web biasa), kita bisa tangani subscription change
-        // Tapi tidak wajib karena focus di aplikasi.
+        // Fungsi untuk menyimpan Player ID ke Firebase
+        function savePlayerIdToFirebase(playerId) {
+            const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
+            playerIdsRef.transaction(function(current) {
+                if (!current) current = [];
+                if (!current.includes(playerId)) {
+                    current.push(playerId);
+                }
+                return current;
+            }).then(() => {
+                console.log('Player ID saved:', playerId);
+            }).catch(err => console.error('Gagal simpan player ID:', err));
+        }
+
+        // Fungsi untuk mendapatkan Player ID dari plugin Median.co
+        function getOneSignalPlayerId() {
+            console.log('Mencoba ambil OneSignal info...');
+            if (window.median && window.median.onesignal) {
+                window.median.onesignal.onesignalInfo().then(function(info) {
+                    console.log('OneSignal info:', info);
+                    const playerId = info.oneSignalUserId;
+                    const subscribed = info.oneSignalSubscribed;
+                    if (playerId && subscribed) {
+                        console.log('Player ID ditemukan:', playerId);
+                        savePlayerIdToFirebase(playerId);
+                    } else {
+                        console.log('Player ID tidak tersedia atau belum subscribe, memulai pengecekan berkala...');
+                        startOneSignalCheck();
+                    }
+                }).catch(err => {
+                    console.log('Gagal ambil OneSignal info:', err);
+                    startOneSignalCheck();
+                });
+            } else {
+                console.log('median.onesignal tidak tersedia, memulai pengecekan berkala...');
+                startOneSignalCheck();
+            }
+        }
+
+        // Panggil saat perangkat siap (Cordova) atau saat halaman dimuat
+        document.addEventListener('deviceready', function() {
+            console.log('deviceready event fired');
+            // Tunggu sedikit agar plugin sempat inisialisasi
+            setTimeout(() => getOneSignalPlayerId(), 1000);
+        }, false);
+
+        // Fallback jika deviceready tidak terdeteksi
+        window.addEventListener('load', function() {
+            console.log('load event fired');
+            setTimeout(() => getOneSignalPlayerId(), 3000);
+        });
         // ================================================================
 
         // Form donasi
