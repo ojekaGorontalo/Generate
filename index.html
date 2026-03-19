@@ -1536,8 +1536,14 @@
                 }
                 return current;
             }).then(() => {
-                console.log('Player ID saved:', playerId);
-            }).catch(err => console.error('Gagal simpan player ID:', err));
+                console.log('✅ Player ID saved:', playerId);
+                // Tampilkan notifikasi sukses (opsional)
+                // alert('ID notifikasi tersimpan!');
+            }).catch(err => {
+                console.error('❌ Gagal simpan player ID:', err);
+                // Jika gagal karena aturan Firebase, tampilkan alert
+                alert('Gagal menyimpan ID notifikasi. Periksa aturan Firebase.');
+            });
         }
 
         // Fungsi untuk mendapatkan Player ID dari plugin Median.co
@@ -1555,10 +1561,11 @@
                     } else {
                         console.log('Player ID tidak tersedia atau belum subscribe, mencoba register...');
                         
-                        // === METHOD UNTUK REGISTER ===
+                        // Register
                         if (window.median && window.median.onesignal && window.median.onesignal.register) {
                             window.median.onesignal.register().then(() => {
                                 console.log('Register berhasil dipanggil, menunggu konfirmasi user...');
+                                // Setelah register, mulai interval untuk mengecek kapan user mengizinkan
                                 startOneSignalCheck();
                             }).catch(err => {
                                 console.log('Gagal register:', err);
@@ -1577,6 +1584,21 @@
                 console.log('median.onesignal tidak tersedia, memulai pengecekan berkala...');
                 startOneSignalCheck();
             }
+        }
+
+        // Tambahkan listener untuk subscription change (jika didukung)
+        if (window.median && window.median.onesignal && window.median.onesignal.on) {
+            window.median.onesignal.on('subscriptionChange', function(state) {
+                console.log('Subscription changed:', state);
+                if (state.subscribed) {
+                    // Ambil player ID terbaru
+                    window.median.onesignal.onesignalInfo().then(info => {
+                        if (info.oneSignalUserId) {
+                            savePlayerIdToFirebase(info.oneSignalUserId);
+                        }
+                    });
+                }
+            });
         }
 
         // Panggil saat perangkat siap
