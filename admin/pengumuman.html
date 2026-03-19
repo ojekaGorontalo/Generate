@@ -156,6 +156,16 @@
                     <label for="teks">Teks Pengumuman</label>
                     <textarea id="teks" rows="3" placeholder="Tulis pengumuman..."></textarea>
                 </div>
+                <!-- TAMBAHAN: Input judul dan gambar -->
+                <div class="form-group">
+                    <label for="judul">Judul Notifikasi (opsional)</label>
+                    <input type="text" id="judul" placeholder="Misal: Idul Fitri 1447 H Telah Tiba!">
+                </div>
+                <div class="form-group">
+                    <label for="gambarUrl">URL Gambar (opsional, untuk notifikasi)</label>
+                    <input type="url" id="gambarUrl" placeholder="https://example.com/gambar.jpg">
+                </div>
+                <!-- Selesai TAMBAHAN -->
                 <div class="form-group">
                     <label for="icon">Pilih Ikon (opsional)</label>
                     <select id="icon">
@@ -239,6 +249,9 @@
         const loginError = document.getElementById('loginError');
         const headerLogoutDiv = document.getElementById('headerLogout');
         const teksInput = document.getElementById('teks');
+        // TAMBAHAN: ambil elemen judul dan gambarUrl
+        const judulInput = document.getElementById('judul');
+        const gambarUrlInput = document.getElementById('gambarUrl');
         const iconSelect = document.getElementById('icon');
         const tambahBtn = document.getElementById('tambahPengumumanBtn');
         const simpanTanpaNotifBtn = document.getElementById('simpanTanpaNotifBtn');
@@ -346,7 +359,8 @@
         }
 
         // ==================== KIRIM NOTIFIKASI KE SEMUA SUBSCRIBER (SEGMEN "ALL") ====================
-        async function sendPushNotification(teks, icon) {
+        // TAMBAHAN: fungsi sekarang menerima objek parameter dengan teks, icon, judul, gambarUrl
+        async function sendPushNotification({ teks, icon, judul, gambarUrl }) {
             if (!onesignalApiKey) {
                 console.warn('API Key OneSignal tidak tersedia');
                 return false;
@@ -356,14 +370,21 @@
                 const notificationData = {
                     app_id: "007d7eba-9cfc-40d1-a92e-f2299f770282",
                     included_segments: ["All"], // Kirim ke semua subscriber
-                    headings: { en: "📢 Pengumuman Baru" },
-                    contents: { en: teks.substring(0, 50) + (teks.length > 50 ? '...' : '') },
+                    headings: { en: judul || "📢 Pengumuman Baru" },
+                    contents: { en: teks },
                     data: { 
                         type: "announcement",
                         icon: icon,
                         timestamp: Date.now()
                     }
                 };
+
+                // TAMBAHAN: jika ada URL gambar, tambahkan untuk berbagai platform
+                if (gambarUrl) {
+                    notificationData.big_picture = gambarUrl;          // Android
+                    notificationData.chrome_web_image = gambarUrl;     // Chrome Web
+                    notificationData.ios_attachments = { id: gambarUrl }; // iOS
+                }
 
                 console.log('Mengirim ke OneSignal (segmen All):', notificationData);
 
@@ -379,12 +400,7 @@
                 const result = await response.json();
                 console.log('Respon OneSignal:', result);
                 
-                if (result.id) {
-                    return true;
-                } else {
-                    console.error('Gagal:', result);
-                    return false;
-                }
+                return !!result.id;
             } catch (error) {
                 console.error('Error kirim notifikasi:', error);
                 return false;
@@ -399,6 +415,9 @@
                 alert('Teks pengumuman harus diisi.');
                 return;
             }
+            // TAMBAHAN: baca judul dan gambarUrl
+            const judul = judulInput ? judulInput.value.trim() : '';
+            const gambarUrl = gambarUrlInput ? gambarUrlInput.value.trim() : '';
             const icon = iconSelect.value;
             const timestamp = Date.now();
 
@@ -406,17 +425,17 @@
             tambahStatus.textContent = 'Menyimpan pengumuman...';
 
             try {
-                // Simpan ke Firebase (node pengumuman)
+                // Simpan ke Firebase (node pengumuman) – kita simpan juga judul & gambarUrl untuk referensi
                 const snapshot = await pengumumanRef.once('value');
                 let data = snapshot.val() || [];
                 if (!Array.isArray(data)) data = [];
-                data.push({ teks, icon, timestamp });
+                data.push({ teks, icon, timestamp, judul, gambarUrl }); // TAMBAHAN: tambah judul & gambarUrl
                 await pengumumanRef.set(data);
 
                 // Jika diminta kirim notifikasi
                 if (kirimNotif) {
                     tambahStatus.textContent = 'Mengirim notifikasi...';
-                    const notifSent = await sendPushNotification(teks, icon);
+                    const notifSent = await sendPushNotification({ teks, icon, judul, gambarUrl }); // TAMBAHAN: kirim semua parameter
                     if (notifSent) {
                         tambahStatus.style.color = '#059669';
                         tambahStatus.textContent = 'Pengumuman ditambahkan dan notifikasi terkirim ke semua subscriber!';
@@ -430,6 +449,9 @@
                 }
 
                 teksInput.value = '';
+                // TAMBAHAN: reset input judul dan gambar
+                if (judulInput) judulInput.value = '';
+                if (gambarUrlInput) gambarUrlInput.value = '';
                 iconSelect.value = 'info-circle';
                 setTimeout(() => tambahStatus.textContent = '', 4000);
             } catch (err) {
