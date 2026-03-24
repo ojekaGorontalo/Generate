@@ -341,7 +341,8 @@
         <a href="pemasukan.html"><i class="fas fa-arrow-down"></i><span>Pemasukan</span></a>
         <a href="pengeluaran.html"><i class="fas fa-arrow-up"></i><span>Pengeluaran</span></a>
         <a href="bukti.html"><i class="fas fa-file-invoice"></i><span>Bukti</span></a>
-        <!-- Link Penyumbang dihapus -->
+        <!-- Tambahan menu Besi Tua -->
+        <a href="besi-tua.html"><i class="fas fa-industry"></i><span>Besi Tua</span></a>
     </nav>
 
     <div id="adminContent">
@@ -438,7 +439,7 @@
                     <span><strong>Jumlah Donatur:</strong> <span id="jumlahDonaturSumbangan">-</span></span>
                 </div>
                 <table id="tabelSumbangan">
-                    <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th></tr></thead>
+                    <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th> </thead>
                     <tbody id="sumbanganBody"></tbody>
                 </table>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;">
@@ -452,11 +453,11 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div>
                         <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pemasukan</h4>
-                        <table id="tabelPemasukan"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
+                        <table id="tabelPemasukan"><thead><tr><th>Kategori</th><th>Nominal</th> </thead><tbody></tbody></table>
                     </div>
                     <div>
                         <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Pengeluaran</h4>
-                        <table id="tabelPengeluaran"><thead><tr><th>Kategori</th><th>Nominal</th></tr></thead><tbody></tbody></table>
+                        <table id="tabelPengeluaran"><thead><tr><th>Kategori</th><th>Nominal</th> </thead><tbody></tbody></table>
                     </div>
                 </div>
             </div>
@@ -689,7 +690,7 @@
             const items = snapshot.val() || [];
             lastTotalPemasukan = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
             document.querySelector('#tabelPemasukan tbody').innerHTML = items.map(item => `
-                <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
+                 <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
             `).join('');
             document.getElementById('totalPemasukanLangsung').textContent = formatRupiah(lastTotalPemasukan);
             updateRingkasanKeuangan();
@@ -700,7 +701,7 @@
             const items = snapshot.val() || [];
             lastTotalPengeluaran = items.reduce((sum, item) => sum + (item.nominal || 0), 0);
             document.querySelector('#tabelPengeluaran tbody').innerHTML = items.map(item => `
-                <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
+                 <tr><td>${item.kategori}</td><td>${formatRupiah(item.nominal)}</td></tr>
             `).join('');
             updateRingkasanKeuangan();
         });
@@ -720,7 +721,7 @@
             const sorted = [...items].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
             const limaTerbaru = sorted.slice(0, 5);
             document.getElementById('sumbanganBody').innerHTML = limaTerbaru.map(item => `
-                <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
+                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
             `).join('');
 
             updateRingkasanKeuangan();
