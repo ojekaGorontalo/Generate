@@ -1832,36 +1832,38 @@
         });
 
         // Update dropdown anggota berdasarkan data Firebase (hanya yang belum lunas)
-        function updateAnggotaDropdown() {
-            anggotaKomunitasRef.once('value', (snapshot) => {
-                const anggota = snapshot.val() || [];
-                const belumLunas = anggota.filter(angg => (angg.sisaIuran || 250000) > 0);
-                anggotaSelect.innerHTML = '<option value="">-- Pilih anggota yang belum lunas --</option>';
-                belumLunas.forEach((angg, idx) => {
-                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-                    const option = document.createElement('option');
-                    option.value = angg.id || idx;
-                    option.textContent = `${angg.nama} - Sisa: ${formatRupiah(sisa)}`;
-                    option.dataset.sisa = sisa;
-                    option.dataset.id = angg.id || idx;
-                    option.dataset.nama = angg.nama;
-                    anggotaSelect.appendChild(option);
-                });
-                // Event listener untuk pilihan anggota
-                anggotaSelect.addEventListener('change', () => {
-                    const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
-                    if (selectedOption && selectedOption.value) {
-                        const sisa = parseInt(selectedOption.dataset.sisa);
-                        sisaInfo.innerHTML = `Sisa tagihan: ${formatRupiah(sisa)}. Maksimal pembayaran: ${formatRupiah(sisa)}`;
-                        nominalInput.max = sisa;
-                        if (nominalInput.value > sisa) nominalInput.value = sisa;
-                    } else {
-                        sisaInfo.innerHTML = '';
-                        nominalInput.removeAttribute('max');
-                    }
-                });
-            });
-        }
+function updateAnggotaDropdown() {
+    anggotaKomunitasRef.once('value', (snapshot) => {
+        const data = snapshot.val();
+        // Konversi objek ke array
+        const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        const belumLunas = anggota.filter(angg => (angg.sisaIuran || 250000) > 0);
+        anggotaSelect.innerHTML = '<option value="">-- Pilih anggota yang belum lunas --</option>';
+        belumLunas.forEach(angg => {
+            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+            const option = document.createElement('option');
+            option.value = angg.id;  // key Firebase sebagai id
+            option.textContent = `${angg.nama} - Sisa: ${formatRupiah(sisa)}`;
+            option.dataset.sisa = sisa;
+            option.dataset.id = angg.id;
+            option.dataset.nama = angg.nama;
+            anggotaSelect.appendChild(option);
+        });
+        // Event listener untuk pilihan anggota
+        anggotaSelect.addEventListener('change', () => {
+            const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const sisa = parseInt(selectedOption.dataset.sisa);
+                sisaInfo.innerHTML = `Sisa tagihan: ${formatRupiah(sisa)}. Maksimal pembayaran: ${formatRupiah(sisa)}`;
+                nominalInput.max = sisa;
+                if (nominalInput.value > sisa) nominalInput.value = sisa;
+            } else {
+                sisaInfo.innerHTML = '';
+                nominalInput.removeAttribute('max');
+            }
+        });
+    });
+}
 
         Promise.all([
             namaRekRef.once('value'),
@@ -2265,74 +2267,79 @@
     <!-- Script Komunitas Besi Tua - Menampilkan daftar anggota dan riwayat -->
     <script>
         function loadKomunitasData() {
-            anggotaKomunitasRef.on('value', (snapshot) => {
-                const anggota = snapshot.val() || [];
-                allAnggota = anggota;
-                const totalAnggota = anggota.length;
-                const totalIuranTarget = totalAnggota * 250000;
-                let totalTerkumpul = 0;
-                let totalSisa = 0;
-                anggota.forEach(angg => {
-                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-                    const sudahBayar = 250000 - sisa;
-                    totalTerkumpul += sudahBayar;
-                    totalSisa += sisa;
-                });
-                document.getElementById('totalAnggota').textContent = totalAnggota;
-                document.getElementById('totalIuranTarget').textContent = formatRupiah(totalIuranTarget);
-                document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
-                document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
+    anggotaKomunitasRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        // Ubah objek menjadi array
+        const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        allAnggota = anggota;
 
-                const container = document.getElementById('anggotaList');
-                if (totalAnggota === 0) {
-                    container.innerHTML = '<div style="text-align:center; padding:1rem;">Belum ada anggota terdaftar.</div>';
-                    return;
-                }
-                // Urutkan berdasarkan nama
-                const sorted = [...anggota].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
-                container.innerHTML = sorted.map((angg, idx) => {
-                    const inisial = angg.nama ? angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '??';
-                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-                    const total = 250000;
-                    const sudahBayar = total - sisa;
-                    const persen = (sudahBayar / total) * 100;
-                    const status = sisa === 0 ? 'Lunas' : 'Belum Lunas';
-                    const statusClass = sisa === 0 ? '' : 'pending';
-                    const riwayat = angg.riwayat || [];
-                    // Urutkan riwayat dari terbaru
-                    const sortedRiwayat = [...riwayat].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    return `
-                        <div class="anggota-card">
-                            <div class="anggota-header">
-                                <div class="anggota-avatar">${inisial}</div>
-                                <div style="flex:1;">
-                                    <div class="anggota-name">${angg.nama || 'Tanpa Nama'}</div>
-                                    <span class="anggota-status ${statusClass}">${status}</span>
-                                </div>
-                            </div>
-                            <div class="anggota-detail">
-                                <div>Total Iuran: ${formatRupiah(total)}</div>
-                                <div>Telah Dibayar: ${formatRupiah(sudahBayar)}</div>
-                                <div>Sisa: ${formatRupiah(sisa)}</div>
-                                <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
-                            </div>
-                            ${sortedRiwayat.length > 0 ? `
-                            <div class="riwayat-list">
-                                <strong><i class="fas fa-history"></i> Riwayat Pembayaran:</strong>
-                                ${sortedRiwayat.map(r => `
-                                    <div class="riwayat-item">
-                                        <span>${r.tanggal || '-'}</span>
-                                        <span>${formatRupiah(r.nominal)}</span>
-                                        <span><a href="${r.buktiUrl}" target="_blank" style="color:#fbbf24;">Bukti</a></span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                            ` : '<div class="riwayat-list"><i>Belum ada pembayaran</i></div>'}
-                        </div>
-                    `;
-                }).join('');
-            });
+        const totalAnggota = anggota.length;
+        const totalIuranTarget = totalAnggota * 250000;
+        let totalTerkumpul = 0;
+        let totalSisa = 0;
+
+        anggota.forEach(angg => {
+            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+            const sudahBayar = 250000 - sisa;
+            totalTerkumpul += sudahBayar;
+            totalSisa += sisa;
+        });
+
+        document.getElementById('totalAnggota').textContent = totalAnggota;
+        document.getElementById('totalIuranTarget').textContent = formatRupiah(totalIuranTarget);
+        document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
+        document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
+
+        const container = document.getElementById('anggotaList');
+        if (totalAnggota === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:1rem;">Belum ada anggota terdaftar.</div>';
+            return;
         }
+
+        // Urutkan berdasarkan nama
+        const sorted = [...anggota].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
+        container.innerHTML = sorted.map(angg => {
+            const inisial = angg.nama ? angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '??';
+            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+            const total = 250000;
+            const sudahBayar = total - sisa;
+            const persen = (sudahBayar / total) * 100;
+            const status = sisa === 0 ? 'Lunas' : 'Belum Lunas';
+            const statusClass = sisa === 0 ? '' : 'pending';
+            const riwayat = angg.riwayat || [];
+            const sortedRiwayat = [...riwayat].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+            return `
+                <div class="anggota-card">
+                    <div class="anggota-header">
+                        <div class="anggota-avatar">${inisial}</div>
+                        <div style="flex:1;">
+                            <div class="anggota-name">${angg.nama || 'Tanpa Nama'}</div>
+                            <span class="anggota-status ${statusClass}">${status}</span>
+                        </div>
+                    </div>
+                    <div class="anggota-detail">
+                        <div>Total Iuran: ${formatRupiah(total)}</div>
+                        <div>Telah Dibayar: ${formatRupiah(sudahBayar)}</div>
+                        <div>Sisa: ${formatRupiah(sisa)}</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
+                    </div>
+                    ${sortedRiwayat.length > 0 ? `
+                    <div class="riwayat-list">
+                        <strong><i class="fas fa-history"></i> Riwayat Pembayaran:</strong>
+                        ${sortedRiwayat.map(r => `
+                            <div class="riwayat-item">
+                                <span>${r.tanggal || '-'}</span>
+                                <span>${formatRupiah(r.nominal)}</span>
+                                <span><a href="${r.buktiUrl}" target="_blank" style="color:#fbbf24;">Bukti</a></span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : '<div class="riwayat-list"><i>Belum ada pembayaran</i></div>'}
+                </div>
+            `;
+        }).join('');
+    });
+}
         loadKomunitasData();
     </script>
 
