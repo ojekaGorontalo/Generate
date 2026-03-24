@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- OneSignal Web SDK (tidak digunakan di dalam app, tapi disertakan untuk keperluan web biasa) -->
+    <!-- OneSignal Web SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <style>
         /* ====== TEMA ISLAMI ====== */
@@ -177,12 +177,12 @@
             color: #1e4a3a; 
         }
         
-        .total-row { 
-            display: flex; 
-            justify-content: space-around; 
-            text-align: center; 
-            margin-top: 1rem; 
-            gap: 1rem; 
+        .total-row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 1rem;
+            gap: 1rem;
         }
         .total-box { 
             flex: 1; 
@@ -883,6 +883,120 @@
             opacity: 1;
         }
 
+        /* Komunitas Besi Tua */
+        .komunitas-card {
+            background: linear-gradient(145deg, #2d3748, #1f2937);
+            color: #fef9e7;
+            border: 1px solid #fbbf24;
+        }
+        .komunitas-stats {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .komunitas-stat {
+            background: rgba(255,255,240,0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .komunitas-stat i {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        .komunitas-stat .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .komunitas-stat .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        .anggota-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .anggota-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: transform 0.2s;
+        }
+        .anggota-card:hover {
+            transform: translateY(-3px);
+            background: rgba(0,0,0,0.5);
+        }
+        .anggota-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        .anggota-avatar {
+            width: 45px;
+            height: 45px;
+            background: #fbbf24;
+            color: #1e4a3a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .anggota-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .anggota-status {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: #10b981;
+            color: white;
+            display: inline-block;
+        }
+        .anggota-status.pending {
+            background: #f59e0b;
+        }
+        .anggota-detail {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #fbbf24;
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+        }
+        .riwayat-list {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 0.5rem;
+        }
+        .riwayat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container { padding: 10px; }
@@ -909,6 +1023,8 @@
             .app-recommend-content i { font-size: 1.5rem; }
             .app-recommend-text { font-size: 0.75rem; }
             .app-recommend-btn { padding: 4px 12px; font-size: 0.7rem; }
+            .komunitas-stats { flex-direction: column; gap: 0.5rem; }
+            .anggota-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1036,9 +1152,20 @@
                             <option value="Zakat">Zakat</option>
                             <option value="Infak">Infak</option>
                             <option value="Wakaf">Wakaf</option>
+                            <option value="Solidaritas Besi Tua">Solidaritas Besi Tua</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
+                    
+                    <!-- Div untuk pilihan anggota Besi Tua (ditampilkan jika kategori Solidaritas Besi Tua) -->
+                    <div id="besiTuaGroup" class="form-group" style="display: none;">
+                        <label for="anggotaBesiTua">Pilih Anggota Besi Tua <span style="color: #dc2626;">*</span></label>
+                        <select id="anggotaBesiTua">
+                            <option value="">-- Pilih anggota yang belum lunas --</option>
+                        </select>
+                        <div class="file-info" id="sisaTagihanInfo"></div>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="nominal">Nominal (Rp) <span style="color: #dc2626;">*</span></label>
                         <input type="number" id="nominal" placeholder="Contoh: 10000" min="1000" required>
@@ -1081,9 +1208,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelDonasi">
-                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Kategori</th><th>Catatan</th></tr></thead>
+                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Kategori</th><th>Catatan</th> </thead>
                         <tbody id="donasiBody"></tbody>
-                    </table>
+                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;"><i class="fas fa-info-circle"></i> <span id="donasiInfo">Menampilkan data</span></p>
             </div>
@@ -1104,9 +1231,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelSumbangan">
-                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th></tr></thead>
+                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th> </thead>
                         <tbody id="sumbanganBody"></tbody>
-                    </table>
+                     </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;"><i class="fas fa-info-circle"></i> <span id="sumbanganInfo">Menampilkan data</span></p>
             </div>
@@ -1127,9 +1254,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelPemasukan">
-                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th> </thead>
                         <tbody></tbody>
-                    </table>
+                     </table>
                 </div>
             </div>
 
@@ -1149,9 +1276,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelPengeluaran">
-                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th> </thead>
                         <tbody></tbody>
-                    </table>
+                     </table>
                 </div>
             </div>
         </div>
@@ -1225,6 +1352,45 @@
                 </div>
             </div>
         </div>
+
+        <!-- Komunitas Besi Tua -->
+        <div id="besi-tua-content" class="tab-content">
+            <div class="card komunitas-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-industry"></i> Komunitas Besi Tua</h3>
+                <div class="card-description" style="color: #fefae0;">
+                    <i class="fas fa-info-circle"></i> Komunitas solidaritas anggota dengan iuran total Rp250.000 per anggota. Pembayaran dapat dicicil. Data anggota dan iuran dikelola secara transparan.
+                </div>
+                <div class="komunitas-stats">
+                    <div class="komunitas-stat">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-label">Total Anggota</div>
+                        <div class="stat-value" id="totalAnggota">0</div>
+                    </div>
+                    <div class="komunitas-stat">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <div class="stat-label">Total Iuran</div>
+                        <div class="stat-value" id="totalIuranTarget">Rp0</div>
+                    </div>
+                    <div class="komunitas-stat">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-label">Terkumpul</div>
+                        <div class="stat-value" id="totalTerkumpul">Rp0</div>
+                    </div>
+                    <div class="komunitas-stat">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-label">Sisa Tagihan</div>
+                        <div class="stat-value" id="totalSisa">Rp0</div>
+                    </div>
+                </div>
+                <h4 style="margin: 1rem 0 0.5rem;"><i class="fas fa-list"></i> Daftar Anggota & Riwayat Pembayaran</h4>
+                <div id="anggotaList" class="anggota-list">
+                    <div style="text-align:center; padding:1rem;">Memuat data anggota...</div>
+                </div>
+                <div class="hadith" style="margin-top: 1.5rem; background: rgba(0,0,0,0.3);">
+                    <i class="fas fa-star-of-life"></i> "Dan tolong-menolonglah kamu dalam (mengerjakan) kebajikan dan takwa, dan jangan tolong-menolong dalam berbuat dosa dan pelanggaran." (QS. Al-Maidah: 2)
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -1241,6 +1407,7 @@
         <a id="tab-terbaru" onclick="showTab('terbaru')"><i class="fas fa-clock"></i><span>Rincian</span></a>
         <a id="tab-dana" onclick="showTab('dana')"><i class="fas fa-chart-pie"></i><span>Kas</span></a>
         <a id="tab-arkiblat" onclick="showTab('arkiblat')"><i class="fas fa-compass"></i><span>AR Kiblat</span></a>
+        <a id="tab-besi-tua" onclick="showTab('besi-tua')"><i class="fas fa-industry"></i><span>Besi Tua</span></a>
     </nav>
 
     <!-- Modal Notifikasi -->
@@ -1335,6 +1502,8 @@
         const rekeningRef = database.ref('panitia/RekeningDonasi/Rekening');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
         const pengumumanRef = database.ref('pengumuman');
+        // Komunitas Besi Tua
+        const anggotaKomunitasRef = database.ref('komunitasBesiTua/anggota');
 
         // Elemen
         const bannerContainer = document.getElementById('bannerContainer');
@@ -1348,6 +1517,7 @@
         let allDonasi = [];
         let allPengumuman = [];
         let lastReadNotifTimestamp = localStorage.getItem('lastReadNotifTimestamp') || 0;
+        let allAnggota = []; // untuk menyimpan data anggota besi tua
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
@@ -1473,7 +1643,7 @@
             if (tgl) filtered = allPemasukan.filter(item => item.tanggal === tgl);
             const tbody = document.querySelector('#tabelPemasukan tbody');
             tbody.innerHTML = filtered.map(item => `
-                <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
+                 <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
             `).join('');
             document.getElementById('jumlahTransaksiPemasukan').textContent = filtered.length;
         }
@@ -1484,7 +1654,7 @@
             if (tgl) filtered = allPengeluaran.filter(item => item.tanggal === tgl);
             const tbody = document.querySelector('#tabelPengeluaran tbody');
             tbody.innerHTML = filtered.map(item => `
-                <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
+                 <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
             `).join('');
             document.getElementById('jumlahTransaksiPengeluaran').textContent = filtered.length;
         }
@@ -1500,7 +1670,7 @@
             if (!tgl) ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 5);
             else ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             document.getElementById('donasiBody').innerHTML = ditampilkan.map(item => `
-                <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.kategori || '-'}</td><td>${item.catatan || '-'}</td></tr>
+                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.kategori || '-'}</td><td>${item.catatan || '-'}</td></tr>
             `).join('');
             document.getElementById('donasiInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan 5 data terbaru`;
         }
@@ -1514,7 +1684,7 @@
             document.getElementById('jumlahDonaturSumbangan').textContent = filtered.length.toLocaleString();
             const sorted = [...filtered].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
             document.getElementById('sumbanganBody').innerHTML = sorted.map(item => `
-                <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
+                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
             `).join('');
             document.getElementById('sumbanganInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan semua data (${filtered.length})`;
         }
@@ -1572,119 +1742,51 @@
 
         window.addEventListener('load', updateMarquee);
 
-        // ==================== ONE SIGNAL INTEGRATION (FINAL) ====================
-        // Variabel untuk interval pengecekan
+        // ==================== ONE SIGNAL INTEGRATION ====================
         let oneSignalCheckInterval = null;
-
         function stopOneSignalCheck() {
             if (oneSignalCheckInterval) {
                 clearInterval(oneSignalCheckInterval);
                 oneSignalCheckInterval = null;
-                console.log('Pengecekan OneSignal dihentikan.');
             }
         }
-
         function startOneSignalCheck() {
             if (oneSignalCheckInterval) return;
-            console.log('Memulai pengecekan OneSignal secara periodik...');
             oneSignalCheckInterval = setInterval(() => {
                 if (window.median && window.median.onesignal) {
                     window.median.onesignal.onesignalInfo().then(info => {
                         if (info.oneSignalUserId && info.oneSignalSubscribed) {
-                            console.log('Player ID ditemukan via interval:', info.oneSignalUserId);
                             savePlayerIdToFirebase(info.oneSignalUserId);
                             stopOneSignalCheck();
                         }
                     }).catch(err => console.log('Gagal ambil info via interval:', err));
                 }
             }, 3000);
-            
-            // Hentikan setelah 2 menit
-            setTimeout(() => {
-                if (oneSignalCheckInterval) {
-                    console.log('Pengecekan OneSignal dihentikan karena waktu habis.');
-                    stopOneSignalCheck();
-                }
-            }, 120000);
+            setTimeout(() => { if (oneSignalCheckInterval) stopOneSignalCheck(); }, 120000);
         }
-
-        // Fungsi untuk menyimpan Player ID ke Firebase
         function savePlayerIdToFirebase(playerId) {
             const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
             playerIdsRef.transaction(function(current) {
                 if (!current) current = [];
-                if (!current.includes(playerId)) {
-                    current.push(playerId);
-                }
+                if (!current.includes(playerId)) current.push(playerId);
                 return current;
-            }).then(() => {
-                console.log('✅ Player ID saved:', playerId);
-            }).catch(err => {
-                console.error('❌ Gagal simpan player ID:', err);
-                alert('Gagal menyimpan ID notifikasi. Periksa aturan Firebase.');
-            });
+            }).catch(err => alert('Gagal menyimpan ID notifikasi.'));
         }
-
-        // Fungsi untuk mendapatkan Player ID dari plugin Median.co
         function getOneSignalPlayerId() {
-            console.log('Mencoba ambil OneSignal info...');
             if (window.median && window.median.onesignal) {
                 window.median.onesignal.onesignalInfo().then(function(info) {
-                    console.log('OneSignal info:', info);
-                    const playerId = info.oneSignalUserId;
-                    const subscribed = info.oneSignalSubscribed;
-                    
-                    if (playerId && subscribed) {
-                        console.log('Player ID ditemukan:', playerId);
-                        savePlayerIdToFirebase(playerId);
+                    if (info.oneSignalUserId && info.oneSignalSubscribed) {
+                        savePlayerIdToFirebase(info.oneSignalUserId);
                     } else {
-                        console.log('Player ID tidak tersedia atau belum subscribe, mencoba register...');
-                        
-                        if (window.median && window.median.onesignal && window.median.onesignal.register) {
-                            window.median.onesignal.register().then(() => {
-                                console.log('Register berhasil dipanggil, menunggu konfirmasi user...');
-                                startOneSignalCheck();
-                            }).catch(err => {
-                                console.log('Gagal register:', err);
-                                startOneSignalCheck();
-                            });
-                        } else {
-                            console.log('Method register tidak tersedia, fallback ke interval');
-                            startOneSignalCheck();
-                        }
+                        if (window.median.onesignal.register) {
+                            window.median.onesignal.register().then(() => startOneSignalCheck()).catch(() => startOneSignalCheck());
+                        } else startOneSignalCheck();
                     }
-                }).catch(err => {
-                    console.log('Gagal ambil OneSignal info:', err);
-                    startOneSignalCheck();
-                });
-            } else {
-                console.log('median.onesignal tidak tersedia, memulai pengecekan berkala...');
-                startOneSignalCheck();
-            }
+                }).catch(() => startOneSignalCheck());
+            } else startOneSignalCheck();
         }
-
-        if (window.median && window.median.onesignal && window.median.onesignal.on) {
-            window.median.onesignal.on('subscriptionChange', function(state) {
-                console.log('Subscription changed:', state);
-                if (state.subscribed) {
-                    window.median.onesignal.onesignalInfo().then(info => {
-                        if (info.oneSignalUserId) {
-                            savePlayerIdToFirebase(info.oneSignalUserId);
-                        }
-                    });
-                }
-            });
-        }
-
-        document.addEventListener('deviceready', function() {
-            console.log('deviceready event fired');
-            setTimeout(() => getOneSignalPlayerId(), 1000);
-        }, false);
-
-        window.addEventListener('load', function() {
-            console.log('load event fired');
-            setTimeout(() => getOneSignalPlayerId(), 3000);
-        });
+        document.addEventListener('deviceready', function() { setTimeout(() => getOneSignalPlayerId(), 1000); }, false);
+        window.addEventListener('load', function() { setTimeout(() => getOneSignalPlayerId(), 3000); });
         // ================================================================
 
         // Form donasi
@@ -1694,6 +1796,11 @@
         const statusMsg = document.getElementById('statusMessage');
         const fileInput = document.getElementById('bukti');
         const preview = document.getElementById('preview');
+        const kategoriSelect = document.getElementById('kategori');
+        const besiTuaGroup = document.getElementById('besiTuaGroup');
+        const anggotaSelect = document.getElementById('anggotaBesiTua');
+        const nominalInput = document.getElementById('nominal');
+        const sisaInfo = document.getElementById('sisaTagihanInfo');
 
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
@@ -1708,6 +1815,53 @@
                 preview.style.display = 'none';
             }
         });
+
+        // Tampilkan pilihan anggota jika kategori Solidaritas Besi Tua dipilih
+        kategoriSelect.addEventListener('change', () => {
+            if (kategoriSelect.value === 'Solidaritas Besi Tua') {
+                besiTuaGroup.style.display = 'block';
+                // Load data anggota untuk dropdown
+                updateAnggotaDropdown();
+            } else {
+                besiTuaGroup.style.display = 'none';
+                anggotaSelect.value = '';
+                sisaInfo.innerHTML = '';
+                // Reset max nominal (biarkan user isi sendiri)
+                nominalInput.removeAttribute('max');
+            }
+        });
+
+        // Update dropdown anggota berdasarkan data Firebase (hanya yang belum lunas)
+        function updateAnggotaDropdown() {
+            anggotaKomunitasRef.once('value', (snapshot) => {
+                const anggota = snapshot.val() || [];
+                const belumLunas = anggota.filter(angg => (angg.sisaIuran || 250000) > 0);
+                anggotaSelect.innerHTML = '<option value="">-- Pilih anggota yang belum lunas --</option>';
+                belumLunas.forEach((angg, idx) => {
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const option = document.createElement('option');
+                    option.value = angg.id || idx;
+                    option.textContent = `${angg.nama} - Sisa: ${formatRupiah(sisa)}`;
+                    option.dataset.sisa = sisa;
+                    option.dataset.id = angg.id || idx;
+                    option.dataset.nama = angg.nama;
+                    anggotaSelect.appendChild(option);
+                });
+                // Event listener untuk pilihan anggota
+                anggotaSelect.addEventListener('change', () => {
+                    const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
+                    if (selectedOption && selectedOption.value) {
+                        const sisa = parseInt(selectedOption.dataset.sisa);
+                        sisaInfo.innerHTML = `Sisa tagihan: ${formatRupiah(sisa)}. Maksimal pembayaran: ${formatRupiah(sisa)}`;
+                        nominalInput.max = sisa;
+                        if (nominalInput.value > sisa) nominalInput.value = sisa;
+                    } else {
+                        sisaInfo.innerHTML = '';
+                        nominalInput.removeAttribute('max');
+                    }
+                });
+            });
+        }
 
         Promise.all([
             namaRekRef.once('value'),
@@ -1743,12 +1897,37 @@
             return data.data.url;
         }
 
+        // Fungsi untuk mengurangi sisa iuran anggota besi tua dan mencatat riwayat
+        async function processBesiTuaPayment(anggotaId, namaAnggota, nominalBayar, buktiUrl, catatan, namaDonatur) {
+            const anggotaRef = anggotaKomunitasRef.child(anggotaId);
+            const snapshot = await anggotaRef.once('value');
+            const anggotaData = snapshot.val();
+            if (!anggotaData) throw new Error('Data anggota tidak ditemukan');
+            let sisaSekarang = anggotaData.sisaIuran !== undefined ? anggotaData.sisaIuran : 250000;
+            if (nominalBayar > sisaSekarang) throw new Error('Nominal melebihi sisa tagihan');
+            const sisaBaru = sisaSekarang - nominalBayar;
+            const riwayatBaru = {
+                nominal: nominalBayar,
+                tanggal: new Date().toISOString().split('T')[0],
+                buktiUrl: buktiUrl,
+                catatan: catatan || '',
+                donatur: namaDonatur,
+                timestamp: Date.now()
+            };
+            const riwayatLama = anggotaData.riwayat || [];
+            await anggotaRef.update({
+                sisaIuran: sisaBaru,
+                riwayat: [...riwayatLama, riwayatBaru]
+            });
+            return { sisaBaru, riwayatBaru };
+        }
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const nama = document.getElementById('nama').value.trim();
             const alamat = document.getElementById('alamat').value.trim();
-            const kategori = document.getElementById('kategori').value;
-            const nominal = parseInt(document.getElementById('nominal').value);
+            const kategori = kategoriSelect.value;
+            const nominal = parseInt(nominalInput.value);
             const catatan = document.getElementById('catatan').value.trim();
             const file = fileInput.files[0];
             if (!nama || !alamat || !kategori || !nominal || !file) {
@@ -1759,6 +1938,21 @@
                 showMessage('Ukuran file maksimal 5 MB.', 'error');
                 return;
             }
+            if (kategori === 'Solidaritas Besi Tua') {
+                const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
+                if (!selectedOption || !selectedOption.value) {
+                    showMessage('Pilih anggota Besi Tua terlebih dahulu!', 'error');
+                    return;
+                }
+                const anggotaId = selectedOption.dataset.id;
+                const anggotaNama = selectedOption.dataset.nama;
+                const sisa = parseInt(selectedOption.dataset.sisa);
+                if (nominal > sisa) {
+                    showMessage(`Nominal melebihi sisa tagihan (${formatRupiah(sisa)})`, 'error');
+                    return;
+                }
+            }
+
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
             try {
@@ -1771,9 +1965,26 @@
                     timestamp: Date.now()
                 };
                 await donasiRef.push(donasiData);
-                showMessage('Donasi Anda berhasil dikirim! Terima kasih.', 'success');
+
+                // Jika kategori solidaritas besi tua, update data anggota
+                if (kategori === 'Solidaritas Besi Tua') {
+                    const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
+                    const anggotaId = selectedOption.dataset.id;
+                    const anggotaNama = selectedOption.dataset.nama;
+                    await processBesiTuaPayment(anggotaId, anggotaNama, nominal, imageUrl, catatan, nama);
+                    showMessage(`Pembayaran iuran Besi Tua untuk ${anggotaNama} sebesar ${formatRupiah(nominal)} berhasil! Terima kasih.`, 'success');
+                    // Reset dropdown setelah sukses
+                    updateAnggotaDropdown();
+                } else {
+                    showMessage('Donasi Anda berhasil dikirim! Terima kasih.', 'success');
+                }
                 form.reset();
                 preview.style.display = 'none';
+                // Reset tampilan dropdown
+                if (kategori === 'Solidaritas Besi Tua') {
+                    kategoriSelect.value = '';
+                    besiTuaGroup.style.display = 'none';
+                }
             } catch (error) {
                 console.error(error);
                 showMessage('Gagal mengirim donasi: ' + error.message, 'error');
@@ -2051,34 +2262,95 @@
         });
     </script>
 
+    <!-- Script Komunitas Besi Tua - Menampilkan daftar anggota dan riwayat -->
+    <script>
+        function loadKomunitasData() {
+            anggotaKomunitasRef.on('value', (snapshot) => {
+                const anggota = snapshot.val() || [];
+                allAnggota = anggota;
+                const totalAnggota = anggota.length;
+                const totalIuranTarget = totalAnggota * 250000;
+                let totalTerkumpul = 0;
+                let totalSisa = 0;
+                anggota.forEach(angg => {
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const sudahBayar = 250000 - sisa;
+                    totalTerkumpul += sudahBayar;
+                    totalSisa += sisa;
+                });
+                document.getElementById('totalAnggota').textContent = totalAnggota;
+                document.getElementById('totalIuranTarget').textContent = formatRupiah(totalIuranTarget);
+                document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
+                document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
+
+                const container = document.getElementById('anggotaList');
+                if (totalAnggota === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding:1rem;">Belum ada anggota terdaftar.</div>';
+                    return;
+                }
+                // Urutkan berdasarkan nama
+                const sorted = [...anggota].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
+                container.innerHTML = sorted.map((angg, idx) => {
+                    const inisial = angg.nama ? angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '??';
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const total = 250000;
+                    const sudahBayar = total - sisa;
+                    const persen = (sudahBayar / total) * 100;
+                    const status = sisa === 0 ? 'Lunas' : 'Belum Lunas';
+                    const statusClass = sisa === 0 ? '' : 'pending';
+                    const riwayat = angg.riwayat || [];
+                    // Urutkan riwayat dari terbaru
+                    const sortedRiwayat = [...riwayat].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    return `
+                        <div class="anggota-card">
+                            <div class="anggota-header">
+                                <div class="anggota-avatar">${inisial}</div>
+                                <div style="flex:1;">
+                                    <div class="anggota-name">${angg.nama || 'Tanpa Nama'}</div>
+                                    <span class="anggota-status ${statusClass}">${status}</span>
+                                </div>
+                            </div>
+                            <div class="anggota-detail">
+                                <div>Total Iuran: ${formatRupiah(total)}</div>
+                                <div>Telah Dibayar: ${formatRupiah(sudahBayar)}</div>
+                                <div>Sisa: ${formatRupiah(sisa)}</div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
+                            </div>
+                            ${sortedRiwayat.length > 0 ? `
+                            <div class="riwayat-list">
+                                <strong><i class="fas fa-history"></i> Riwayat Pembayaran:</strong>
+                                ${sortedRiwayat.map(r => `
+                                    <div class="riwayat-item">
+                                        <span>${r.tanggal || '-'}</span>
+                                        <span>${formatRupiah(r.nominal)}</span>
+                                        <span><a href="${r.buktiUrl}" target="_blank" style="color:#fbbf24;">Bukti</a></span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : '<div class="riwayat-list"><i>Belum ada pembayaran</i></div>'}
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+        loadKomunitasData();
+    </script>
+
     <!-- Script deteksi aplikasi dan tampilkan banner rekomendasi -->
     <script>
-        // Fungsi untuk menampilkan banner rekomendasi jika tidak di dalam aplikasi
         (function() {
-            // Cek apakah halaman ini dijalankan di dalam aplikasi (misalnya diset oleh aplikasi)
-            // Jika aplikasi tidak menyediakan flag, maka kita anggap tidak di dalam aplikasi.
-            // Kita juga bisa mengecek user agent tertentu jika aplikasi memiliki custom user agent.
             const isInApp = typeof window.isInApp !== 'undefined' && window.isInApp === true;
-            // Cek juga apakah ada fitur tertentu yang hanya ada di aplikasi (opsional)
-            // Misalnya aplikasi bisa menambahkan properti `window.isMasjidApp = true`
             const appExists = isInApp || (window.MasjidApp && window.MasjidApp.installed === true);
-            
-            // Jika tidak dalam aplikasi, tampilkan banner rekomendasi (kecuali sudah ditutup sebelumnya)
             const bannerClosed = localStorage.getItem('appRecommendClosed');
             if (!appExists && bannerClosed !== 'true') {
                 const banner = document.getElementById('appRecommendBanner');
                 banner.style.display = 'flex';
-                
-                // Tombol close
                 document.getElementById('closeAppBanner').addEventListener('click', () => {
                     banner.style.display = 'none';
                     localStorage.setItem('appRecommendClosed', 'true');
                 });
-                
-                // Tombol download (ganti dengan link download aplikasi sebenarnya)
                 document.getElementById('downloadAppBtn').addEventListener('click', () => {
-                    // Ganti URL ini dengan link Play Store atau file APK
-                    const appUrl = 'https://masjid-arrahman.netlify.app/masjid_arrahman.apk'; // ganti dengan link resmi
+                    const appUrl = 'https://play.google.com/store/apps/details?id=com.masjid.arrahman';
                     window.location.href = appUrl;
                 });
             }
