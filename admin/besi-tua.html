@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masjid Ar-Rahman - Kelola Besi Tua</title>
+    <title>Masjid Ar-Rahman - Admin Kelola Besi Tua</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ====== TEMA SAMA DENGAN ADMIN PANEL SEBELUMNYA ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: #f3f4f6; color: #1f2937; padding-bottom: 80px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -50,70 +51,36 @@
         }
         .login-card h2 { color: #1B5E20; margin-bottom: 0.5rem; }
         .login-card p { color: #6b7280; margin-bottom: 2rem; }
-        .login-card input {
-            width: 100%; padding: 0.9rem 1rem; margin-bottom: 1.2rem; border: 1px solid #d1d5db;
-            border-radius: 12px; font-size: 1rem; outline: none; transition: 0.2s;
-        }
+        .login-card input { width: 100%; padding: 0.9rem 1rem; margin-bottom: 1.2rem; border: 1px solid #d1d5db; border-radius: 12px; font-size: 1rem; outline: none; }
         .login-card input:focus { border-color: #1B5E20; box-shadow: 0 0 0 3px rgba(27,94,32,0.2); }
-        .login-card button {
-            background: #1B5E20; color: white; border: none; padding: 0.9rem; width: 100%;
-            border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s;
-        }
+        .login-card button { background: #1B5E20; color: white; border: none; padding: 0.9rem; width: 100%; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         .login-card button:hover { background: #2e7d32; }
-        #loginError { color: #dc2626; margin-top: 1rem; font-size: 0.9rem; }
+        #loginError { color: #dc2626; margin-top: 1rem; }
         #adminContent { display: none; }
-        .section-title {
-            font-size: 1.8rem; font-weight: 700; color: #1B5E20; margin: 2rem 0 1.5rem;
-            border-bottom: 3px solid #D4AF37; display: inline-block; padding-bottom: 0.3rem;
-        }
-        .card {
-            background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 1.5rem; margin-bottom: 1.5rem;
-        }
-        .info-panel {
-            background-color: #E8F5E9; border-left: 5px solid #1B5E20; padding: 1rem 1.2rem;
-            border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; color: #1B5E20;
-        }
+        .section-title { font-size: 1.8rem; font-weight: 700; color: #1B5E20; margin: 2rem 0 1.5rem; border-bottom: 3px solid #D4AF37; display: inline-block; padding-bottom: 0.3rem; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .info-panel { background-color: #E8F5E9; border-left: 5px solid #1B5E20; padding: 1rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; color: #1B5E20; }
         .info-panel i { font-size: 1.8rem; }
-        .info-panel p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
-        .komunitas-stats {
-            display: flex; gap: 1rem; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap;
-        }
-        .komunitas-stat {
-            background: #f9fafb; border-radius: 12px; padding: 1rem; text-align: center; flex: 1; min-width: 120px;
-        }
+        .info-panel p { margin: 0; font-size: 0.95rem; }
+        .komunitas-stats { display: flex; gap: 1rem; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .komunitas-stat { background: #f9fafb; border-radius: 12px; padding: 1rem; text-align: center; flex: 1; min-width: 120px; }
         .komunitas-stat i { font-size: 1.5rem; color: #1B5E20; margin-bottom: 0.3rem; display: block; }
         .komunitas-stat .stat-label { font-size: 0.8rem; color: #6b7280; }
         .komunitas-stat .stat-value { font-size: 1.4rem; font-weight: bold; color: #1B5E20; }
-        .anggota-list {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;
-        }
-        .anggota-card {
-            background: #f9fafb; border-radius: 12px; padding: 1rem; transition: transform 0.2s; border: 1px solid #e5e7eb;
-        }
+        .anggota-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .anggota-card { background: #f9fafb; border-radius: 12px; padding: 1rem; transition: transform 0.2s; border: 1px solid #e5e7eb; }
         .anggota-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .anggota-header {
-            display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; justify-content: space-between;
-        }
-        .anggota-avatar {
-            width: 45px; height: 45px; background: #1B5E20; color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;
-        }
+        .anggota-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; justify-content: space-between; }
+        .anggota-avatar { width: 45px; height: 45px; background: #1B5E20; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
         .anggota-info { flex: 1; }
         .anggota-nama { font-weight: bold; font-size: 1rem; }
-        .anggota-status {
-            font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; background: #fbbf24; color: #1B5E20; display: inline-block;
-        }
+        .anggota-status { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; background: #fbbf24; color: #1B5E20; display: inline-block; }
         .anggota-status.lunas { background: #10b981; color: white; }
         .progress-bar { background: #e5e7eb; border-radius: 10px; height: 8px; margin: 0.5rem 0; overflow: hidden; }
         .progress-fill { background: #1B5E20; height: 100%; width: 0%; border-radius: 10px; }
         .anggota-detail { font-size: 0.85rem; margin-top: 0.5rem; display: flex; justify-content: space-between; }
-        .anggota-actions {
-            display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: flex-end;
-        }
-        .btn-sm {
-            background: #e5e7eb; border: none; padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: 0.2s;
-        }
+        .anggota-actions { display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: flex-end; }
+        .btn-sm { background: #e5e7eb; border: none; padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
         .btn-sm i { margin-right: 0.2rem; }
         .btn-sm:hover { background: #d1d5db; }
         .btn-danger { background: #fee2e2; color: #dc2626; }
@@ -124,29 +91,29 @@
         .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; color: #374151; }
         .form-group input, .form-group select { width: 100%; padding: 0.7rem; border: 1px solid #d1d5db; border-radius: 8px; }
         .form-group button { background: #1B5E20; color: white; border: none; padding: 0.7rem 1rem; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; }
-        .form-group button:hover { background: #2e7d32; }
-        .modal {
-            display: none; position: fixed; z-index: 2001; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center;
-        }
-        .modal-content {
-            background: white; margin: auto; padding: 20px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
-        }
+        .modal { display: none; position: fixed; z-index: 2001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+        .modal-content { background: white; margin: auto; padding: 20px; border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .modal-header h3 { color: #1B5E20; }
         .close-modal { font-size: 1.5rem; cursor: pointer; color: #6b7280; }
         .riwayat-item { padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 0.85rem; }
-        .riwayat-item:last-child { border-bottom: none; }
-        footer {
-            background-color: #1B5E20; color: white; text-align: center; padding: 1.2rem 0; font-size: 0.9rem;
-        }
+        .donasi-pending { background: #fffbeb; border-left: 4px solid #fbbf24; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 8px; }
+        .donasi-pending .donasi-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .donasi-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .btn-approve { background: #10b981; color: white; border: none; padding: 0.2rem 0.8rem; border-radius: 4px; cursor: pointer; }
+        .btn-reject { background: #ef4444; color: white; border: none; padding: 0.2rem 0.8rem; border-radius: 4px; cursor: pointer; }
+        footer { background-color: #1B5E20; color: white; text-align: center; padding: 1.2rem 0; font-size: 0.9rem; }
         @media (max-width: 768px) {
             .container { padding: 15px; }
-            .section-title { font-size: 1.5rem; margin: 1.5rem 0 1rem; }
+            .section-title { font-size: 1.5rem; }
             .card { padding: 1rem; }
             .anggota-list { grid-template-columns: 1fr; }
-            .komunitas-stats { flex-direction: column; gap: 0.5rem; }
+            .komunitas-stats { flex-direction: column; }
         }
+        .status-badge { padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body>
@@ -154,13 +121,10 @@
         <div class="container">
             <div class="logo">
                 <h1>Masjid Ar-Rahman</h1>
-                <p>Transparan, Amanah, Berkah</p>
+                <p>Admin Panel</p>
             </div>
             <div class="header-right">
-                <a href="pengumuman.html" class="header-link">
-                    <i class="fas fa-bullhorn"></i>
-                    <span class="header-link-text">Pengumuman</span>
-                </a>
+                <a href="pengumuman.html" class="header-link"><i class="fas fa-bullhorn"></i><span class="header-link-text">Pengumuman</span></a>
                 <div id="headerLogout"></div>
             </div>
         </div>
@@ -187,15 +151,21 @@
     </nav>
 
     <div id="adminContent">
-        <main class="container">
-            <h2 class="section-title">🏭 Kelola Komunitas Besi Tua</h2>
+        <div class="container">
+            <h2 class="section-title">🏭 Kelola Komunitas Besi Tua & Verifikasi Donasi</h2>
             <div class="info-panel">
                 <i class="fas fa-info-circle"></i>
-                <p>Kelola anggota komunitas Besi Tua, lihat iuran, catat pembayaran, dan hapus anggota. Iuran tetap Rp250.000 per anggota.</p>
+                <p>Kelola anggota komunitas Besi Tua, lihat iuran, catat pembayaran tunai, dan verifikasi donasi transfer yang masuk.</p>
+            </div>
+
+            <!-- Tampilkan donasi pending -->
+            <div class="card">
+                <h3><i class="fas fa-clock"></i> Verifikasi Donasi (Pending)</h3>
+                <div id="pendingDonasiList">Memuat data...</div>
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-chart-line"></i> Ringkasan</h3>
+                <h3><i class="fas fa-chart-line"></i> Ringkasan Komunitas</h3>
                 <div class="komunitas-stats" id="statsContainer">
                     <div class="komunitas-stat"><i class="fas fa-users"></i><div class="stat-label">Total Anggota</div><div class="stat-value" id="totalAnggota">0</div></div>
                     <div class="komunitas-stat"><i class="fas fa-hand-holding-usd"></i><div class="stat-label">Total Iuran Target</div><div class="stat-value" id="totalTarget">Rp0</div></div>
@@ -225,7 +195,7 @@
                     <div style="text-align:center; padding:2rem;">Memuat data...</div>
                 </div>
             </div>
-        </main>
+        </div>
         <footer>
             <div class="container">
                 <p>© 2026 Takmir Masjid Ar-Rahman. Data komunitas Besi Tua diperbarui secara real-time.</p>
@@ -244,11 +214,11 @@
         </div>
     </div>
 
-    <!-- Modal Catat Pembayaran -->
+    <!-- Modal Catat Pembayaran (Tunai) -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-hand-holding-usd"></i> Catat Pembayaran</h3>
+                <h3><i class="fas fa-hand-holding-usd"></i> Catat Pembayaran Tunai</h3>
                 <span class="close-modal" onclick="closeModal('paymentModal')">&times;</span>
             </div>
             <form id="paymentForm">
@@ -267,12 +237,12 @@
                 </div>
                 <div class="form-group">
                     <label>Catatan (opsional)</label>
-                    <input type="text" id="paymentNote" placeholder="e.g. Tunai, Transfer">
+                    <input type="text" id="paymentNote" placeholder="e.g. Tunai, Transfer manual">
                 </div>
                 <div class="form-group">
                     <label>Upload Bukti (opsional)</label>
                     <input type="file" id="paymentProof" accept="image/*">
-                    <div style="font-size:0.75rem; color:#6b7280;">Format JPG/PNG, maks 5MB</div>
+                    <div style="font-size:0.75rem; color:#6b7280;">Kosongkan jika tidak ada bukti</div>
                 </div>
                 <button type="submit" id="submitPaymentBtn">Simpan Pembayaran</button>
             </form>
@@ -282,7 +252,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script>
-        // Firebase Config
+        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyA8YonBeDUVkjOqLtDE6t91GXGXmw-47VM",
             authDomain: "steady-fin-368617.firebaseapp.com",
@@ -296,75 +266,51 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // References
         const anggotaRef = database.ref('komunitasBesiTua/anggota');
+        const donasiRef = database.ref('donasi/daftar');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
         const userNameRef = database.ref('panitia/UserName');
         const passwordRef = database.ref('panitia/Password');
-
         let apiKey = '';
         let validUsername = '';
         let validPassword = '';
-        let allAnggota = [];
-
-        // DOM Elements
-        const loginOverlay = document.getElementById('loginOverlay');
-        const adminContent = document.getElementById('adminContent');
-        const bottomNav = document.getElementById('bottomNav');
-        const usernameInput = document.getElementById('usernameInput');
-        const passwordInput = document.getElementById('passwordInput');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
-        const headerLogoutDiv = document.getElementById('headerLogout');
-        const addMemberForm = document.getElementById('addMemberForm');
-        const memberNameInput = document.getElementById('memberName');
-        const memberPhoneInput = document.getElementById('memberPhone');
-        const anggotaListDiv = document.getElementById('anggotaList');
-
-        // Helper functions
-        function formatRupiah(angka) {
-            return 'Rp ' + angka.toLocaleString('id-ID');
-        }
 
         // Authentication
         function checkAuth() {
             if (localStorage.getItem('adminLoggedIn') === 'true') {
-                loginOverlay.style.display = 'none';
-                adminContent.style.display = 'block';
-                bottomNav.style.display = 'flex';
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                document.getElementById('bottomNav').style.display = 'flex';
                 addLogoutButton();
                 loadData();
+                loadPendingDonasi();
             } else {
-                loginOverlay.style.display = 'flex';
-                adminContent.style.display = 'none';
-                bottomNav.style.display = 'none';
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('adminContent').style.display = 'none';
+                document.getElementById('bottomNav').style.display = 'none';
             }
         }
 
         function handleLogin() {
-            const user = usernameInput.value.trim();
-            const pass = passwordInput.value.trim();
+            const user = document.getElementById('usernameInput').value.trim();
+            const pass = document.getElementById('passwordInput').value.trim();
             if (user === validUsername && pass === validPassword) {
                 localStorage.setItem('adminLoggedIn', 'true');
-                loginOverlay.style.display = 'none';
-                adminContent.style.display = 'block';
-                bottomNav.style.display = 'flex';
-                addLogoutButton();
-                loadData();
+                checkAuth();
             } else {
-                loginError.textContent = 'Username atau password salah.';
+                document.getElementById('loginError').textContent = 'Username atau password salah.';
             }
         }
 
         function addLogoutButton() {
-            headerLogoutDiv.innerHTML = '<button class="logout-btn-header" id="logoutBtnHeader"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+            const headerLogout = document.getElementById('headerLogout');
+            headerLogout.innerHTML = '<button class="logout-btn-header" id="logoutBtnHeader"><i class="fas fa-sign-out-alt"></i> Logout</button>';
             document.getElementById('logoutBtnHeader').addEventListener('click', () => {
                 localStorage.removeItem('adminLoggedIn');
                 window.location.reload();
             });
         }
 
-        // Load credentials
         Promise.all([
             apiKeyRef.once('value'),
             userNameRef.once('value'),
@@ -376,13 +322,16 @@
             checkAuth();
         }).catch(err => {
             console.error(err);
-            loginError.textContent = 'Gagal memuat data login. Refresh halaman.';
+            document.getElementById('loginError').textContent = 'Gagal memuat data login.';
         });
 
-        loginBtn.addEventListener('click', handleLogin);
-        passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
 
-        // Upload gambar ke ImgBB
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toLocaleString('id-ID');
+        }
+
         async function uploadToImgBB(file) {
             if (!apiKey) throw new Error('API Key tidak tersedia');
             const formData = new FormData();
@@ -393,15 +342,99 @@
             return data.data.url;
         }
 
-        // Tambah anggota
-        addMemberForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nama = memberNameInput.value.trim();
-            if (!nama) {
-                alert('Nama anggota harus diisi');
+        // Fungsi untuk memproses pembayaran (update sisa iuran dan catat riwayat)
+        async function processPayment(memberId, nominal, catatan, buktiUrl, dicatatOleh = 'admin') {
+            const snapshot = await anggotaRef.child(memberId).once('value');
+            const member = snapshot.val();
+            if (!member) throw new Error('Anggota tidak ditemukan');
+            let sisa = member.sisaIuran;
+            if (nominal > sisa) throw new Error(`Nominal melebihi sisa tagihan (${formatRupiah(sisa)})`);
+            const sisaBaru = sisa - nominal;
+            const paymentRecord = {
+                nominal: nominal,
+                tanggal: new Date().toISOString().split('T')[0],
+                catatan: catatan || '',
+                buktiUrl: buktiUrl || '',
+                timestamp: Date.now(),
+                dicatatOleh: dicatatOleh
+            };
+            const riwayatBaru = [...(member.riwayat || []), paymentRecord];
+            await anggotaRef.child(memberId).update({
+                sisaIuran: sisaBaru,
+                riwayat: riwayatBaru
+            });
+            return { sisaBaru };
+        }
+
+        // Load donasi pending dan tampilkan
+        async function loadPendingDonasi() {
+            const snapshot = await donasiRef.once('value');
+            const data = snapshot.val();
+            if (!data) {
+                document.getElementById('pendingDonasiList').innerHTML = '<p>Tidak ada donasi pending.</p>';
                 return;
             }
-            const kontak = memberPhoneInput.value.trim();
+            const donasiArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+            const pending = donasiArray.filter(d => d.status === 'pending');
+            if (pending.length === 0) {
+                document.getElementById('pendingDonasiList').innerHTML = '<p>Tidak ada donasi pending.</p>';
+                return;
+            }
+            let html = '';
+            for (const donasi of pending) {
+                html += `
+                    <div class="donasi-pending">
+                        <div class="donasi-header">
+                            <div><strong>${donasi.nama}</strong> - ${formatRupiah(donasi.nominal)}</div>
+                            <div><small>${donasi.tanggal} | ${donasi.kategori}</small></div>
+                        </div>
+                        <div>Catatan: ${donasi.catatan || '-'}</div>
+                        <div><a href="${donasi.buktiUrl}" target="_blank">Lihat Bukti Transfer</a></div>
+                        ${donasi.kategori === 'Solidaritas Besi Tua' ? `<div><strong>Anggota Besi Tua:</strong> ${donasi.anggotaNama || 'Tidak terpilih'}</div>` : ''}
+                        <div class="donasi-actions">
+                            <button class="btn-approve" onclick="approveDonation('${donasi.id}', ${donasi.nominal}, '${donasi.anggotaId || ''}', '${donasi.anggotaNama || ''}', '${donasi.catatan || ''}', '${donasi.buktiUrl}')">Setujui</button>
+                            <button class="btn-reject" onclick="rejectDonation('${donasi.id}')">Tolak</button>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('pendingDonasiList').innerHTML = html;
+        }
+
+        window.approveDonation = async function(donasiId, nominal, anggotaId, anggotaNama, catatan, buktiUrl) {
+            if (!confirm('Setujui donasi ini? Data akan ditambahkan ke komunitas.')) return;
+            try {
+                // Update status donasi
+                await donasiRef.child(donasiId).update({ status: 'disetujui' });
+                // Jika kategori Besi Tua, proses pembayaran ke anggota
+                if (anggotaId) {
+                    await processPayment(anggotaId, nominal, catatan, buktiUrl, 'verifikasi_admin');
+                }
+                alert('Donasi disetujui dan data telah diperbarui.');
+                loadPendingDonasi(); // refresh
+                loadData(); // refresh anggota
+            } catch (err) {
+                alert('Gagal menyetujui: ' + err.message);
+            }
+        };
+
+        window.rejectDonation = async function(donasiId) {
+            if (!confirm('Tolak donasi ini? Data akan dihapus dari sistem.')) return;
+            try {
+                await donasiRef.child(donasiId).update({ status: 'ditolak' });
+                alert('Donasi ditolak.');
+                loadPendingDonasi();
+            } catch (err) {
+                alert('Gagal menolak: ' + err.message);
+            }
+        };
+
+        // Tambah anggota
+        document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nama = document.getElementById('memberName').value.trim();
+            if (!nama) { alert('Nama harus diisi'); return; }
+            const kontak = document.getElementById('memberPhone').value.trim();
             const newMember = {
                 nama: nama,
                 kontak: kontak || '',
@@ -412,35 +445,27 @@
             };
             try {
                 await anggotaRef.push(newMember);
-                memberNameInput.value = '';
-                memberPhoneInput.value = '';
+                document.getElementById('memberName').value = '';
+                document.getElementById('memberPhone').value = '';
                 alert('Anggota berhasil ditambahkan');
-            } catch (err) {
-                console.error(err);
-                alert('Gagal menambah anggota: ' + err.message);
-            }
+            } catch (err) { alert('Gagal: ' + err.message); }
         });
 
         // Hapus anggota
-        async function deleteMember(memberId, memberName) {
+        window.deleteMember = async function(memberId, memberName) {
             if (confirm(`Hapus anggota "${memberName}"? Semua data pembayaran akan hilang.`)) {
                 try {
                     await anggotaRef.child(memberId).remove();
                     alert('Anggota dihapus');
-                } catch (err) {
-                    alert('Gagal hapus: ' + err.message);
-                }
+                } catch (err) { alert('Gagal: ' + err.message); }
             }
-        }
+        };
 
         // Tampilkan riwayat
-        async function showHistory(memberId, memberName) {
+        window.showHistory = async function(memberId, memberName) {
             const snapshot = await anggotaRef.child(memberId).once('value');
             const member = snapshot.val();
-            if (!member) {
-                alert('Data anggota tidak ditemukan');
-                return;
-            }
+            if (!member) { alert('Data anggota tidak ditemukan'); return; }
             const riwayat = member.riwayat || [];
             const historyDiv = document.getElementById('historyContent');
             if (riwayat.length === 0) {
@@ -453,11 +478,11 @@
                             <div class="riwayat-item">
                                 <div>
                                     <div>${formatRupiah(r.nominal)}</div>
-                                    <div style="font-size:0.7rem; color:#6b7280;">${r.tanggal || new Date(r.timestamp).toLocaleDateString('id-ID')}</div>
+                                    <div style="font-size:0.7rem;">${r.tanggal || new Date(r.timestamp).toLocaleDateString('id-ID')}</div>
                                 </div>
                                 <div style="text-align:right;">
                                     <div>${r.catatan || '-'}</div>
-                                    ${r.buktiUrl ? `<a href="${r.buktiUrl}" target="_blank" style="font-size:0.7rem;">Lihat Bukti</a>` : ''}
+                                    ${r.buktiUrl ? `<a href="${r.buktiUrl}" target="_blank" style="font-size:0.7rem;">Bukti</a>` : ''}
                                 </div>
                             </div>
                         `).join('')}
@@ -465,10 +490,10 @@
                 `;
             }
             document.getElementById('historyModal').style.display = 'flex';
-        }
+        };
 
-        // Buka modal pembayaran
-        function openPaymentModal(memberId, memberName, currentSisa) {
+        // Buka modal pembayaran tunai
+        window.openPaymentModal = function(memberId, memberName, currentSisa) {
             document.getElementById('paymentMemberId').value = memberId;
             document.getElementById('paymentMemberName').value = memberName;
             document.getElementById('currentSisa').value = formatRupiah(currentSisa);
@@ -476,125 +501,53 @@
             document.getElementById('paymentNote').value = '';
             document.getElementById('paymentProof').value = '';
             document.getElementById('paymentModal').style.display = 'flex';
-        }
+        };
 
-        // Proses pembayaran
+        // Proses pembayaran tunai
         document.getElementById('paymentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const memberId = document.getElementById('paymentMemberId').value;
             const nominal = parseInt(document.getElementById('paymentNominal').value);
             const catatan = document.getElementById('paymentNote').value.trim();
             const file = document.getElementById('paymentProof').files[0];
-
-            if (!memberId || !nominal || nominal <= 0) {
-                alert('Nominal harus diisi dan lebih dari 0');
-                return;
-            }
-
+            if (!memberId || !nominal || nominal <= 0) { alert('Nominal harus diisi dan lebih dari 0'); return; }
             const submitBtn = document.getElementById('submitPaymentBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Memproses...';
-
+            submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
             try {
-                // Ambil data anggota terbaru
-                const snapshot = await anggotaRef.child(memberId).once('value');
-                const member = snapshot.val();
-                if (!member) throw new Error('Anggota tidak ditemukan');
-                let sisa = member.sisaIuran;
-                if (nominal > sisa) throw new Error(`Nominal melebihi sisa tagihan (${formatRupiah(sisa)})`);
-
                 let buktiUrl = '';
-                if (file) {
-                    buktiUrl = await uploadToImgBB(file);
-                }
-
-                const newSisa = sisa - nominal;
-                const paymentRecord = {
+                if (file) buktiUrl = await uploadToImgBB(file);
+                await processPayment(memberId, nominal, catatan, buktiUrl, 'admin_tunai');
+                // Catat juga ke donasi/daftar sebagai transaksi tunai
+                const memberSnap = await anggotaRef.child(memberId).once('value');
+                const member = memberSnap.val();
+                await donasiRef.push({
+                    nama: member.nama,
+                    alamat: 'Pembayaran Tunai',
+                    kategori: 'Solidaritas Besi Tua (Tunai)',
                     nominal: nominal,
+                    catatan: catatan || 'Pembayaran langsung ke admin',
                     tanggal: new Date().toISOString().split('T')[0],
-                    catatan: catatan || 'Dicatat oleh admin',
-                    buktiUrl: buktiUrl,
+                    buktiUrl: buktiUrl || '',
                     timestamp: Date.now(),
-                    dicatatOleh: 'admin'
-                };
-                const riwayatBaru = [...(member.riwayat || []), paymentRecord];
-                await anggotaRef.child(memberId).update({
-                    sisaIuran: newSisa,
-                    riwayat: riwayatBaru
+                    status: 'disetujui'
                 });
-                alert(`Pembayaran Rp ${nominal.toLocaleString()} untuk ${member.nama} berhasil dicatat.`);
+                alert(`Pembayaran tunai Rp ${nominal.toLocaleString()} untuk ${member.nama} berhasil dicatat.`);
                 closeModal('paymentModal');
-            } catch (err) {
-                alert('Gagal mencatat pembayaran: ' + err.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Simpan Pembayaran';
-            }
+                loadData(); // refresh
+                loadPendingDonasi();
+            } catch (err) { alert('Gagal: ' + err.message); }
+            finally { submitBtn.disabled = false; submitBtn.textContent = 'Simpan Pembayaran'; }
         });
 
-        // Render daftar anggota
-        function renderAnggota(anggotaArray) {
-            if (!anggotaArray.length) {
-                anggotaListDiv.innerHTML = '<div style="text-align:center; padding:2rem;">Belum ada anggota terdaftar.</div>';
-                return;
-            }
-            anggotaListDiv.innerHTML = anggotaArray.map(angg => {
-                const sisa = angg.sisaIuran;
-                const total = 250000;
-                const sudah = total - sisa;
-                const persen = (sudah / total) * 100;
-                const statusClass = sisa === 0 ? 'lunas' : '';
-                const statusText = sisa === 0 ? 'Lunas' : 'Belum Lunas';
-                const inisial = angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2);
-                return `
-                    <div class="anggota-card" data-id="${angg.id}">
-                        <div class="anggota-header">
-                            <div style="display: flex; align-items: center; gap: 0.8rem;">
-                                <div class="anggota-avatar">${inisial}</div>
-                                <div class="anggota-info">
-                                    <div class="anggota-nama">${angg.nama}</div>
-                                    <div class="anggota-status ${statusClass}">${statusText}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
-                        <div class="anggota-detail">
-                            <span>Dibayar: ${formatRupiah(sudah)}</span>
-                            <span>Sisa: ${formatRupiah(sisa)}</span>
-                        </div>
-                        <div class="anggota-actions">
-                            <button class="btn-sm" onclick="showHistory('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}')"><i class="fas fa-history"></i> Riwayat</button>
-                            <button class="btn-sm btn-primary" onclick="openPaymentModal('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}', ${sisa})"><i class="fas fa-hand-holding-usd"></i> Bayar</button>
-                            <button class="btn-sm btn-danger" onclick="deleteMember('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Hapus</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Update ringkasan dan daftar anggota
+        // Load data anggota & ringkasan
         function loadData() {
             anggotaRef.on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (!data) {
-                    allAnggota = [];
-                    document.getElementById('totalAnggota').textContent = '0';
-                    document.getElementById('totalTarget').textContent = formatRupiah(0);
-                    document.getElementById('totalTerkumpul').textContent = formatRupiah(0);
-                    document.getElementById('totalSisa').textContent = formatRupiah(0);
-                    renderAnggota([]);
-                    return;
-                }
-                const anggotaList = Object.keys(data).map(key => ({
-                    id: key,
-                    ...data[key]
-                }));
-                allAnggota = anggotaList;
-                const totalAnggota = anggotaList.length;
+                const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                const totalAnggota = anggota.length;
                 const totalTarget = totalAnggota * 250000;
-                let totalTerkumpul = 0;
-                let totalSisa = 0;
-                anggotaList.forEach(angg => {
+                let totalTerkumpul = 0, totalSisa = 0;
+                anggota.forEach(angg => {
                     const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
                     totalSisa += sisa;
                     totalTerkumpul += (250000 - sisa);
@@ -603,16 +556,48 @@
                 document.getElementById('totalTarget').textContent = formatRupiah(totalTarget);
                 document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
                 document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
-                renderAnggota(anggotaList);
+                const container = document.getElementById('anggotaList');
+                if (totalAnggota === 0) { container.innerHTML = '<div style="text-align:center;">Belum ada anggota</div>'; return; }
+                const sorted = [...anggota].sort((a,b) => (a.nama||'').localeCompare(b.nama||''));
+                container.innerHTML = sorted.map(angg => {
+                    const inisial = angg.nama ? angg.nama.split(' ').map(k=>k[0]).join('').toUpperCase().slice(0,2) : '??';
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const sudah = 250000 - sisa;
+                    const persen = (sudah / 250000) * 100;
+                    const statusClass = sisa === 0 ? 'lunas' : '';
+                    const statusText = sisa === 0 ? 'Lunas' : 'Belum Lunas';
+                    return `
+                        <div class="anggota-card" data-id="${angg.id}">
+                            <div class="anggota-header">
+                                <div style="display:flex; align-items:center; gap:0.8rem;">
+                                    <div class="anggota-avatar">${inisial}</div>
+                                    <div class="anggota-info">
+                                        <div class="anggota-nama">${angg.nama}</div>
+                                        <div class="anggota-status ${statusClass}">${statusText}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
+                            <div class="anggota-detail">
+                                <span>Dibayar: ${formatRupiah(sudah)}</span>
+                                <span>Sisa: ${formatRupiah(sisa)}</span>
+                            </div>
+                            <div class="anggota-actions">
+                                <button class="btn-sm" onclick="showHistory('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}')"><i class="fas fa-history"></i> Riwayat</button>
+                                <button class="btn-sm btn-primary" onclick="openPaymentModal('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}', ${sisa})"><i class="fas fa-hand-holding-usd"></i> Bayar Tunai</button>
+                                <button class="btn-sm btn-danger" onclick="deleteMember('${angg.id}', '${angg.nama.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Hapus</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             });
         }
 
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        };
-        window.showHistory = showHistory;
-        window.deleteMember = deleteMember;
-        window.openPaymentModal = openPaymentModal;
+        window.closeModal = function(modalId) { document.getElementById(modalId).style.display = 'none'; };
+        // set active menu
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.bottom-nav a');
+        links.forEach(link => { if (currentPath.includes(link.getAttribute('href'))) link.classList.add('active'); });
     </script>
 </body>
 </html>
