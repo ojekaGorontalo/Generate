@@ -4,1000 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masjid Ar-Rahman - Informasi Jamaah</title>
-    <!-- Font Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- OneSignal Web SDK -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <style>
-        /* ====== TEMA ISLAMI ====== */
+        /* ====== TEMA ISLAMI ====== (style sama seperti sebelumnya, tidak diubah) ====== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
-        body { 
-            background-color: #faf7f0; 
-            color: #1f2937; 
-            padding-bottom: 80px; 
-        }
+        body { background-color: #faf7f0; color: #1f2937; padding-bottom: 80px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        
-        header { 
-            background-color: #1e4a3a; 
-            color: white; 
-            padding: 0.5rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15); 
-        }
-        header .container { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; 
-        }
-        .logo h1 { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-        }
-        .logo p { 
-            font-size: 0.8rem; 
-            opacity: 0.9; 
-        }
-
-        /* Bagian kanan header */
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .header-right i {
-            font-size: 1.3rem;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .header-right i:hover {
-            transform: scale(1.1);
-            color: #fbbf24;
-        }
-        /* Badge notifikasi */
-        .notif-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #fbbf24;
-            color: #1e4a3a;
-            font-size: 0.7rem;
-            font-weight: bold;
-            padding: 2px 5px;
-            border-radius: 50%;
-            min-width: 18px;
-            text-align: center;
-            line-height: 1;
-            display: none;
-        }
-        
-        .visitor-header {
-            background: rgba(255,255,255,0.2);
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            white-space: nowrap;
-        }
-        .visitor-header i {
-            font-size: 0.9rem;
-            margin-right: 0.2rem;
-        }
-        
-        #bannerContainer { 
-            width: 100%; 
-            overflow: hidden; 
-            background-color: #e2e8f0; 
-        }
-        #bannerImage { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
-        }
-
-        .marquee-container {
-            background-color: #1e4a3a;
-            color: white;
-            padding: 0.5rem 0;
-            font-size: 0.95rem;
-            border-bottom: 2px solid #fbbf24;
-        }
-        .marquee-container marquee {
-            display: block;
-            width: 100%;
-        }
-        .marquee-container span {
-            margin-right: 3rem;
-        }
-
-        .section-title {
-            font-size: 1.8rem; 
-            font-weight: 700; 
-            color: #1e4a3a; 
-            margin: 2rem 0 1.5rem;
-            border-bottom: 3px solid #fbbf24; 
-            display: inline-block; 
-            padding-bottom: 0.3rem;
-        }
-        
-        .card {
-            background: white; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 1.5rem; 
-            margin-bottom: 1.5rem;
-        }
-        .card-description {
-            font-size: 0.9rem;
-            color: #4b5563;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px dashed #d1d5db;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-        }
-        .stat-item {
-            background: #f9fafb; 
-            padding: 1.2rem; 
-            border-radius: 10px; 
-            text-align: center;
-        }
-        .stat-item i { 
-            font-size: 1.8rem; 
-            color: #1e4a3a; 
-            margin-bottom: 0.3rem; 
-        }
-        .stat-item h3 { 
-            font-size: 0.9rem; 
-            font-weight: 500; 
-            color: #6b7280; 
-            margin-bottom: 0.3rem; 
-        }
-        .stat-item .value { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            color: #1e4a3a; 
-        }
-        
-        .total-row {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin-top: 1rem;
-            gap: 1rem;
-        }
-        .total-box { 
-            flex: 1; 
-            padding: 0.8rem; 
-            background: #f9fafb; 
-            border-radius: 10px; 
-        }
-        .total-box p:first-child { 
-            font-size: 1rem; 
-            color: #1e4a3a; 
-            margin-bottom: 0.3rem; 
-        }
-        .total-box .nilai { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            color: #1e4a3a; 
-        }
-        .total-box small { 
-            font-size: 0.7rem; 
-            color: #6b7280; 
-            display: block; 
-            margin-top: 0.3rem; 
-        }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 1rem; 
-            font-size: 0.9rem;
-        }
-        th, td { 
-            padding: 0.75rem; 
-            text-align: left; 
-            border-bottom: 1px solid #e5e7eb; 
-        }
-        th { 
-            background-color: #f9fafb; 
-            font-weight: 600; 
-        }
-
-        .panitia-list {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 1rem;
-        }
-        .panitia-card {
-            background: #f9fafb; 
-            padding: 0.8rem; 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.8rem;
-        }
-        .panitia-card .avatar {
-            width: 40px; 
-            height: 40px; 
-            background-color: #1e4a3a; 
-            color: white; 
-            border-radius: 50%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: bold; 
-            font-size: 1rem;
-            object-fit: cover;
-        }
-        .panitia-card .info h4 { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-        }
-        .panitia-card .info p { 
-            color: #6b7280; 
-            font-size: 0.8rem; 
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #1e4a3a;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0.5rem 0.2rem;
-            z-index: 1000;
-            border-top: 1px solid #fbbf24;
-        }
-        .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #e5e7eb;
-            text-decoration: none;
-            font-size: 0.7rem;
-            transition: color 0.2s;
-            flex: 1;
-            text-align: center;
-            cursor: pointer;
-        }
-        .bottom-nav a i {
-            font-size: 1.3rem;
-            margin-bottom: 0.2rem;
-        }
-        .bottom-nav a.active {
-            color: #fbbf24;
-        }
-        .bottom-nav a.donate {
-            color: #fbbf24;
-        }
-        .bottom-nav a.donate i {
-            color: #fbbf24;
-        }
-
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        .filter-container {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        .filter-container label {
-            font-weight: 600;
-            color: #1e4a3a;
-        }
-        .filter-container input[type="date"] {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-        .filter-container button {
-            background: #1e4a3a;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .filter-container button:hover {
-            background: #2d6a4f;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            font-size: 0.9rem;
-            background: #f9fafb;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        footer { 
-            background-color: #1e4a3a; 
-            color: white; 
-            text-align: center; 
-            padding: 1.2rem 0; 
-            margin-top: 2rem;
-            font-size: 0.9rem;
-        }
-
-        /* Jadwal Sholat */
-        .ramadan-card {
-            background: linear-gradient(145deg, #1e4a3a, #2d6a4f);
-            color: #fefae0;
-            border: 2px solid #fbbf24;
-            box-shadow: 0 12px 24px rgba(0, 40, 20, 0.3);
-            position: relative;
-            overflow: hidden;
-            animation: fadeInScale 0.6s ease-out;
-        }
-        .ramadan-card::before {
-            content: "☪️";
-            font-size: 6rem;
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            opacity: 0.12;
-            transform: rotate(10deg);
-            color: #fbbf24;
-            pointer-events: none;
-        }
-        .prayer-grid-ramadan {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-        .prayer-item-ramadan {
-            background: rgba(255, 250, 210, 0.1);
-            backdrop-filter: blur(8px);
-            border: 1px solid #fbbf24;
-            border-radius: 12px;
-            padding: 0.8rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: slideInUp 0.5s ease backwards;
-            animation-delay: calc(0.1s * var(--i));
-        }
-        .prayer-item-ramadan:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
-            border-color: #ffd966;
-        }
-        .prayer-item-ramadan i {
-            font-size: 1.3rem;
-            color: #fbbf24;
-            margin-bottom: 0.2rem;
-            transition: transform 0.3s ease;
-        }
-        .prayer-item-ramadan:hover i {
-            transform: rotate(5deg) scale(1.1);
-        }
-        .prayer-item-ramadan h4 {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #fefae0;
-            margin: 0.2rem 0;
-        }
-        .prayer-item-ramadan .time {
-            font-weight: 700;
-            color: #fbbf24;
-            font-size: 1.1rem;
-        }
-        .ramadan-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            color: #fefae0;
-            background: rgba(0,0,0,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            animation: fadeIn 1s ease;
-        }
-
-        /* Animasi */
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes slideInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* Form Donasi */
-        .quote {
-            font-size: 1.1rem;
-            font-style: italic;
-            color: #2d3748;
-            border-left: 5px solid #fbbf24;
-            padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            background: #f9fafb;
-            padding: 1.2rem 1.5rem;
-            border-radius: 0 12px 12px 0;
-        }
-        .rekening-box {
-            background: linear-gradient(145deg, #f9fafb, #ffffff);
-            border: 2px dashed #1e4a3a;
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .bank-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1e4a3a;
-        }
-        .rekening-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1e4a3a;
-            letter-spacing: 2px;
-            margin: 0.3rem 0;
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            display: inline-block;
-            border: 1px solid #e2e8f0;
-        }
-        .btn-copy {
-            background: #fbbf24;
-            color: #1e4a3a;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 0.5rem;
-        }
-        .btn-copy:hover {
-            background: #f59e0b;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.4rem;
-            color: #374151;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #1e4a3a;
-            box-shadow: 0 0 0 3px rgba(30,74,58,0.2);
-        }
-        .btn {
-            background-color: #1e4a3a;
-            color: white;
-            border: none;
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 1rem;
-            width: 100%;
-        }
-        .btn:hover {
-            background-color: #2d6a4f;
-            transform: translateY(-2px);
-        }
-        .btn:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .file-info {
-            font-size: 0.9rem;
-            color: #6b7280;
-            margin-top: 0.3rem;
-        }
-        .preview-image {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-            border: 1px solid #d1d5db;
-        }
-        .status-message {
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: none;
-        }
-        .success {
-            background-color: #d1fae5;
-            color: #065f46;
-            display: block;
-        }
-        .error {
-            background-color: #fee2e2;
-            color: #991b1b;
-            display: block;
-        }
-        .hadith {
-            margin-top: 2rem;
-            padding: 1.2rem;
-            background-color: #fef9e7;
-            border-radius: 12px;
-            border: 1px solid #fbbf24;
-            text-align: center;
-            font-size: 0.95rem;
-            color: #92400e;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-        .close:hover,
-        .close:focus {
-            color: #1e4a3a;
-            text-decoration: none;
-        }
-        .info-list {
-            list-style: none;
-            padding: 0;
-            margin: 1rem 0;
-        }
-        .info-list li {
-            padding: 0.8rem;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .info-list li:last-child {
-            border-bottom: none;
-        }
-        .info-list li i {
-            color: #fbbf24;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* AR Kiblat */
-        .ar-container {
-            position: relative;
-            width: 100%;
-            height: 70vh;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-        #arVideo {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background: #000;
-        }
-        .ar-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .ar-horizon {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 50%;
-            height: 1px;
-            background: rgba(255,255,255,.15);
-            transform: translateY(-50%);
-        }
-        .ar-center-guide {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 2px;
-            height: 90px;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,.5);
-            box-shadow: 0 0 10px rgba(255,255,255,.35);
-        }
-        .ar-qibla-line-container {
-            position: absolute;
-            left: 50%;
-            bottom: 20%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            z-index: 5;
-            pointer-events: none;
-        }
-        .ar-qibla-line {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 4px;
-            height: 220px;
-            background: linear-gradient(to top, #ffd700, #ffaa00);
-            transform-origin: bottom center;
-            box-shadow: 0 0 20px gold;
-            border-radius: 2px;
-        }
-        .ar-kabah-icon {
-            position: absolute;
-            font-size: 56px;
-            filter: drop-shadow(0 0 20px gold);
-            animation: lampuBerkedip 3s infinite;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 6;
-            text-shadow: 0 0 20px rgba(255,215,0,0.8);
-        }
-        @keyframes lampuBerkedip {
-            0% { filter: drop-shadow(0 0 5px #ffd700); }
-            50% { filter: drop-shadow(0 0 25px #ffb347); }
-            100% { filter: drop-shadow(0 0 5px #ffd700); }
-        }
-        .ar-controls {
-            position: absolute;
-            left: 12px;
-            right: 12px;
-            bottom: 20px;
-            z-index: 4;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            pointer-events: auto;
-        }
-        .ar-btn {
-            appearance: none;
-            border: 0;
-            border-radius: 14px;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #fff;
-            background: rgba(0,0,0,.55);
-            border: 1px solid rgba(255,255,255,.15);
-            backdrop-filter: blur(6px);
-            cursor: pointer;
-            pointer-events: auto;
-        }
-        .ar-btn-primary {
-            background: #0b57d0;
-        }
-        .ar-bottom-panel {
-            background: rgba(0,0,0,.45);
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 18px;
-            padding: 14px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 30px rgba(0,0,0,.25);
-            color: white;
-            margin-top: 1rem;
-        }
-        .ar-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .ar-value {
-            font-weight: bold;
-        }
-        .ar-success-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            backdrop-filter: blur(8px);
-            pointer-events: auto;
-        }
-        .ar-success-overlay.show {
-            display: flex;
-        }
-        .ar-success-kabah {
-            font-size: 120px;
-            margin-bottom: 20px;
-            animation: lampuBerkedip 2s infinite;
-        }
-        .ar-success-title {
-            font-size: 36px;
-            color: gold;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .ar-success-info {
-            font-size: 20px;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.1);
-            padding: 18px 28px;
-            border-radius: 60px;
-            border: 2px solid gold;
-        }
-        .ar-success-btn {
-            background: gold;
-            color: black;
-            border: none;
-            padding: 16px 48px;
-            border-radius: 60px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        /* Banner rekomendasi aplikasi */
-        .app-recommend {
-            position: fixed;
-            bottom: 70px;
-            left: 10px;
-            right: 10px;
-            background: #1e4a3a;
-            color: white;
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1002;
-            border-left: 5px solid #fbbf24;
-            backdrop-filter: blur(10px);
-            background: rgba(30, 74, 58, 0.95);
-        }
-        .app-recommend-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-        .app-recommend-content i {
-            font-size: 2rem;
-            color: #fbbf24;
-        }
-        .app-recommend-text {
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-        .app-recommend-text strong {
-            display: block;
-            font-size: 0.9rem;
-        }
-        .app-recommend-btn {
-            background: #fbbf24;
-            color: #1e4a3a;
-            border: none;
-            border-radius: 40px;
-            padding: 6px 16px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: 0.2s;
-        }
-        .app-recommend-btn:hover {
-            background: #ffd966;
-            transform: scale(1.02);
-        }
-        .app-recommend-close {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0 4px;
-            opacity: 0.7;
-        }
-        .app-recommend-close:hover {
-            opacity: 1;
-        }
-
-        /* Komunitas Besi Tua */
-        .komunitas-card {
-            background: linear-gradient(145deg, #2d3748, #1f2937);
-            color: #fef9e7;
-            border: 1px solid #fbbf24;
-        }
-        .komunitas-stats {
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .komunitas-stat {
-            background: rgba(255,255,240,0.1);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-        }
-        .komunitas-stat i {
-            font-size: 1.5rem;
-            color: #fbbf24;
-            margin-bottom: 0.3rem;
-            display: block;
-        }
-        .komunitas-stat .stat-label {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-        .komunitas-stat .stat-value {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fbbf24;
-        }
-        .anggota-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .anggota-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            padding: 1rem;
-            transition: transform 0.2s;
-        }
-        .anggota-card:hover {
-            transform: translateY(-3px);
-            background: rgba(0,0,0,0.5);
-        }
-        .anggota-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-        }
-        .anggota-avatar {
-            width: 45px;
-            height: 45px;
-            background: #fbbf24;
-            color: #1e4a3a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .anggota-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .anggota-status {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            background: #10b981;
-            color: white;
-            display: inline-block;
-        }
-        .anggota-status.pending {
-            background: #f59e0b;
-        }
-        .anggota-detail {
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-        .progress-bar {
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            height: 8px;
-            margin: 0.5rem 0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            background: #fbbf24;
-            height: 100%;
-            width: 0%;
-            border-radius: 10px;
-        }
-        .riwayat-list {
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 0.5rem;
-        }
-        .riwayat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.2rem 0;
-        }
-
-        /* Responsive */
+        header { background-color: #1e4a3a; color: white; padding: 0.5rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo h1 { font-size: 1.5rem; font-weight: 700; }
+        .logo p { font-size: 0.8rem; opacity: 0.9; }
+        .header-right { display: flex; align-items: center; gap: 0.8rem; }
+        .header-right i { font-size: 1.3rem; color: white; cursor: pointer; transition: transform 0.2s; }
+        .header-right i:hover { transform: scale(1.1); color: #fbbf24; }
+        .notif-wrapper { position: relative; display: inline-block; }
+        .badge { position: absolute; top: -5px; right: -5px; background-color: #fbbf24; color: #1e4a3a; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 50%; min-width: 18px; text-align: center; line-height: 1; display: none; }
+        .visitor-header { background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 30px; font-size: 0.9rem; font-weight: 600; color: white; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
+        .visitor-header i { font-size: 0.9rem; margin-right: 0.2rem; }
+        #bannerContainer { width: 100%; overflow: hidden; background-color: #e2e8f0; }
+        #bannerImage { width: 100%; height: auto; display: block; }
+        .marquee-container { background-color: #1e4a3a; color: white; padding: 0.5rem 0; font-size: 0.95rem; border-bottom: 2px solid #fbbf24; }
+        .marquee-container marquee { display: block; width: 100%; }
+        .marquee-container span { margin-right: 3rem; }
+        .section-title { font-size: 1.8rem; font-weight: 700; color: #1e4a3a; margin: 2rem 0 1.5rem; border-bottom: 3px solid #fbbf24; display: inline-block; padding-bottom: 0.3rem; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card-description { font-size: 0.9rem; color: #4b5563; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px dashed #d1d5db; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .stat-item { background: #f9fafb; padding: 1.2rem; border-radius: 10px; text-align: center; }
+        .stat-item i { font-size: 1.8rem; color: #1e4a3a; margin-bottom: 0.3rem; }
+        .stat-item h3 { font-size: 0.9rem; font-weight: 500; color: #6b7280; margin-bottom: 0.3rem; }
+        .stat-item .value { font-size: 1.5rem; font-weight: 700; color: #1e4a3a; }
+        .total-row { display: flex; justify-content: space-around; text-align: center; margin-top: 1rem; gap: 1rem; }
+        .total-box { flex: 1; padding: 0.8rem; background: #f9fafb; border-radius: 10px; }
+        .total-box p:first-child { font-size: 1rem; color: #1e4a3a; margin-bottom: 0.3rem; }
+        .total-box .nilai { font-size: 1.5rem; font-weight: 700; color: #1e4a3a; }
+        .total-box small { font-size: 0.7rem; color: #6b7280; display: block; margin-top: 0.3rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background-color: #f9fafb; font-weight: 600; }
+        .panitia-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .panitia-card { background: #f9fafb; padding: 0.8rem; border-radius: 8px; display: flex; align-items: center; gap: 0.8rem; }
+        .panitia-card .avatar { width: 40px; height: 40px; background-color: #1e4a3a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; object-fit: cover; }
+        .panitia-card .info h4 { font-weight: 600; font-size: 0.95rem; }
+        .panitia-card .info p { color: #6b7280; font-size: 0.8rem; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e4a3a; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); display: flex; justify-content: space-around; align-items: center; padding: 0.5rem 0.2rem; z-index: 1000; border-top: 1px solid #fbbf24; }
+        .bottom-nav a { display: flex; flex-direction: column; align-items: center; color: #e5e7eb; text-decoration: none; font-size: 0.7rem; transition: color 0.2s; flex: 1; text-align: center; cursor: pointer; }
+        .bottom-nav a i { font-size: 1.3rem; margin-bottom: 0.2rem; }
+        .bottom-nav a.active { color: #fbbf24; }
+        .bottom-nav a.donate { color: #fbbf24; }
+        .bottom-nav a.donate i { color: #fbbf24; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .filter-container { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-container label { font-weight: 600; color: #1e4a3a; }
+        .filter-container input[type="date"] { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; }
+        .filter-container button { background: #1e4a3a; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .filter-container button:hover { background: #2d6a4f; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem; background: #f9fafb; padding: 0.5rem 1rem; border-radius: 8px; }
+        footer { background-color: #1e4a3a; color: white; text-align: center; padding: 1.2rem 0; margin-top: 2rem; font-size: 0.9rem; }
+        .ramadan-card { background: linear-gradient(145deg, #1e4a3a, #2d6a4f); color: #fefae0; border: 2px solid #fbbf24; box-shadow: 0 12px 24px rgba(0, 40, 20, 0.3); position: relative; overflow: hidden; animation: fadeInScale 0.6s ease-out; }
+        .ramadan-card::before { content: "☪️"; font-size: 6rem; position: absolute; bottom: -20px; right: -20px; opacity: 0.12; transform: rotate(10deg); color: #fbbf24; pointer-events: none; }
+        .prayer-grid-ramadan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-top: 1rem; }
+        .prayer-item-ramadan { background: rgba(255, 250, 210, 0.1); backdrop-filter: blur(8px); border: 1px solid #fbbf24; border-radius: 12px; padding: 0.8rem; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; animation: slideInUp 0.5s ease backwards; animation-delay: calc(0.1s * var(--i)); }
+        .prayer-item-ramadan:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3); border-color: #ffd966; }
+        .prayer-item-ramadan i { font-size: 1.3rem; color: #fbbf24; margin-bottom: 0.2rem; transition: transform 0.3s ease; }
+        .prayer-item-ramadan:hover i { transform: rotate(5deg) scale(1.1); }
+        .prayer-item-ramadan h4 { font-size: 0.9rem; font-weight: 500; color: #fefae0; margin: 0.2rem 0; }
+        .prayer-item-ramadan .time { font-weight: 700; color: #fbbf24; font-size: 1.1rem; }
+        .ramadan-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.8rem; color: #fefae0; background: rgba(0,0,0,0.2); padding: 0.5rem 1rem; border-radius: 30px; animation: fadeIn 1s ease; }
+        @keyframes fadeInScale { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes slideInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .quote { font-size: 1.1rem; font-style: italic; color: #2d3748; border-left: 5px solid #fbbf24; padding-left: 1.5rem; margin: 1.5rem 0; background: #f9fafb; padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; }
+        .rekening-box { background: linear-gradient(145deg, #f9fafb, #ffffff); border: 2px dashed #1e4a3a; border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 2rem; }
+        .bank-name { font-size: 1.3rem; font-weight: 600; color: #1e4a3a; }
+        .rekening-number { font-size: 1.8rem; font-weight: 700; color: #1e4a3a; letter-spacing: 2px; margin: 0.3rem 0; background: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; border: 1px solid #e2e8f0; }
+        .btn-copy { background: #fbbf24; color: #1e4a3a; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 0.5rem; }
+        .btn-copy:hover { background: #f59e0b; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151; }
+        input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; transition: 0.2s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #1e4a3a; box-shadow: 0 0 0 3px rgba(30,74,58,0.2); }
+        .btn { background-color: #1e4a3a; color: white; border: none; padding: 0.9rem 2rem; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; width: 100%; }
+        .btn:hover { background-color: #2d6a4f; transform: translateY(-2px); }
+        .btn:disabled { background-color: #9ca3af; cursor: not-allowed; transform: none; }
+        .file-info { font-size: 0.9rem; color: #6b7280; margin-top: 0.3rem; }
+        .preview-image { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 0.5rem; border: 1px solid #d1d5db; }
+        .status-message { padding: 1rem; border-radius: 8px; margin: 1rem 0; display: none; }
+        .success { background-color: #d1fae5; color: #065f46; display: block; }
+        .error { background-color: #fee2e2; color: #991b1b; display: block; }
+        .hadith { margin-top: 2rem; padding: 1.2rem; background-color: #fef9e7; border-radius: 12px; border: 1px solid #fbbf24; text-align: center; font-size: 0.95rem; color: #92400e; }
+        .modal { display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close:hover, .close:focus { color: #1e4a3a; text-decoration: none; }
+        .info-list { list-style: none; padding: 0; margin: 1rem 0; }
+        .info-list li { padding: 0.8rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 0.5rem; }
+        .info-list li:last-child { border-bottom: none; }
+        .info-list li i { color: #fbbf24; width: 24px; text-align: center; }
+        .ar-container { position: relative; width: 100%; height: 70vh; background: #000; border-radius: 20px; overflow: hidden; margin-bottom: 1rem; }
+        #arVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+        .ar-overlay { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+        .ar-horizon { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,.15); transform: translateY(-50%); }
+        .ar-center-guide { position: absolute; left: 50%; top: 50%; width: 2px; height: 90px; transform: translate(-50%, -50%); background: rgba(255,255,255,.5); box-shadow: 0 0 10px rgba(255,255,255,.35); }
+        .ar-qibla-line-container { position: absolute; left: 50%; bottom: 20%; transform: translateX(-50%); width: 0; height: 0; z-index: 5; pointer-events: none; }
+        .ar-qibla-line { position: absolute; left: 0; bottom: 0; width: 4px; height: 220px; background: linear-gradient(to top, #ffd700, #ffaa00); transform-origin: bottom center; box-shadow: 0 0 20px gold; border-radius: 2px; }
+        .ar-kabah-icon { position: absolute; font-size: 56px; filter: drop-shadow(0 0 20px gold); animation: lampuBerkedip 3s infinite; transform: translate(-50%, -50%); pointer-events: none; z-index: 6; text-shadow: 0 0 20px rgba(255,215,0,0.8); }
+        @keyframes lampuBerkedip { 0% { filter: drop-shadow(0 0 5px #ffd700); } 50% { filter: drop-shadow(0 0 25px #ffb347); } 100% { filter: drop-shadow(0 0 5px #ffd700); } }
+        .ar-controls { position: absolute; left: 12px; right: 12px; bottom: 20px; z-index: 4; display: flex; gap: 10px; flex-wrap: wrap; pointer-events: auto; }
+        .ar-btn { appearance: none; border: 0; border-radius: 14px; padding: 12px 16px; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.15); backdrop-filter: blur(6px); cursor: pointer; pointer-events: auto; }
+        .ar-btn-primary { background: #0b57d0; }
+        .ar-bottom-panel { background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 14px; backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(0,0,0,.25); color: white; margin-top: 1rem; }
+        .ar-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 14px; }
+        .ar-value { font-weight: bold; }
+        .ar-success-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 20px; backdrop-filter: blur(8px); pointer-events: auto; }
+        .ar-success-overlay.show { display: flex; }
+        .ar-success-kabah { font-size: 120px; margin-bottom: 20px; animation: lampuBerkedip 2s infinite; }
+        .ar-success-title { font-size: 36px; color: gold; margin-bottom: 10px; font-weight: bold; }
+        .ar-success-info { font-size: 20px; margin-bottom: 30px; background: rgba(255,255,255,0.1); padding: 18px 28px; border-radius: 60px; border: 2px solid gold; }
+        .ar-success-btn { background: gold; color: black; border: none; padding: 16px 48px; border-radius: 60px; font-size: 20px; font-weight: bold; cursor: pointer; pointer-events: auto; }
+        .app-recommend { position: fixed; bottom: 70px; left: 10px; right: 10px; background: #1e4a3a; color: white; border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1002; border-left: 5px solid #fbbf24; backdrop-filter: blur(10px); background: rgba(30, 74, 58, 0.95); }
+        .app-recommend-content { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .app-recommend-content i { font-size: 2rem; color: #fbbf24; }
+        .app-recommend-text { font-size: 0.85rem; line-height: 1.3; }
+        .app-recommend-text strong { display: block; font-size: 0.9rem; }
+        .app-recommend-btn { background: #fbbf24; color: #1e4a3a; border: none; border-radius: 40px; padding: 6px 16px; font-weight: bold; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
+        .app-recommend-btn:hover { background: #ffd966; transform: scale(1.02); }
+        .app-recommend-close { background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 0 4px; opacity: 0.7; }
+        .app-recommend-close:hover { opacity: 1; }
+        .komunitas-card { background: linear-gradient(145deg, #2d3748, #1f2937); color: #fef9e7; border: 1px solid #fbbf24; }
+        .komunitas-stats { display: flex; gap: 1rem; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .komunitas-stat { background: rgba(255,255,240,0.1); border-radius: 12px; padding: 1rem; text-align: center; flex: 1; min-width: 120px; }
+        .komunitas-stat i { font-size: 1.5rem; color: #fbbf24; margin-bottom: 0.3rem; display: block; }
+        .komunitas-stat .stat-label { font-size: 0.8rem; opacity: 0.8; }
+        .komunitas-stat .stat-value { font-size: 1.4rem; font-weight: bold; color: #fbbf24; }
+        .anggota-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .anggota-card { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1rem; transition: transform 0.2s; }
+        .anggota-card:hover { transform: translateY(-3px); background: rgba(0,0,0,0.5); }
+        .anggota-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+        .anggota-avatar { width: 45px; height: 45px; background: #fbbf24; color: #1e4a3a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .anggota-name { font-weight: bold; font-size: 1.1rem; }
+        .anggota-status { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; background: #10b981; color: white; display: inline-block; }
+        .anggota-status.pending { background: #f59e0b; }
+        .anggota-detail { font-size: 0.85rem; margin-top: 0.5rem; }
+        .progress-bar { background: rgba(255,255,255,0.2); border-radius: 10px; height: 8px; margin: 0.5rem 0; overflow: hidden; }
+        .progress-fill { background: #fbbf24; height: 100%; width: 0%; border-radius: 10px; }
+        .riwayat-list { margin-top: 0.5rem; font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 0.5rem; }
+        .riwayat-item { display: flex; justify-content: space-between; padding: 0.2rem 0; }
         @media (max-width: 768px) {
             .container { padding: 10px; }
             header { padding: 0.25rem 0; }
@@ -1208,9 +366,11 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelDonasi">
-                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Kategori</th><th>Catatan</th> </thead>
+                        <thead>
+                            <tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Kategori</th><th>Status</th><th>Catatan</th></tr>
+                        </thead>
                         <tbody id="donasiBody"></tbody>
-                     </table>
+                    </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;"><i class="fas fa-info-circle"></i> <span id="donasiInfo">Menampilkan data</span></p>
             </div>
@@ -1231,9 +391,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelSumbangan">
-                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th> </thead>
+                        <thead><tr><th>Nama</th><th>Jumlah</th><th>Tanggal</th><th>Keterangan</th></tr></thead>
                         <tbody id="sumbanganBody"></tbody>
-                     </table>
+                    </table>
                 </div>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #6b7280;"><i class="fas fa-info-circle"></i> <span id="sumbanganInfo">Menampilkan data</span></p>
             </div>
@@ -1254,9 +414,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelPemasukan">
-                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th> </thead>
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
                         <tbody></tbody>
-                     </table>
+                    </table>
                 </div>
             </div>
 
@@ -1276,9 +436,9 @@
                 </div>
                 <div class="table-responsive">
                     <table id="tabelPengeluaran">
-                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th> </thead>
+                        <thead><tr><th>Kategori</th><th>Nominal</th><th>Tanggal</th></tr></thead>
                         <tbody></tbody>
-                     </table>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1438,7 +598,7 @@
         </div>
     </div>
 
-    <!-- Banner rekomendasi aplikasi (akan ditampilkan jika bukan di dalam aplikasi) -->
+    <!-- Banner rekomendasi aplikasi -->
     <div id="appRecommendBanner" class="app-recommend" style="display: none;">
         <div class="app-recommend-content">
             <i class="fas fa-mobile-alt"></i>
@@ -1455,7 +615,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    <!-- Script utama -->
+    <!-- Script utama dengan sistem pending -->
     <script>
         // Fungsi tab
         window.showTab = function(tabName) {
@@ -1502,7 +662,6 @@
         const rekeningRef = database.ref('panitia/RekeningDonasi/Rekening');
         const apiKeyRef = database.ref('panitia/apikeyimagsbb');
         const pengumumanRef = database.ref('pengumuman');
-        // Komunitas Besi Tua
         const anggotaKomunitasRef = database.ref('komunitasBesiTua/anggota');
 
         // Elemen
@@ -1517,7 +676,7 @@
         let allDonasi = [];
         let allPengumuman = [];
         let lastReadNotifTimestamp = localStorage.getItem('lastReadNotifTimestamp') || 0;
-        let allAnggota = []; // untuk menyimpan data anggota besi tua
+        let allAnggota = [];
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toLocaleString('id-ID');
@@ -1553,7 +712,7 @@
                     const donasiItems = snapDonasi.val() || [];
                     const donasiArray = Object.keys(donasiItems).map(key => donasiItems[key]);
                     donasiArray.forEach(item => {
-                        if (item.nama && item.nominal) {
+                        if (item.nama && item.nominal && item.status === 'disetujui') {
                             const nominal = formatRupiah(item.nominal);
                             const catatan = item.catatan ? ` - ${item.catatan}` : '';
                             messages.push(`${item.nama} donasi ${nominal}${catatan}`);
@@ -1607,7 +766,7 @@
             updateDonasi();
         });
 
-        // Pengumuman (notifikasi)
+        // Pengumuman
         pengumumanRef.on('value', (snapshot) => {
             const data = snapshot.val();
             const infoList = document.getElementById('infoList');
@@ -1624,7 +783,6 @@
             }
         });
 
-        // Fungsi badge notifikasi
         function updateNotifBadge() {
             const unreadCount = allPengumuman.filter(item => (item.timestamp || 0) > lastReadNotifTimestamp).length;
             const badge = document.getElementById('notifBadge');
@@ -1643,7 +801,7 @@
             if (tgl) filtered = allPemasukan.filter(item => item.tanggal === tgl);
             const tbody = document.querySelector('#tabelPemasukan tbody');
             tbody.innerHTML = filtered.map(item => `
-                 <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
+                <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
             `).join('');
             document.getElementById('jumlahTransaksiPemasukan').textContent = filtered.length;
         }
@@ -1654,7 +812,7 @@
             if (tgl) filtered = allPengeluaran.filter(item => item.tanggal === tgl);
             const tbody = document.querySelector('#tabelPengeluaran tbody');
             tbody.innerHTML = filtered.map(item => `
-                 <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
+                <tr><td>${item.kategori || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td></tr>
             `).join('');
             document.getElementById('jumlahTransaksiPengeluaran').textContent = filtered.length;
         }
@@ -1670,7 +828,14 @@
             if (!tgl) ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 5);
             else ditampilkan = filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             document.getElementById('donasiBody').innerHTML = ditampilkan.map(item => `
-                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.nominal || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.kategori || '-'}</td><td>${item.catatan || '-'}</td></tr>
+                <tr>
+                    <td>${item.nama || '-'}</td>
+                    <td>${formatRupiah(item.nominal || 0)}</td>
+                    <td>${item.tanggal || '-'}</td>
+                    <td>${item.kategori || '-'}</td>
+                    <td><span class="status-badge ${item.status === 'disetujui' ? 'status-approved' : (item.status === 'ditolak' ? 'status-rejected' : 'status-pending')}">${item.status || 'pending'}</span></td>
+                    <td>${item.catatan || '-'}</td>
+                </tr>
             `).join('');
             document.getElementById('donasiInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan 5 data terbaru`;
         }
@@ -1684,7 +849,7 @@
             document.getElementById('jumlahDonaturSumbangan').textContent = filtered.length.toLocaleString();
             const sorted = [...filtered].sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
             document.getElementById('sumbanganBody').innerHTML = sorted.map(item => `
-                 <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
+                <tr><td>${item.nama || '-'}</td><td>${formatRupiah(item.jumlah || 0)}</td><td>${item.tanggal || '-'}</td><td>${item.keterangan || '-'}</td></tr>
             `).join('');
             document.getElementById('sumbanganInfo').innerText = tgl ? `Menampilkan ${filtered.length} data pada tanggal ${tgl}` : `Menampilkan semua data (${filtered.length})`;
         }
@@ -1707,7 +872,6 @@
             updateMarquee();
         }
 
-        // Event listeners filter
         document.getElementById('filterPemasukanBtn').addEventListener('click', filterPemasukan);
         document.getElementById('filterPengeluaranBtn').addEventListener('click', filterPengeluaran);
         document.getElementById('filterDonasiBtn').addEventListener('click', filterDonasi);
@@ -1742,52 +906,14 @@
 
         window.addEventListener('load', updateMarquee);
 
-        // ==================== ONE SIGNAL INTEGRATION ====================
+        // OneSignal integration (disederhanakan)
         let oneSignalCheckInterval = null;
-        function stopOneSignalCheck() {
-            if (oneSignalCheckInterval) {
-                clearInterval(oneSignalCheckInterval);
-                oneSignalCheckInterval = null;
-            }
-        }
-        function startOneSignalCheck() {
-            if (oneSignalCheckInterval) return;
-            oneSignalCheckInterval = setInterval(() => {
-                if (window.median && window.median.onesignal) {
-                    window.median.onesignal.onesignalInfo().then(info => {
-                        if (info.oneSignalUserId && info.oneSignalSubscribed) {
-                            savePlayerIdToFirebase(info.oneSignalUserId);
-                            stopOneSignalCheck();
-                        }
-                    }).catch(err => console.log('Gagal ambil info via interval:', err));
-                }
-            }, 3000);
-            setTimeout(() => { if (oneSignalCheckInterval) stopOneSignalCheck(); }, 120000);
-        }
-        function savePlayerIdToFirebase(playerId) {
-            const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids');
-            playerIdsRef.transaction(function(current) {
-                if (!current) current = [];
-                if (!current.includes(playerId)) current.push(playerId);
-                return current;
-            }).catch(err => alert('Gagal menyimpan ID notifikasi.'));
-        }
-        function getOneSignalPlayerId() {
-            if (window.median && window.median.onesignal) {
-                window.median.onesignal.onesignalInfo().then(function(info) {
-                    if (info.oneSignalUserId && info.oneSignalSubscribed) {
-                        savePlayerIdToFirebase(info.oneSignalUserId);
-                    } else {
-                        if (window.median.onesignal.register) {
-                            window.median.onesignal.register().then(() => startOneSignalCheck()).catch(() => startOneSignalCheck());
-                        } else startOneSignalCheck();
-                    }
-                }).catch(() => startOneSignalCheck());
-            } else startOneSignalCheck();
-        }
+        function stopOneSignalCheck() { if (oneSignalCheckInterval) { clearInterval(oneSignalCheckInterval); oneSignalCheckInterval = null; } }
+        function startOneSignalCheck() { if (oneSignalCheckInterval) return; oneSignalCheckInterval = setInterval(() => { if (window.median && window.median.onesignal) { window.median.onesignal.onesignalInfo().then(info => { if (info.oneSignalUserId && info.oneSignalSubscribed) { savePlayerIdToFirebase(info.oneSignalUserId); stopOneSignalCheck(); } }).catch(()=>{}); } }, 3000); setTimeout(()=>{ if(oneSignalCheckInterval) stopOneSignalCheck(); }, 120000); }
+        function savePlayerIdToFirebase(playerId) { const playerIdsRef = database.ref('onesignal_ids/all_subscribers/player_ids'); playerIdsRef.transaction(function(current) { if (!current) current = []; if (!current.includes(playerId)) current.push(playerId); return current; }).catch(()=>alert('Gagal menyimpan ID notifikasi.')); }
+        function getOneSignalPlayerId() { if (window.median && window.median.onesignal) { window.median.onesignal.onesignalInfo().then(info => { if (info.oneSignalUserId && info.oneSignalSubscribed) savePlayerIdToFirebase(info.oneSignalUserId); else { if (window.median.onesignal.register) window.median.onesignal.register().then(()=>startOneSignalCheck()).catch(()=>startOneSignalCheck()); else startOneSignalCheck(); } }).catch(()=>startOneSignalCheck()); } else startOneSignalCheck(); }
         document.addEventListener('deviceready', function() { setTimeout(() => getOneSignalPlayerId(), 1000); }, false);
         window.addEventListener('load', function() { setTimeout(() => getOneSignalPlayerId(), 3000); });
-        // ================================================================
 
         // Form donasi
         const rekeningContainer = document.getElementById('rekeningContainer');
@@ -1806,51 +932,46 @@
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
+                reader.onload = function(e) { preview.src = e.target.result; preview.style.display = 'block'; }
                 reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
-            }
+            } else { preview.style.display = 'none'; }
         });
 
-        // Tampilkan pilihan anggota jika kategori Solidaritas Besi Tua dipilih
         kategoriSelect.addEventListener('change', () => {
             if (kategoriSelect.value === 'Solidaritas Besi Tua') {
                 besiTuaGroup.style.display = 'block';
-                // Load data anggota untuk dropdown
                 updateAnggotaDropdown();
             } else {
                 besiTuaGroup.style.display = 'none';
                 anggotaSelect.value = '';
                 sisaInfo.innerHTML = '';
-                // Reset max nominal (biarkan user isi sendiri)
                 nominalInput.removeAttribute('max');
             }
         });
 
-        // Update dropdown anggota berdasarkan data Firebase (hanya yang belum lunas)
-function updateAnggotaDropdown() {
-    anggotaKomunitasRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        // Konversi objek ke array
-        const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-        const belumLunas = anggota.filter(angg => (angg.sisaIuran || 250000) > 0);
-        anggotaSelect.innerHTML = '<option value="">-- Pilih anggota yang belum lunas --</option>';
-        belumLunas.forEach(angg => {
-            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-            const option = document.createElement('option');
-            option.value = angg.id;  // key Firebase sebagai id
-            option.textContent = `${angg.nama} - Sisa: ${formatRupiah(sisa)}`;
-            option.dataset.sisa = sisa;
-            option.dataset.id = angg.id;
-            option.dataset.nama = angg.nama;
-            anggotaSelect.appendChild(option);
-        });
-        // Event listener untuk pilihan anggota
-        anggotaSelect.addEventListener('change', () => {
+        // Update dropdown anggota (hanya yang belum lunas)
+        function updateAnggotaDropdown() {
+            anggotaKomunitasRef.once('value', (snapshot) => {
+                const data = snapshot.val();
+                const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                const belumLunas = anggota.filter(angg => (angg.sisaIuran || 250000) > 0);
+                anggotaSelect.innerHTML = '<option value="">-- Pilih anggota yang belum lunas --</option>';
+                belumLunas.forEach(angg => {
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const option = document.createElement('option');
+                    option.value = angg.id;
+                    option.textContent = `${angg.nama} - Sisa: ${formatRupiah(sisa)}`;
+                    option.dataset.sisa = sisa;
+                    option.dataset.id = angg.id;
+                    option.dataset.nama = angg.nama;
+                    anggotaSelect.appendChild(option);
+                });
+                anggotaSelect.removeEventListener('change', handleAnggotaChange);
+                anggotaSelect.addEventListener('change', handleAnggotaChange);
+            });
+        }
+
+        function handleAnggotaChange() {
             const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
             if (selectedOption && selectedOption.value) {
                 const sisa = parseInt(selectedOption.dataset.sisa);
@@ -1861,14 +982,9 @@ function updateAnggotaDropdown() {
                 sisaInfo.innerHTML = '';
                 nominalInput.removeAttribute('max');
             }
-        });
-    });
-}
+        }
 
-        Promise.all([
-            namaRekRef.once('value'),
-            rekeningRef.once('value')
-        ]).then(([namaSnap, rekeningSnap]) => {
+        Promise.all([namaRekRef.once('value'), rekeningRef.once('value')]).then(([namaSnap, rekeningSnap]) => {
             const nama = namaSnap.val() || "MASJID AR RAHMAN";
             const rekening = rekeningSnap.val() || "5127-01-031275-53-2";
             rekeningContainer.innerHTML = `
@@ -1877,9 +993,7 @@ function updateAnggotaDropdown() {
                 <div class="bank-name" style="font-size:1rem; margin-top:0.2rem;">a.n. ${nama}</div>
                 <button class="btn-copy" onclick="copyRekening()"><i class="fas fa-copy"></i> Salin Nomor</button>
             `;
-        }).catch(error => {
-            rekeningContainer.innerHTML = '<div style="color: #991b1b;">Gagal memuat rekening. Hubungi pengurus.</div>';
-        });
+        }).catch(() => { rekeningContainer.innerHTML = '<div style="color: #991b1b;">Gagal memuat rekening. Hubungi pengurus.</div>'; });
 
         window.copyRekening = function() {
             const rekeningText = document.getElementById('rekeningText').innerText;
@@ -1899,31 +1013,7 @@ function updateAnggotaDropdown() {
             return data.data.url;
         }
 
-        // Fungsi untuk mengurangi sisa iuran anggota besi tua dan mencatat riwayat
-        async function processBesiTuaPayment(anggotaId, namaAnggota, nominalBayar, buktiUrl, catatan, namaDonatur) {
-            const anggotaRef = anggotaKomunitasRef.child(anggotaId);
-            const snapshot = await anggotaRef.once('value');
-            const anggotaData = snapshot.val();
-            if (!anggotaData) throw new Error('Data anggota tidak ditemukan');
-            let sisaSekarang = anggotaData.sisaIuran !== undefined ? anggotaData.sisaIuran : 250000;
-            if (nominalBayar > sisaSekarang) throw new Error('Nominal melebihi sisa tagihan');
-            const sisaBaru = sisaSekarang - nominalBayar;
-            const riwayatBaru = {
-                nominal: nominalBayar,
-                tanggal: new Date().toISOString().split('T')[0],
-                buktiUrl: buktiUrl,
-                catatan: catatan || '',
-                donatur: namaDonatur,
-                timestamp: Date.now()
-            };
-            const riwayatLama = anggotaData.riwayat || [];
-            await anggotaRef.update({
-                sisaIuran: sisaBaru,
-                riwayat: [...riwayatLama, riwayatBaru]
-            });
-            return { sisaBaru, riwayatBaru };
-        }
-
+        // Submit donasi dengan status pending
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const nama = document.getElementById('nama').value.trim();
@@ -1932,6 +1022,9 @@ function updateAnggotaDropdown() {
             const nominal = parseInt(nominalInput.value);
             const catatan = document.getElementById('catatan').value.trim();
             const file = fileInput.files[0];
+            let anggotaId = null;
+            let anggotaNama = null;
+
             if (!nama || !alamat || !kategori || !nominal || !file) {
                 showMessage('Harap isi semua field yang wajib!', 'error');
                 return;
@@ -1946,8 +1039,8 @@ function updateAnggotaDropdown() {
                     showMessage('Pilih anggota Besi Tua terlebih dahulu!', 'error');
                     return;
                 }
-                const anggotaId = selectedOption.dataset.id;
-                const anggotaNama = selectedOption.dataset.nama;
+                anggotaId = selectedOption.dataset.id;
+                anggotaNama = selectedOption.dataset.nama;
                 const sisa = parseInt(selectedOption.dataset.sisa);
                 if (nominal > sisa) {
                     showMessage(`Nominal melebihi sisa tagihan (${formatRupiah(sisa)})`, 'error');
@@ -1964,25 +1057,15 @@ function updateAnggotaDropdown() {
                     catatan: catatan || '',
                     tanggal: new Date().toISOString().split('T')[0],
                     buktiUrl: imageUrl,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    status: 'pending',       // status awal pending
+                    anggotaId: anggotaId,    // simpan id anggota jika kategori besi tua
+                    anggotaNama: anggotaNama
                 };
                 await donasiRef.push(donasiData);
-
-                // Jika kategori solidaritas besi tua, update data anggota
-                if (kategori === 'Solidaritas Besi Tua') {
-                    const selectedOption = anggotaSelect.options[anggotaSelect.selectedIndex];
-                    const anggotaId = selectedOption.dataset.id;
-                    const anggotaNama = selectedOption.dataset.nama;
-                    await processBesiTuaPayment(anggotaId, anggotaNama, nominal, imageUrl, catatan, nama);
-                    showMessage(`Pembayaran iuran Besi Tua untuk ${anggotaNama} sebesar ${formatRupiah(nominal)} berhasil! Terima kasih.`, 'success');
-                    // Reset dropdown setelah sukses
-                    updateAnggotaDropdown();
-                } else {
-                    showMessage('Donasi Anda berhasil dikirim! Terima kasih.', 'success');
-                }
+                showMessage('Donasi Anda telah dikirim dan menunggu verifikasi admin. Terima kasih.', 'success');
                 form.reset();
                 preview.style.display = 'none';
-                // Reset tampilan dropdown
                 if (kategori === 'Solidaritas Besi Tua') {
                     kategoriSelect.value = '';
                     besiTuaGroup.style.display = 'none';
@@ -2002,19 +1085,127 @@ function updateAnggotaDropdown() {
             statusMsg.style.display = 'block';
             setTimeout(() => statusMsg.style.display = 'none', 5000);
         }
-    </script>
 
-    <!-- Jadwal Sholat -->
-    <script>
+        // Load data komunitas Besi Tua (hanya menampilkan data yang sudah disetujui)
+        function loadKomunitasData() {
+            anggotaKomunitasRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                const totalAnggota = anggota.length;
+                const totalIuranTarget = totalAnggota * 250000;
+                let totalTerkumpul = 0, totalSisa = 0;
+                anggota.forEach(angg => {
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const sudahBayar = 250000 - sisa;
+                    totalTerkumpul += sudahBayar;
+                    totalSisa += sisa;
+                });
+                document.getElementById('totalAnggota').textContent = totalAnggota;
+                document.getElementById('totalIuranTarget').textContent = formatRupiah(totalIuranTarget);
+                document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
+                document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
+                const container = document.getElementById('anggotaList');
+                if (totalAnggota === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding:1rem;">Belum ada anggota terdaftar.</div>';
+                    return;
+                }
+                const sorted = [...anggota].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
+                container.innerHTML = sorted.map(angg => {
+                    const inisial = angg.nama ? angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '??';
+                    const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
+                    const total = 250000;
+                    const sudahBayar = total - sisa;
+                    const persen = (sudahBayar / total) * 100;
+                    const status = sisa === 0 ? 'Lunas' : 'Belum Lunas';
+                    const statusClass = sisa === 0 ? '' : 'pending';
+                    const riwayat = angg.riwayat || [];
+                    const sortedRiwayat = [...riwayat].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+                    return `
+                        <div class="anggota-card">
+                            <div class="anggota-header">
+                                <div class="anggota-avatar">${inisial}</div>
+                                <div style="flex:1;">
+                                    <div class="anggota-name">${angg.nama || 'Tanpa Nama'}</div>
+                                    <span class="anggota-status ${statusClass}">${status}</span>
+                                </div>
+                            </div>
+                            <div class="anggota-detail">
+                                <div>Total Iuran: ${formatRupiah(total)}</div>
+                                <div>Telah Dibayar: ${formatRupiah(sudahBayar)}</div>
+                                <div>Sisa: ${formatRupiah(sisa)}</div>
+                                <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
+                            </div>
+                            ${sortedRiwayat.length > 0 ? `
+                            <div class="riwayat-list">
+                                <strong><i class="fas fa-history"></i> Riwayat Pembayaran:</strong>
+                                ${sortedRiwayat.map(r => `
+                                    <div class="riwayat-item">
+                                        <span>${r.tanggal || '-'}</span>
+                                        <span>${formatRupiah(r.nominal)}</span>
+                                        <span><a href="${r.buktiUrl}" target="_blank" style="color:#fbbf24;">Bukti</a></span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : '<div class="riwayat-list"><i>Belum ada pembayaran</i></div>'}
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+        loadKomunitasData();
+
+        // Modal notifikasi dan lokasi
+        const notifIcon = document.getElementById('notifIcon');
+        const notifModal = document.getElementById('notifModal');
+        const mapIcon = document.getElementById('mapIcon');
+        const mapModal = document.getElementById('mapModal');
+        const routeBtn = document.getElementById('routeBtn');
+
+        notifIcon.addEventListener('click', () => {
+            notifModal.style.display = 'block';
+            if (allPengumuman.length > 0) {
+                const maxTimestamp = Math.max(...allPengumuman.map(item => item.timestamp || 0));
+                if (maxTimestamp > lastReadNotifTimestamp) {
+                    lastReadNotifTimestamp = maxTimestamp;
+                    localStorage.setItem('lastReadNotifTimestamp', maxTimestamp);
+                    updateNotifBadge();
+                }
+            }
+        });
+        mapIcon.addEventListener('click', () => { mapModal.style.display = 'block'; });
+        document.querySelectorAll('.modal .close').forEach(btn => { btn.addEventListener('click', function() { this.closest('.modal').style.display = 'none'; }); });
+        window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) { e.target.style.display = 'none'; } });
+        routeBtn.addEventListener('click', () => {
+            const lat = 0.5626898635945491; const lng = 123.1200838777164; const label = 'Masjid Ar-Rahman';
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const url = `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`;
+            const webUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            const intentUrl = `intent://maps.google.com/maps?q=${lat},${lng}&ll=${lat},${lng}&z=15#Intent;scheme=https;package=com.google.android.apps.maps;end`;
+            if (/android/i.test(userAgent)) { window.location.href = intentUrl; setTimeout(() => window.location.href = webUrl, 500); } 
+            else { window.location.href = url; setTimeout(() => window.location.href = webUrl, 500); }
+        });
+
+        // Banner rekomendasi aplikasi
+        (function() {
+            const isInApp = typeof window.isInApp !== 'undefined' && window.isInApp === true;
+            const appExists = isInApp || (window.MasjidApp && window.MasjidApp.installed === true);
+            const bannerClosed = localStorage.getItem('appRecommendClosed');
+            if (!appExists && bannerClosed !== 'true') {
+                const banner = document.getElementById('appRecommendBanner');
+                banner.style.display = 'flex';
+                document.getElementById('closeAppBanner').addEventListener('click', () => { banner.style.display = 'none'; localStorage.setItem('appRecommendClosed', 'true'); });
+                document.getElementById('downloadAppBtn').addEventListener('click', () => { window.location.href = 'https://play.google.com/store/apps/details?id=com.masjid.arrahman'; });
+            }
+        })();
+
+        // Jadwal sholat
         async function getJadwalSholat() {
             const today = new Date();
             const tahun = today.getFullYear();
             const bulan = String(today.getMonth() + 1).padStart(2, '0');
             const tanggal = String(today.getDate()).padStart(2, '0');
-
             const myQuranUrl = `https://api.myquran.com/v2/sholat/jadwal/2502/${tahun}/${bulan}/${tanggal}`;
             const aladhanUrl = `https://api.aladhan.com/v1/timingsByCity/${tanggal}-${bulan}-${tahun}?city=Gorontalo&country=Indonesia&method=20`;
-
             try {
                 const [myQuranRes, aladhanRes] = await Promise.all([fetch(myQuranUrl), fetch(aladhanUrl)]);
                 if (!myQuranRes.ok) throw new Error('Gagal memuat jadwal sholat');
@@ -2024,12 +1215,10 @@ function updateAnggotaDropdown() {
                 if (!myQuranData.status) throw new Error('Data jadwal tidak tersedia');
                 const jadwal = myQuranData.data.jadwal;
                 const t = jadwal;
-                const dateInfo = aladhanData.data.date;
-                const hijri = dateInfo.hijri;
-                const gregorian = dateInfo.gregorian;
+                const hijri = aladhanData.data.date.hijri;
+                const gregorian = aladhanData.data.date.gregorian;
                 document.getElementById('hijriDate').innerText = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
                 document.getElementById('gregorianDate').innerText = `${gregorian.day} ${gregorian.month.en} ${gregorian.year}`;
-
                 const prayerHTML = `
                     <div class="prayer-grid-ramadan">
                         <div class="prayer-item-ramadan" style="--i:1"><i class="fas fa-moon"></i><h4>Imsak</h4><span class="time">${t.imsak}</span></div>
@@ -2044,22 +1233,14 @@ function updateAnggotaDropdown() {
                 document.getElementById('prayerContent').innerHTML = prayerHTML;
             } catch (error) {
                 console.error(error);
-                document.getElementById('prayerContent').innerHTML = `
-                    <div style="text-align:center; color:#fca5a5; padding:1rem;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i>
-                        <p style="margin-top:0.5rem;">Gagal memuat jadwal sholat.</p>
-                        <button onclick="getJadwalSholat()" style="background:#fbbf24; color:#1e3a5f; border:none; padding:0.5rem 1rem; border-radius:8px; margin-top:0.5rem; cursor:pointer;"><i class="fas fa-sync-alt"></i> Coba lagi</button>
-                    </div>
-                `;
+                document.getElementById('prayerContent').innerHTML = `<div style="text-align:center; color:#fca5a5; padding:1rem;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i><p>Gagal memuat jadwal sholat.</p><button onclick="getJadwalSholat()" style="background:#fbbf24; color:#1e3a5f; border:none; padding:0.5rem 1rem; border-radius:8px; margin-top:0.5rem; cursor:pointer;"><i class="fas fa-sync-alt"></i> Coba lagi</button></div>`;
                 document.getElementById('hijriDate').innerText = '-';
                 document.getElementById('gregorianDate').innerText = '-';
             }
         }
         getJadwalSholat();
-    </script>
 
-    <!-- AR Kiblat -->
-    <script>
+        // AR Kiblat (sama seperti sebelumnya, tidak diubah)
         (function() {
             const arVideo = document.getElementById('arVideo');
             const arStartBtn = document.getElementById('arStartBtn');
@@ -2073,23 +1254,15 @@ function updateAnggotaDropdown() {
             const arGuideText = document.getElementById('arGuideText');
             const arSuccessOverlay = document.getElementById('arSuccessOverlay');
             const arSuccessInfo = document.getElementById('arSuccessInfo');
-
             let arUserLat = null, arUserLon = null, arQiblaBearing = null, arCurrentHeading = null;
             let arMagneticDeclination = 0, arHeadingOffset = 0, arStream = null, arOrientationListenerActive = false;
             let arFoundQibla = false, arQiblaFoundTimer = null;
             const AR_TOLERANCE = 2, AR_STABLE_TIME = 800, AR_LINE_LENGTH = 220;
-
             function normalizeDeg(deg) { return (deg % 360 + 360) % 360; }
-            function shortestAngleDiff(target, current) {
-                let diff = normalizeDeg(target - current);
-                if (diff > 180) diff -= 360;
-                return diff;
-            }
+            function shortestAngleDiff(target, current) { let diff = normalizeDeg(target - current); if (diff > 180) diff -= 360; return diff; }
             function getQiblaBearing(lat, lon) {
-                const kaabaLat = 21.4225 * Math.PI / 180;
-                const kaabaLon = 39.8262 * Math.PI / 180;
-                const userLatRad = lat * Math.PI / 180;
-                const userLonRad = lon * Math.PI / 180;
+                const kaabaLat = 21.4225 * Math.PI / 180; const kaabaLon = 39.8262 * Math.PI / 180;
+                const userLatRad = lat * Math.PI / 180; const userLonRad = lon * Math.PI / 180;
                 const dLon = kaabaLon - userLonRad;
                 const y = Math.sin(dLon) * Math.cos(kaabaLat);
                 const x = Math.cos(userLatRad) * Math.sin(kaabaLat) - Math.sin(userLatRad) * Math.cos(kaabaLat) * Math.cos(dLon);
@@ -2097,10 +1270,8 @@ function updateAnggotaDropdown() {
                 return normalizeDeg(bearing);
             }
             function getTrueHeadingFromEvent(event) {
-                let magneticHeading = null;
                 if (typeof event.webkitCompassHeading === "number") return normalizeDeg(event.webkitCompassHeading);
-                if (typeof event.alpha === "number") magneticHeading = normalizeDeg(360 - event.alpha);
-                if (magneticHeading !== null) return normalizeDeg(magneticHeading + arMagneticDeclination);
+                if (typeof event.alpha === "number") return normalizeDeg(360 - event.alpha + arMagneticDeclination);
                 return null;
             }
             function arUpdateUI() {
@@ -2138,230 +1309,43 @@ function updateAnggotaDropdown() {
                             arSuccessOverlay.classList.add('show');
                         }, AR_STABLE_TIME);
                     }
-                } else {
-                    if (arQiblaFoundTimer) { clearTimeout(arQiblaFoundTimer); arQiblaFoundTimer = null; }
-                }
+                } else { if (arQiblaFoundTimer) { clearTimeout(arQiblaFoundTimer); arQiblaFoundTimer = null; } }
             }
-            function arHandleOrientation(event) {
-                const heading = getTrueHeadingFromEvent(event);
-                if (heading == null) return;
-                arCurrentHeading = heading;
-                arUpdateUI();
-            }
-            function arStartOrientationListener() {
-                if (arOrientationListenerActive) return;
-                window.addEventListener("deviceorientationabsolute", arHandleOrientation, true);
-                window.addEventListener("deviceorientation", arHandleOrientation, true);
-                arOrientationListenerActive = true;
-            }
-            async function arRequestOrientationPermissionIfNeeded() {
-                if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
-                    const response = await DeviceOrientationEvent.requestPermission();
-                    if (response !== "granted") throw new Error("Izin sensor arah ditolak.");
-                }
-            }
-            function arGetLocation() {
-                return new Promise((resolve, reject) => {
-                    if (!navigator.geolocation) reject(new Error("Geolocation tidak didukung."));
-                    navigator.geolocation.getCurrentPosition(
-                        pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-                        err => reject(err),
-                        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                    );
-                });
-            }
-            async function arStartCamera() {
-                try {
-                    arStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
-                    arVideo.srcObject = arStream;
-                } catch (err) { throw new Error("Tidak dapat mengakses kamera: " + err.message); }
-            }
+            function arHandleOrientation(event) { const heading = getTrueHeadingFromEvent(event); if (heading == null) return; arCurrentHeading = heading; arUpdateUI(); }
+            function arStartOrientationListener() { if (arOrientationListenerActive) return; window.addEventListener("deviceorientationabsolute", arHandleOrientation, true); window.addEventListener("deviceorientation", arHandleOrientation, true); arOrientationListenerActive = true; }
+            async function arRequestOrientationPermissionIfNeeded() { if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") { const response = await DeviceOrientationEvent.requestPermission(); if (response !== "granted") throw new Error("Izin sensor arah ditolak."); } }
+            function arGetLocation() { return new Promise((resolve, reject) => { if (!navigator.geolocation) reject(new Error("Geolocation tidak didukung.")); navigator.geolocation.getCurrentPosition(pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }), err => reject(err), { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }); }); }
+            async function arStartCamera() { try { arStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false }); arVideo.srcObject = arStream; } catch (err) { throw new Error("Tidak dapat mengakses kamera: " + err.message); } }
             async function arStartAll() {
-                arFoundQibla = false;
-                if (arQiblaFoundTimer) { clearTimeout(arQiblaFoundTimer); arQiblaFoundTimer = null; }
+                arFoundQibla = false; if (arQiblaFoundTimer) { clearTimeout(arQiblaFoundTimer); arQiblaFoundTimer = null; }
                 arSuccessOverlay.classList.remove('show');
                 try {
-                    arStartBtn.disabled = true;
-                    arStartBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memulai...';
+                    arStartBtn.disabled = true; arStartBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memulai...';
                     await arStartCamera();
                     const loc = await arGetLocation();
-                    arUserLat = loc.lat;
-                    arUserLon = loc.lon;
+                    arUserLat = loc.lat; arUserLon = loc.lon;
                     arQiblaBearing = getQiblaBearing(arUserLat, arUserLon);
                     arMagneticDeclination = 0;
                     await arRequestOrientationPermissionIfNeeded();
                     arStartOrientationListener();
-                    arStartBtn.innerHTML = 'Mulai AR Kiblat';
-                    arStartBtn.disabled = false;
+                    arStartBtn.innerHTML = 'Mulai AR Kiblat'; arStartBtn.disabled = false;
                     arGuideText.textContent = 'Arahkan HP ke depan';
-                } catch (err) {
-                    console.error(err);
-                    alert('Gagal: ' + (err.message || 'izin ditolak'));
-                    arStartBtn.innerHTML = 'Mulai AR Kiblat';
-                    arStartBtn.disabled = false;
-                }
+                } catch (err) { console.error(err); alert('Gagal: ' + (err.message || 'izin ditolak')); arStartBtn.innerHTML = 'Mulai AR Kiblat'; arStartBtn.disabled = false; }
             }
             arStartBtn.addEventListener('click', arStartAll);
-            arCalibrateBtn.addEventListener('click', () => {
-                if (arCurrentHeading != null) { arHeadingOffset = 0; alert('Kalibrasi direset. Gerakkan angka 8 jika perlu.'); }
-                else alert('Mulai AR terlebih dahulu.');
-            });
+            arCalibrateBtn.addEventListener('click', () => { if (arCurrentHeading != null) { arHeadingOffset = 0; alert('Kalibrasi direset. Gerakkan angka 8 jika perlu.'); } else alert('Mulai AR terlebih dahulu.'); });
             arResetBtn.addEventListener('click', () => { arSuccessOverlay.classList.remove('show'); arStartAll(); });
         })();
-    </script>
 
-    <!-- Script modal notifikasi dan lokasi -->
-    <script>
-        const notifIcon = document.getElementById('notifIcon');
-        const notifModal = document.getElementById('notifModal');
-        const mapIcon = document.getElementById('mapIcon');
-        const mapModal = document.getElementById('mapModal');
-        const routeBtn = document.getElementById('routeBtn');
-
-        notifIcon.addEventListener('click', () => {
-            notifModal.style.display = 'block';
-            if (allPengumuman.length > 0) {
-                const maxTimestamp = Math.max(...allPengumuman.map(item => item.timestamp || 0));
-                if (maxTimestamp > lastReadNotifTimestamp) {
-                    lastReadNotifTimestamp = maxTimestamp;
-                    localStorage.setItem('lastReadNotifTimestamp', maxTimestamp);
-                    updateNotifBadge();
-                }
-            }
-        });
-
-        mapIcon.addEventListener('click', () => {
-            mapModal.style.display = 'block';
-        });
-
-        document.querySelectorAll('.modal .close').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.closest('.modal').style.display = 'none';
-            });
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                e.target.style.display = 'none';
-            }
-        });
-
-        routeBtn.addEventListener('click', () => {
-            const lat = 0.5626898635945491;
-            const lng = 123.1200838777164;
-            const label = 'Masjid Ar-Rahman';
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const url = `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label)})`;
-            const webUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-            const intentUrl = `intent://maps.google.com/maps?q=${lat},${lng}&ll=${lat},${lng}&z=15#Intent;scheme=https;package=com.google.android.apps.maps;end`;
-            if (/android/i.test(userAgent)) {
-                window.location.href = intentUrl;
-                setTimeout(() => window.location.href = webUrl, 500);
-            } else {
-                window.location.href = url;
-                setTimeout(() => window.location.href = webUrl, 500);
-            }
-        });
-    </script>
-
-    <!-- Script Komunitas Besi Tua - Menampilkan daftar anggota dan riwayat -->
-    <script>
-        function loadKomunitasData() {
-    anggotaKomunitasRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        // Ubah objek menjadi array
-        const anggota = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-        allAnggota = anggota;
-
-        const totalAnggota = anggota.length;
-        const totalIuranTarget = totalAnggota * 250000;
-        let totalTerkumpul = 0;
-        let totalSisa = 0;
-
-        anggota.forEach(angg => {
-            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-            const sudahBayar = 250000 - sisa;
-            totalTerkumpul += sudahBayar;
-            totalSisa += sisa;
-        });
-
-        document.getElementById('totalAnggota').textContent = totalAnggota;
-        document.getElementById('totalIuranTarget').textContent = formatRupiah(totalIuranTarget);
-        document.getElementById('totalTerkumpul').textContent = formatRupiah(totalTerkumpul);
-        document.getElementById('totalSisa').textContent = formatRupiah(totalSisa);
-
-        const container = document.getElementById('anggotaList');
-        if (totalAnggota === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:1rem;">Belum ada anggota terdaftar.</div>';
-            return;
-        }
-
-        // Urutkan berdasarkan nama
-        const sorted = [...anggota].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
-        container.innerHTML = sorted.map(angg => {
-            const inisial = angg.nama ? angg.nama.split(' ').map(k => k[0]).join('').toUpperCase().slice(0,2) : '??';
-            const sisa = angg.sisaIuran !== undefined ? angg.sisaIuran : 250000;
-            const total = 250000;
-            const sudahBayar = total - sisa;
-            const persen = (sudahBayar / total) * 100;
-            const status = sisa === 0 ? 'Lunas' : 'Belum Lunas';
-            const statusClass = sisa === 0 ? '' : 'pending';
-            const riwayat = angg.riwayat || [];
-            const sortedRiwayat = [...riwayat].sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
-            return `
-                <div class="anggota-card">
-                    <div class="anggota-header">
-                        <div class="anggota-avatar">${inisial}</div>
-                        <div style="flex:1;">
-                            <div class="anggota-name">${angg.nama || 'Tanpa Nama'}</div>
-                            <span class="anggota-status ${statusClass}">${status}</span>
-                        </div>
-                    </div>
-                    <div class="anggota-detail">
-                        <div>Total Iuran: ${formatRupiah(total)}</div>
-                        <div>Telah Dibayar: ${formatRupiah(sudahBayar)}</div>
-                        <div>Sisa: ${formatRupiah(sisa)}</div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: ${persen}%;"></div></div>
-                    </div>
-                    ${sortedRiwayat.length > 0 ? `
-                    <div class="riwayat-list">
-                        <strong><i class="fas fa-history"></i> Riwayat Pembayaran:</strong>
-                        ${sortedRiwayat.map(r => `
-                            <div class="riwayat-item">
-                                <span>${r.tanggal || '-'}</span>
-                                <span>${formatRupiah(r.nominal)}</span>
-                                <span><a href="${r.buktiUrl}" target="_blank" style="color:#fbbf24;">Bukti</a></span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : '<div class="riwayat-list"><i>Belum ada pembayaran</i></div>'}
-                </div>
-            `;
-        }).join('');
-    });
-}
-        loadKomunitasData();
-    </script>
-
-    <!-- Script deteksi aplikasi dan tampilkan banner rekomendasi -->
-    <script>
-        (function() {
-            const isInApp = typeof window.isInApp !== 'undefined' && window.isInApp === true;
-            const appExists = isInApp || (window.MasjidApp && window.MasjidApp.installed === true);
-            const bannerClosed = localStorage.getItem('appRecommendClosed');
-            if (!appExists && bannerClosed !== 'true') {
-                const banner = document.getElementById('appRecommendBanner');
-                banner.style.display = 'flex';
-                document.getElementById('closeAppBanner').addEventListener('click', () => {
-                    banner.style.display = 'none';
-                    localStorage.setItem('appRecommendClosed', 'true');
-                });
-                document.getElementById('downloadAppBtn').addEventListener('click', () => {
-                    const appUrl = 'https://play.google.com/store/apps/details?id=com.masjid.arrahman';
-                    window.location.href = appUrl;
-                });
-            }
-        })();
+        // Tambahkan style untuk status badge
+        const style = document.createElement('style');
+        style.textContent = `
+            .status-badge { padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
+            .status-pending { background: #fef3c7; color: #92400e; }
+            .status-approved { background: #d1fae5; color: #065f46; }
+            .status-rejected { background: #fee2e2; color: #991b1b; }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
